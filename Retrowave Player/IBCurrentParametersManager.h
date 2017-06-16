@@ -30,7 +30,7 @@ typedef enum {
 
 @property (strong, nonatomic) MPMediaItem *artist;
 @property (strong, nonatomic) MPMediaItem *album;
-@property (strong, nonatomic) IBPlaylist *playlist;
+@property (strong, nonatomic) MPMediaPlaylist *playlist;
 @property (assign, nonatomic) IBSongsViewControllerTypeDataToView songsViewControllerDataViewMode;
 
 

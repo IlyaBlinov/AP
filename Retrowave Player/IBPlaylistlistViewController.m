@@ -72,34 +72,13 @@ static NSString* lastNames[] = {
    
     
     self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Playlists"];
+        
+    MPMediaQuery *playlistQuery = [MPMediaQuery playlistsQuery];
+    NSArray *playlistArray = [playlistQuery collections];
     
-    NSMutableArray *playlistsArray = [NSMutableArray array];
+    NSLog(@"playlistsCont = %d", [playlistArray count]);
     
-    for (int i = 0; i < 10; i++) {
-        
-        IBPlaylist *playlist = [[IBPlaylist alloc] init];
-        
-       playlist.playlistName = [NSString stringWithFormat:@"%@ %@", firstNames[arc4random() % 50], lastNames[arc4random() % 50]];
-        
-        
-        NSMutableArray *songsArray = [NSMutableArray array];
-        
-        for (int i = 0; i < 100; i++) {
-            
-            IBSong *song = [[IBSong alloc] init];
-            song.songName = firstNames[arc4random() % 50];
-            song.artistName = [NSString stringWithFormat:@"%@ %@", firstNames[arc4random() % 50], lastNames[arc4random() % 50]];
-            song.duration = arc4random() % 50;
-            
-            [songsArray addObject:song];
-        }
-        playlist.songs = songsArray;
-        
-        [playlistsArray addObject:playlist];
-        
-    }
-    
-    self.playlists = playlistsArray;
+    self.playlists = playlistArray;
     
 }
 
@@ -136,21 +115,26 @@ static NSString* lastNames[] = {
                                               reuseIdentifier:identifier];
     }
     
-    IBPlaylist *playlist = [self.playlists objectAtIndex:indexPath.row];
+    MPMediaPlaylist *playlist = [self.playlists objectAtIndex:indexPath.row];
+    
+    NSString *playlistName = [playlist valueForProperty:MPMediaPlaylistPropertyName];
+    
+    if ((playlist != nil) && (playlistName != nil) && (![playlistName isEqualToString:@""])){
+        
     
     
-    NSAttributedString *playlistName = [[NSAttributedString alloc] initWithString:playlist.playlistName];
+    NSAttributedString *playlistTitle = [[NSAttributedString alloc] initWithString:playlistName];
     
-    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d",[playlist.songs count]]];
+    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d",[playlist.items count]]];
     
     
     IBPlayerItem *accessoryButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
      [accessoryButton setImage: [UIImage imageNamed:@"skip-track.png"]forState:UIControlStateNormal];
     
-    cell.playlistTitle.attributedText    = playlistName;
+    cell.playlistTitle.attributedText    = playlistTitle;
     cell.songCount.attributedText        = songCount;
     cell.accessoryView = accessoryButton;
-    
+    }
   
     return cell;
     
@@ -164,7 +148,7 @@ static NSString* lastNames[] = {
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     
-    IBPlaylist *currentPlaylist = [self.playlists objectAtIndex:indexPath.row];
+    MPMediaPlaylist *currentPlaylist = [self.playlists objectAtIndex:indexPath.row];
     
     [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = playlist;
     
