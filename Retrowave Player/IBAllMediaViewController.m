@@ -18,6 +18,9 @@
 #import "IBCurrentParametersManager.h"
 #import "IBPlaylist.h"
 #import "IBSongsChooseViewController.h"
+
+
+
 @interface IBAllMediaViewController ()<UITabBarDelegate>
 @property (strong, nonatomic) NSArray *categories;
 @end

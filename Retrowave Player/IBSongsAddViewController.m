@@ -19,40 +19,7 @@
 
 
 
-
-static NSString* firstNames[] = {
-    @"Tran", @"Lenore", @"Bud", @"Fredda", @"Katrice",
-    @"Clyde", @"Hildegard", @"Vernell", @"Nellie", @"Rupert",
-    @"Billie", @"Tamica", @"Crystle", @"Kandi", @"Caridad",
-    @"Vanetta", @"Taylor", @"Pinkie", @"Ben", @"Rosanna",
-    @"Eufemia", @"Britteny", @"Ramon", @"Jacque", @"Telma",
-    @"Colton", @"Monte", @"Pam", @"Tracy", @"Tresa",
-    @"Willard", @"Mireille", @"Roma", @"Elise", @"Trang",
-    @"Ty", @"Pierre", @"Floyd", @"Savanna", @"Arvilla",
-    @"Whitney", @"Denver", @"Norbert", @"Meghan", @"Tandra",
-    @"Jenise", @"Brent", @"Elenor", @"Sha", @"Jessie"
-};
-
-static NSString* lastNames[] = {
-    
-    @"Farrah", @"Laviolette", @"Heal", @"Sechrest", @"Roots",
-    @"Homan", @"Starns", @"Oldham", @"Yocum", @"Mancia",
-    @"Prill", @"Lush", @"Piedra", @"Castenada", @"Warnock",
-    @"Vanderlinden", @"Simms", @"Gilroy", @"Brann", @"Bodden",
-    @"Lenz", @"Gildersleeve", @"Wimbish", @"Bello", @"Beachy",
-    @"Jurado", @"William", @"Beaupre", @"Dyal", @"Doiron",
-    @"Plourde", @"Bator", @"Krause", @"Odriscoll", @"Corby",
-    @"Waltman", @"Michaud", @"Kobayashi", @"Sherrick", @"Woolfolk",
-    @"Holladay", @"Hornback", @"Moler", @"Bowles", @"Libbey",
-    @"Spano", @"Folson", @"Arguelles", @"Burke", @"Rook"
-};
-
-
-
-
 @interface IBSongsAddViewController ()<UINavigationControllerDelegate>
-
-
 
 @property (strong, nonatomic) MPMediaPlaylist *currentPlaylist;
 
@@ -61,14 +28,10 @@ static NSString* lastNames[] = {
 @implementation IBSongsAddViewController
 
 
-
-
-
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
+- (void)viewWillAppear:(BOOL)animated{
     
+    [super viewWillAppear:animated];
+
     
     NSString *title;
     
@@ -89,13 +52,51 @@ static NSString* lastNames[] = {
         
     }else{
         
+        self.songs = nil;
         
-        
-        
-        self.songs = songsArray;
+        self.songs = [NSArray arrayWithArray:songsArray];
     }
     
-     self.navigationController.delegate = self;
+    self.navigationController.delegate = self;
+    
+
+    [self.tableView reloadData];
+    
+    }
+
+
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    
+//    NSString *title;
+//    
+//    MPMediaPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] playlist];
+//    self.currentPlaylist = currentPlaylist;
+//    NSArray *songsArray = [currentPlaylist items];
+//    title = [currentPlaylist valueForProperty:MPMediaPlaylistPropertyName];
+//    
+//    
+//    UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
+//    [self.navigationItem setLeftBarButtonItem:backItem];
+//    
+//    self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Songs"];
+//    
+//    
+//    
+//    if ((currentPlaylist) && ([currentPlaylist.items count] == 0)) {
+//        
+//    }else{
+//        
+//        
+//        
+//        
+//        self.songs = songsArray;
+//    }
+//    
+//     self.navigationController.delegate = self;
     
     
     
@@ -121,7 +122,7 @@ static NSString* lastNames[] = {
 {
     
     
-    return [self.songs count];
+    return [[self.currentPlaylist items] count];
 }
 
 
@@ -137,7 +138,7 @@ static NSString* lastNames[] = {
                                               reuseIdentifier:identifier];
     }
     
-    MPMediaItem *song = [self.songs objectAtIndex:indexPath.row];
+    MPMediaItem *song = [[self.currentPlaylist items] objectAtIndex:indexPath.row];
     
     NSString *songTitle = [song valueForProperty:MPMediaItemPropertyTitle];
     NSString *artistTitle = [song valueForProperty:MPMediaItemPropertyArtist];
@@ -240,26 +241,21 @@ static NSString* lastNames[] = {
     
     if ([viewController isKindOfClass:[IBSongsAddViewController class]] && ([[IBCurrentParametersManager sharedManager] isEditing])) {
        
-        NSLog(@"songsCount = %d", [self.songs count]);
+        NSLog(@"songsCount = %d", [[self.currentPlaylist items]count]);
         
         [[IBCurrentParametersManager sharedManager] setIsEditing:NO];
         
         self.navigationController.delegate = nil;
         
-        MPMediaPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
         
-        NSArray *addedSongs = [[IBCurrentParametersManager sharedManager] addedSongs];
-        [currentPlaylist addMediaItems:addedSongs completionHandler:^(NSError * _Nullable error) {
-            
-            NSLog(@"%@", [error description]);
-        }];
-        
+        self.currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
         //NSMutableArray *tempArray = [NSMutableArray arrayWithArray:[[IBCurrentParametersManager sharedManager] addedSongs]];
         
         
         
-        self.songs = [NSArray arrayWithArray:[currentPlaylist items]];
- NSLog(@"songsCount = %d", [self.songs count]);
+//        self.songs = [NSArray arrayWithArray:[currentPlaylist items]];
+NSLog(@"songsCount = %d", [[self.currentPlaylist items]count]);
+        
         [[IBCurrentParametersManager sharedManager].addedSongs removeAllObjects];
         [[IBCurrentParametersManager sharedManager] setChangingPlaylist:nil];
         
