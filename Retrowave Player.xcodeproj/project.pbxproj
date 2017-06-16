@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		236727F21ED30C0A0054678D /* IBSongsAddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 236727F11ED30C0A0054678D /* IBSongsAddViewController.m */; };
 		236727F51ED30C2B0054678D /* IBSongsChooseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 236727F41ED30C2B0054678D /* IBSongsChooseViewController.m */; };
+		23B15EF81EF40C4500CF7829 /* SomeClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 23B15EF71EF40C4500CF7829 /* SomeClass.m */; };
 		6F004C751EACCEFC007755C3 /* Automani.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B561EACCEFC007755C3 /* Automani.ttf */; };
 		6F004C761EACCEFC007755C3 /* Codystar.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B571EACCEFC007755C3 /* Codystar.ttf */; };
 		6F004C771EACCEFC007755C3 /* Codystart.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B581EACCEFC007755C3 /* Codystart.ttf */; };
@@ -271,6 +272,8 @@
 		236727F11ED30C0A0054678D /* IBSongsAddViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBSongsAddViewController.m; sourceTree = "<group>"; };
 		236727F31ED30C2B0054678D /* IBSongsChooseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBSongsChooseViewController.h; sourceTree = "<group>"; };
 		236727F41ED30C2B0054678D /* IBSongsChooseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBSongsChooseViewController.m; sourceTree = "<group>"; };
+		23B15EF61EF40C4400CF7829 /* SomeClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SomeClass.h; sourceTree = "<group>"; };
+		23B15EF71EF40C4500CF7829 /* SomeClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SomeClass.m; sourceTree = "<group>"; };
 		6F004B561EACCEFC007755C3 /* Automani.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Automani.ttf; sourceTree = "<group>"; };
 		6F004B571EACCEFC007755C3 /* Codystar.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Codystar.ttf; sourceTree = "<group>"; };
 		6F004B581EACCEFC007755C3 /* Codystart.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Codystart.ttf; sourceTree = "<group>"; };
@@ -1133,6 +1136,8 @@
 		6FA46FA11E1BF4B2008B9F33 = {
 			isa = PBXGroup;
 			children = (
+				23B15EF61EF40C4400CF7829 /* SomeClass.h */,
+				23B15EF71EF40C4500CF7829 /* SomeClass.m */,
 				6FA46FAC1E1BF4B3008B9F33 /* Retrowave Player */,
 				6FA46FAB1E1BF4B3008B9F33 /* Products */,
 				6FA46FC91E1C014B008B9F33 /* Frameworks */,
@@ -1501,6 +1506,7 @@
 				6F004C811EACCEFC007755C3 /* IBArtistNameTitle.m in Sources */,
 				6F004C7E1EACCEFC007755C3 /* IBArtist.m in Sources */,
 				6FCDBDD11EB9148C00B326D7 /* IBAddPlaylistViewController.m in Sources */,
+				23B15EF81EF40C4500CF7829 /* SomeClass.m in Sources */,
 				6FA46FBB1E1BF4B3008B9F33 /* Retrowave_Player.xcdatamodeld in Sources */,
 				6FCDBDCE1EB4A30E00B326D7 /* IBPlaylistCell.m in Sources */,
 				6F004C7F1EACCEFC007755C3 /* IBArtistCount.m in Sources */,
