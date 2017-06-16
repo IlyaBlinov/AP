@@ -60,11 +60,16 @@ static NSString* lastNames[] = {
 {
     [super viewDidLoad];
     
-        
-    if ([[self.navigationController.viewControllers objectAtIndex:0] isKindOfClass:[IBAllMediaViewController class]]) {
-        NSString *title = @"All Media";
-        UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
-        [self.navigationItem setLeftBarButtonItem:backItem];
+    
+    NSInteger number = [self.navigationController.viewControllers count] - 2;
+    
+    if (number >= 0) {
+        if ([[self.navigationController.viewControllers objectAtIndex:number] isKindOfClass:[IBAllMediaViewController class]]) {
+            NSString *title = @"All Media";
+            UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
+            [self.navigationItem setLeftBarButtonItem:backItem];
+            
+        }
 
     }
     
@@ -76,7 +81,7 @@ static NSString* lastNames[] = {
     MPMediaQuery *playlistQuery = [MPMediaQuery playlistsQuery];
     NSArray *playlistArray = [playlistQuery collections];
     
-    NSLog(@"playlistsCont = %d", [playlistArray count]);
+   
     
     self.playlists = playlistArray;
     

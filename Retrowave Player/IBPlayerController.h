@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "IBSong.h"
+#import "IBCurrentParametersManager.h"
 
 @class IBPlayerItem, IBVisualizerMusic;
 
 @interface IBPlayerController : UIViewController
 
-@property (strong, nonatomic) IBSong *song;
+@property (strong, nonatomic) MPMediaItem *song;
 @property (strong, nonatomic) IBVisualizerMusic *visualizer;
 
 @property (weak, nonatomic) IBOutlet IBPlayerItem *playPauseButton;

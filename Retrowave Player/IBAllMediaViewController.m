@@ -36,9 +36,9 @@
     
     if ([IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode == playlist) {
     
-    IBPlaylist *playlist = [[IBCurrentParametersManager sharedManager] playlist];
+    MPMediaPlaylist *playlist = [[IBCurrentParametersManager sharedManager] playlist];
         
-    NSString *title = [NSString stringWithFormat:@"Playlist  %@", playlist.playlistName];
+    NSString *title = [NSString stringWithFormat:@"Playlist  %@", [playlist valueForProperty:MPMediaPlaylistPropertyName]];
     
     UIBarButtonItem *backItem =  [self setLeftBackBarButtonItem:title];
     [self.navigationItem setLeftBarButtonItem:backItem];

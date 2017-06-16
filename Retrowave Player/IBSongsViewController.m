@@ -75,76 +75,22 @@ static NSString* lastNames[] = {
    
     
     
+    NSDictionary *titleAndSongsDictionary = [[IBCurrentParametersManager sharedManager]getSongsAndTitleForSongViewController];
     
-    IBPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] playlist];
-    MPMediaItem   *currentArtist = [[IBCurrentParametersManager sharedManager] artist];
-    MPMediaItem *currentAlbum = [[IBCurrentParametersManager sharedManager] album];
-    
-    
-    
-   
-    
-     NSString *title;
-     NSArray *songs;
-    
-    if ([IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode == allSongs ) {
-        title = @"All Media";
-        
-        MPMediaQuery *songsQuery = [MPMediaQuery songsQuery];
-        songs = [songsQuery items];
-       
+    NSString *title = [titleAndSongsDictionary valueForKey:@"title"];
+    NSArray *songs  = [titleAndSongsDictionary valueForKey:@"songs"];
+    self.songs = [NSArray arrayWithArray:songs];
 
-    }else if ([IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode == album){
-        title = [currentAlbum valueForProperty:MPMediaItemPropertyAlbumTitle];
-        
-        MPMediaPropertyPredicate *albumNamePredicate =
-        [MPMediaPropertyPredicate predicateWithValue: title
-                                         forProperty: MPMediaItemPropertyAlbumTitle];
-        
-        MPMediaQuery *songsOfAlbum = [[MPMediaQuery alloc] init];
-        [songsOfAlbum addFilterPredicate:albumNamePredicate];
-        
-        
-        songs = [songsOfAlbum items];
-        
-        
-    }else if ([IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode == artist){
-        
-        NSString *artistName = [currentArtist valueForProperty:MPMediaItemPropertyArtist];
-        title = artistName;
-        
-        MPMediaPropertyPredicate *artistNamePredicate =
-        [MPMediaPropertyPredicate predicateWithValue: title
-                                         forProperty: MPMediaItemPropertyArtist];
-        
-        MPMediaQuery *songsOfArtist = [[MPMediaQuery alloc] init];
-        [songsOfArtist addFilterPredicate:artistNamePredicate];
-        
-        
-        songs = [songsOfArtist items];
-
-        
-    }else if ([IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode == playlist){
-        title = currentPlaylist.playlistName;
-    }
-    
-    
     
     
     UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
     [self.navigationItem setLeftBarButtonItem:backItem];
 
+    
     self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Songs"];
     
-    self.songs = [NSArray arrayWithArray:songs];
     
-    
-    
-    
-    if ((currentPlaylist) && ([currentPlaylist.songs count] == 0)) {
-        self.songs = nil;
-    }
-
+ 
     
 }
 
@@ -184,10 +130,14 @@ static NSString* lastNames[] = {
                                       reuseIdentifier:identifier];
     }
     
+    if ([self.songs count] != 0) {
+        
+    
+    
     MPMediaItem *song = [self.songs objectAtIndex:indexPath.row];
     
-    NSString *songTitle = [song valueForProperty:MPMediaItemPropertyTitle];
-    NSString *artistTitle = [song valueForProperty:MPMediaItemPropertyArtist];
+    NSString *songTitle        = [song valueForProperty:MPMediaItemPropertyTitle];
+    NSString *artistTitle      = [song valueForProperty:MPMediaItemPropertyArtist];
     NSNumber *playBackDuration = [song valueForProperty:MPMediaItemPropertyPlaybackDuration];
     
     double songDuration = [playBackDuration doubleValue] / 60;
@@ -202,10 +152,10 @@ static NSString* lastNames[] = {
     }
     
     
-    NSAttributedString *songName = [[NSAttributedString alloc] initWithString:songTitle];
-    NSAttributedString *artistName = [[NSAttributedString alloc] initWithString:artistTitle];
+    NSAttributedString *songName     = [[NSAttributedString alloc] initWithString:songTitle];
+    NSAttributedString *artistName   = [[NSAttributedString alloc] initWithString:artistTitle];
     NSAttributedString *timeDuration = [[NSAttributedString alloc] initWithString:songDurationTitle];
-    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", indexPath.row + 1]];
+    NSAttributedString *songCount    = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", indexPath.row + 1]];
     
     
     cell.songTitle.attributedText    = songName;
@@ -213,7 +163,7 @@ static NSString* lastNames[] = {
     cell.timeDuration.attributedText = timeDuration;
     cell.songCount.attributedText    = songCount;
     
-   
+    }
     
     
     
@@ -228,7 +178,7 @@ static NSString* lastNames[] = {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-       IBSong *song = [self.songs objectAtIndex:indexPath.row];
+       MPMediaItem *song = [self.songs objectAtIndex:indexPath.row];
     
     
     IBPlayerController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBPlayerController"];
@@ -261,6 +211,7 @@ static NSString* lastNames[] = {
     return YES;
     
 }
+
 
 
 #pragma mark - Actions

@@ -53,7 +53,8 @@ static NSString* lastNames[] = {
 @interface IBSongsAddViewController ()<UINavigationControllerDelegate>
 
 
-@property (strong, nonatomic) NSString *backItemTitle;
+
+@property (strong, nonatomic) MPMediaPlaylist *currentPlaylist;
 
 @end
 
@@ -71,9 +72,10 @@ static NSString* lastNames[] = {
     
     NSString *title;
     
-    IBPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] playlist];
-   
-    title = currentPlaylist.playlistName;
+    MPMediaPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] playlist];
+    self.currentPlaylist = currentPlaylist;
+    NSArray *songsArray = [currentPlaylist items];
+    title = [currentPlaylist valueForProperty:MPMediaPlaylistPropertyName];
     
     
     UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
@@ -83,24 +85,12 @@ static NSString* lastNames[] = {
     
     
     
-    
-    
-    NSMutableArray *songsArray = [NSMutableArray array];
-    
-    
-    if ((currentPlaylist) && ([currentPlaylist.songs count] == 0)) {
+    if ((currentPlaylist) && ([currentPlaylist.items count] == 0)) {
         
     }else{
         
-        for (int i = 0; i < 12; i++) {
-            IBSong *song = [[IBSong alloc] init];
-            song.songName = firstNames[arc4random() % 50];
-            song.artistName = [NSString stringWithFormat:@"%@ %@", firstNames[arc4random() % 50], lastNames[arc4random() % 50]];
-            song.duration = arc4random() % 50;
-            
-            [songsArray addObject:song];
-            
-        }
+        
+        
         
         self.songs = songsArray;
     }
@@ -147,21 +137,35 @@ static NSString* lastNames[] = {
                                               reuseIdentifier:identifier];
     }
     
-    IBSong *song = [self.songs objectAtIndex:indexPath.row];
+    MPMediaItem *song = [self.songs objectAtIndex:indexPath.row];
+    
+    NSString *songTitle = [song valueForProperty:MPMediaItemPropertyTitle];
+    NSString *artistTitle = [song valueForProperty:MPMediaItemPropertyArtist];
+    NSNumber *playBackDuration = [song valueForProperty:MPMediaItemPropertyPlaybackDuration];
+    
+    double songDuration = [playBackDuration doubleValue] / 60;
+    NSString *songDurationTitle = [NSString stringWithFormat:@"%5.2f",songDuration];
+    
+    if (songTitle == nil) {
+        songTitle  = @"";
+    }else if (artistTitle == nil){
+        artistTitle = @"";
+    }else if (songDurationTitle == nil){
+        songDurationTitle = @"";
+    }
     
     
-    NSAttributedString *songName = [[NSAttributedString alloc] initWithString:song.songName];
+    NSAttributedString *songName = [[NSAttributedString alloc] initWithString:songTitle];
+    NSAttributedString *artistName = [[NSAttributedString alloc] initWithString:artistTitle];
+    NSAttributedString *timeDuration = [[NSAttributedString alloc] initWithString:songDurationTitle];
+    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", indexPath.row + 1]];
     
-    NSAttributedString *artistName = [[NSAttributedString alloc] initWithString:song.artistName];
-    
-    NSAttributedString *timeDuration = [[NSAttributedString alloc] initWithString:@"5:09"];
-    
-    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%ld", indexPath.row + 1]];
     
     cell.songTitle.attributedText    = songName;
     cell.artistTitle.attributedText  = artistName;
     cell.timeDuration.attributedText = timeDuration;
     cell.songCount.attributedText    = songCount;
+
     
         
     
@@ -176,7 +180,7 @@ static NSString* lastNames[] = {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    IBSong *song = [self.songs objectAtIndex:indexPath.row];
+    MPMediaItem *song = [self.songs objectAtIndex:indexPath.row];
     
     
     IBPlayerController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBPlayerController"];
@@ -218,6 +222,8 @@ static NSString* lastNames[] = {
     
         [[IBCurrentParametersManager sharedManager] setIsEditing:YES];//playlist was saved to IBCurrentParametersManager in IBPlaylistsController
     
+    [[IBCurrentParametersManager sharedManager] setChangingPlaylist:self.currentPlaylist];
+    
     [[IBCurrentParametersManager sharedManager] setReturnSongsViewController:self];
     
         IBAllMediaViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBAllMediaViewController"];
@@ -234,19 +240,28 @@ static NSString* lastNames[] = {
     
     if ([viewController isKindOfClass:[IBSongsAddViewController class]] && ([[IBCurrentParametersManager sharedManager] isEditing])) {
        
+        NSLog(@"songsCount = %d", [self.songs count]);
+        
         [[IBCurrentParametersManager sharedManager] setIsEditing:NO];
         
         self.navigationController.delegate = nil;
         
+        MPMediaPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
         
-        NSMutableArray *tempArray = [NSMutableArray arrayWithArray:[[IBCurrentParametersManager sharedManager] addedSongs]];
+        NSArray *addedSongs = [[IBCurrentParametersManager sharedManager] addedSongs];
+        [currentPlaylist addMediaItems:addedSongs completionHandler:^(NSError * _Nullable error) {
+            
+            NSLog(@"%@", [error description]);
+        }];
         
-        [tempArray addObjectsFromArray:self.songs];
-        self.songs = nil;
-        self.songs = [NSArray arrayWithArray:tempArray];
-
+        //NSMutableArray *tempArray = [NSMutableArray arrayWithArray:[[IBCurrentParametersManager sharedManager] addedSongs]];
+        
+        
+        
+        self.songs = [NSArray arrayWithArray:[currentPlaylist items]];
+ NSLog(@"songsCount = %d", [self.songs count]);
         [[IBCurrentParametersManager sharedManager].addedSongs removeAllObjects];
-        
+        [[IBCurrentParametersManager sharedManager] setChangingPlaylist:nil];
         
         [self.tableView reloadData];
         

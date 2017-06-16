@@ -28,8 +28,8 @@ typedef enum {
 @property (strong, nonatomic) IBSongsViewController *returnSongsViewController;
 
 
-@property (strong, nonatomic) MPMediaItem *artist;
-@property (strong, nonatomic) MPMediaItem *album;
+@property (strong, nonatomic) MPMediaItem     *artist;
+@property (strong, nonatomic) MPMediaItem     *album;
 @property (strong, nonatomic) MPMediaPlaylist *playlist;
 @property (assign, nonatomic) IBSongsViewControllerTypeDataToView songsViewControllerDataViewMode;
 
@@ -37,10 +37,10 @@ typedef enum {
 @property (assign, nonatomic) BOOL isEditing;
 
 
+@property (strong, nonatomic) MPMediaPlaylist *changingPlaylist;
+@property (strong, nonatomic) NSMutableArray  *addedSongs;
 
-@property (strong, nonatomic) NSMutableArray *addedSongs;
-
-
+- (NSDictionary*) getSongsAndTitleForSongViewController;
 
 
 

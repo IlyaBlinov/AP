@@ -170,7 +170,7 @@ static NSString* lastNames[] = {
     
     IBArtistInfoViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBArtistInfoViewController"];
    
-    IBArtist *artist = [self.artists objectAtIndex:indexPath.row];
+    MPMediaItem *artist = [self.artists objectAtIndex:indexPath.row];
     
     [[IBCurrentParametersManager sharedManager] setArtist:artist];
     

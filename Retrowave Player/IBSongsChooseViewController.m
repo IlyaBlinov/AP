@@ -65,32 +65,17 @@ static NSString* lastNames[] = {
      [super viewWillAppear:animated];
     
     
-    NSString *title;
+    NSDictionary *titleAndSongsDictionary = [[IBCurrentParametersManager sharedManager]getSongsAndTitleForSongViewController];
     
-    IBPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] playlist];
-    MPMediaItem   *currentArtist = [[IBCurrentParametersManager sharedManager] artist];
-    MPMediaItem   *currentAlbum = [[IBCurrentParametersManager sharedManager] album];
-    
-    
-    
-    
-    if ([IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode == allSongs) {
-        title = @"All Media";
-    }else if (([IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode == album)){
-        NSString *albumName = [currentAlbum valueForProperty:MPMediaItemPropertyAlbumTitle];
-        title = albumName;
-    }else if (([IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode == artist)){
-        NSString *artistName = [currentArtist valueForProperty:MPMediaItemPropertyArtist];
-        title = artistName;
-    }else if (([IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode == playlist)){
-        title = currentPlaylist.playlistName;
-    }
-    
+    NSString *title = [titleAndSongsDictionary valueForKey:@"title"];
+    NSArray *songs  = [titleAndSongsDictionary valueForKey:@"songs"];
+    self.songs = [NSArray arrayWithArray:songs];
   
     
     
     UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
     [self.navigationItem setLeftBarButtonItem:backItem];
+    
     self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Songs"];
     
     
@@ -119,24 +104,6 @@ static NSString* lastNames[] = {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-        
-    
-    NSMutableArray *songsArray = [NSMutableArray array];
-    
-    
-        for (int i = 0; i < 12; i++) {
-            IBSong *song = [[IBSong alloc] init];
-            song.songName = firstNames[arc4random() % 50];
-            song.artistName = [NSString stringWithFormat:@"%@ %@", firstNames[arc4random() % 50], lastNames[arc4random() % 50]];
-            song.duration = arc4random() % 50;
-            
-            [songsArray addObject:song];
-            
-        }
-        
-        self.songs = songsArray;
-    
     
     
     [self.tableView setEditing:YES];
@@ -180,38 +147,60 @@ static NSString* lastNames[] = {
                                               reuseIdentifier:identifier];
     }
     
-    IBSong *song = [self.songs objectAtIndex:indexPath.row];
-    
-    
-    NSAttributedString *songName = [[NSAttributedString alloc] initWithString:song.songName];
-    
-    NSAttributedString *artistName = [[NSAttributedString alloc] initWithString:song.artistName];
-    
-    NSAttributedString *timeDuration = [[NSAttributedString alloc] initWithString:@"5:09"];
-    
-    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", indexPath.row + 1]];
-    
-    cell.songTitle.attributedText    = songName;
-    cell.artistTitle.attributedText  = artistName;
-    cell.timeDuration.attributedText = timeDuration;
-    cell.songCount.attributedText    = songCount;
+    if ([self.songs count] != 0) {
+        
+        
+        
+        MPMediaItem *song = [self.songs objectAtIndex:indexPath.row];
+        
+        NSString *songTitle        = [song valueForProperty:MPMediaItemPropertyTitle];
+        NSString *artistTitle      = [song valueForProperty:MPMediaItemPropertyArtist];
+        NSNumber *playBackDuration = [song valueForProperty:MPMediaItemPropertyPlaybackDuration];
+        
+        double songDuration = [playBackDuration doubleValue] / 60;
+        NSString *songDurationTitle = [NSString stringWithFormat:@"%5.2f",songDuration];
+        
+        if (songTitle == nil) {
+            songTitle  = @"";
+        }else if (artistTitle == nil){
+            artistTitle = @"";
+        }else if (songDurationTitle == nil){
+            songDurationTitle = @"";
+        }
+        
+        
+        NSAttributedString *songName     = [[NSAttributedString alloc] initWithString:songTitle];
+        NSAttributedString *artistName   = [[NSAttributedString alloc] initWithString:artistTitle];
+        NSAttributedString *timeDuration = [[NSAttributedString alloc] initWithString:songDurationTitle];
+        NSAttributedString *songCount    = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", indexPath.row + 1]];
+        
+        
+        cell.songTitle.attributedText    = songName;
+        cell.artistTitle.attributedText  = artistName;
+        cell.timeDuration.attributedText = timeDuration;
+        cell.songCount.attributedText    = songCount;
+        
+    }
+
     
     
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
     IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-    
     [addToPlaylistButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
     
     
     [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
-    
     cell.editingAccessoryView = addToPlaylistButton;
     
     }else{
+        
         cell.editingAccessoryView = nil;
     }
+    
+    
+    
     return cell;
     
 }
@@ -223,7 +212,7 @@ static NSString* lastNames[] = {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    IBSong *song = [self.songs objectAtIndex:indexPath.row];
+    MPMediaItem *song = [self.songs objectAtIndex:indexPath.row];
     
     
     IBPlayerController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBPlayerController"];
@@ -266,7 +255,7 @@ static NSString* lastNames[] = {
     CGPoint point = [button convertPoint:CGPointZero toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
     
-    IBSong *song = [self.songs objectAtIndex:indexPath.row];
+    MPMediaItem *song = [self.songs objectAtIndex:indexPath.row];
     
     if (button.isSelected == NO) {
         [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];
