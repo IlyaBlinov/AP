@@ -16,11 +16,14 @@
 + (IBAnimationManager*) sharedManager;
 
 - (CAAnimationGroup*) animationForMusicVisualizer:(IBVisualizerLayer*) layer;
+- (CAAnimationGroup*) stopAnimationForMusicVisualizer:(IBVisualizerLayer*) layer;
+
+
 
 - (CAKeyframeAnimation*) animationForKenwoodMusicVisualizer:(CALayer*) layer;
+- (CAAnimationGroup*) stopAnimationForKenwoodMusicVisualizer:(IBVisualizerLayer*) layer;
 
 
 
-- (CAAnimationGroup*) stopAnimationForMusicVisualizer:(IBVisualizerLayer*) layer;
 
 @end
