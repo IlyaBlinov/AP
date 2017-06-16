@@ -247,55 +247,7 @@
 - (CAAnimationGroup*) stopAnimationForKenwoodMusicVisualizer:(IBVisualizerLayer*) layer{
     
     CAAnimationGroup *group = [CAAnimationGroup animation];
-    group.beginTime = 0.0;
-    group.timeOffset = 0.0;
-    group.autoreverses = NO;
-    group.repeatCount = 0;
-    [group setDuration:0.6f];
-    group.timingFunction = [CAMediaTimingFunction functionWithName:@"easeInEaseOut"];
-    
-    NSValue *currentPosition = [layer.presentationLayer valueForKey:@"position"];
-    
-    
-    
-    NSValue *currentBounds = [layer.presentationLayer valueForKey:@"bounds"];
-    
-    
-    
-    
-    
-    NSMutableArray *valuesPositionArray = [NSMutableArray arrayWithObjects:currentPosition,layer.startValuePosition, nil];
-    
-    CAKeyframeAnimation *frameAnimationPosition = [CAKeyframeAnimation animationWithKeyPath:@"position"];
-    
-    frameAnimationPosition.values = [NSArray arrayWithArray:valuesPositionArray];
-    frameAnimationPosition.duration = 0.6f ;
-    frameAnimationPosition.autoreverses = NO;
-    frameAnimationPosition.beginTime = 0.0f;
-    
-    
-    
-    
-    
-    
-    NSMutableArray *valuesBoundsArray = [NSMutableArray arrayWithObjects:currentBounds,layer.startValueBounds, nil];
-    
-    
-    
-    CAKeyframeAnimation *frameAnimationBounds = [CAKeyframeAnimation animationWithKeyPath:@"bounds"];
-    
-    
-    frameAnimationBounds.values = [NSArray arrayWithArray: valuesBoundsArray];
-    frameAnimationBounds.duration = 0.6f ;
-    frameAnimationBounds.autoreverses = NO;
-    frameAnimationBounds.beginTime = 0.0f;
-    
-    
-    
-    
-    
-    
-    [group setAnimations:[NSArray arrayWithObjects:  frameAnimationPosition, frameAnimationBounds, nil]];
+   
     
     return group;
 
