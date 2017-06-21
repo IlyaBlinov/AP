@@ -17,32 +17,6 @@
 #import "IBTransitionDismissViewController.h"
 #import "IBCurrentParametersManager.h"
 
-static NSString* firstNames[] = {
-    @"Tran", @"Lenore", @"Bud", @"Fredda", @"Katrice",
-    @"Clyde", @"Hildegard", @"Vernell", @"Nellie", @"Rupert",
-    @"Billie", @"Tamica", @"Crystle", @"Kandi", @"Caridad",
-    @"Vanetta", @"Taylor", @"Pinkie", @"Ben", @"Rosanna",
-    @"Eufemia", @"Britteny", @"Ramon", @"Jacque", @"Telma",
-    @"Colton", @"Monte", @"Pam", @"Tracy", @"Tresa",
-    @"Willard", @"Mireille", @"Roma", @"Elise", @"Trang",
-    @"Ty", @"Pierre", @"Floyd", @"Savanna", @"Arvilla",
-    @"Whitney", @"Denver", @"Norbert", @"Meghan", @"Tandra",
-    @"Jenise", @"Brent", @"Elenor", @"Sha", @"Jessie"
-};
-
-static NSString* lastNames[] = {
-    
-    @"Farrah", @"Laviolette", @"Heal", @"Sechrest", @"Roots",
-    @"Homan", @"Starns", @"Oldham", @"Yocum", @"Mancia",
-    @"Prill", @"Lush", @"Piedra", @"Castenada", @"Warnock",
-    @"Vanderlinden", @"Simms", @"Gilroy", @"Brann", @"Bodden",
-    @"Lenz", @"Gildersleeve", @"Wimbish", @"Bello", @"Beachy",
-    @"Jurado", @"William", @"Beaupre", @"Dyal", @"Doiron",
-    @"Plourde", @"Bator", @"Krause", @"Odriscoll", @"Corby",
-    @"Waltman", @"Michaud", @"Kobayashi", @"Sherrick", @"Woolfolk",
-    @"Holladay", @"Hornback", @"Moler", @"Bowles", @"Libbey",
-    @"Spano", @"Folson", @"Arguelles", @"Burke", @"Rook"
-};
 
 
 
@@ -56,10 +30,12 @@ static NSString* lastNames[] = {
 
 @implementation IBPlaylistlistViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
+
+
+
+- (void)viewWillAppear:(BOOL)animated{
     
+    [super viewWillAppear:animated];
     
     NSInteger number = [self.navigationController.viewControllers count] - 2;
     
@@ -70,20 +46,35 @@ static NSString* lastNames[] = {
             [self.navigationItem setLeftBarButtonItem:backItem];
             
         }
-
+        
     }
     
     
-   
+    
     
     self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Playlists"];
-        
+    
     MPMediaQuery *playlistQuery = [MPMediaQuery playlistsQuery];
     NSArray *playlistArray = [playlistQuery collections];
     
-   
+    
     
     self.playlists = playlistArray;
+    
+    [self.tableView reloadData];
+    
+}
+
+
+
+
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    
+    
     
 }
 
@@ -119,6 +110,7 @@ static NSString* lastNames[] = {
         cell = [[IBPlaylistCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                               reuseIdentifier:identifier];
     }
+    
     
     MPMediaPlaylist *playlist = [self.playlists objectAtIndex:indexPath.row];
     

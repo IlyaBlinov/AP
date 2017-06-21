@@ -253,17 +253,23 @@
     
     MPMediaPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
     
-    NSLog(@"items1  = %d",[[currentPlaylist items]count]);
     NSArray *addedSongs              = [NSArray arrayWithArray:[[IBCurrentParametersManager sharedManager] addedSongs]];
+    
+    IBSongsViewController *vc = [[IBCurrentParametersManager sharedManager] returnSongsViewController];
+    
+    __weak IBSongsViewController        *weakVC   = vc;
+    __weak IBSongsChooseViewController  *weakSelf = self;
+    
+    
     
     [currentPlaylist addMediaItems:addedSongs completionHandler:^(NSError * _Nullable error) {
         
-        NSLog(@"%@", [error description]);
+    dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.navigationController popToViewController:weakVC animated:YES];
+        });
+        
     }];
-     NSLog(@"items2  = %d",[[currentPlaylist items]count]);
-        IBSongsViewController *vc = [[IBCurrentParametersManager sharedManager] returnSongsViewController];
-        [self.navigationController popToViewController:vc animated:YES];
-   
+    
 }
 
 

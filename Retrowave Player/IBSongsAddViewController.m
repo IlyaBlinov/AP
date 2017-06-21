@@ -28,10 +28,12 @@
 @implementation IBSongsAddViewController
 
 
-- (void)viewWillAppear:(BOOL)animated{
-    
-    [super viewWillAppear:animated];
 
+
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
     
     NSString *title;
     
@@ -59,44 +61,9 @@
     
     self.navigationController.delegate = self;
     
-
-    [self.tableView reloadData];
     
-    }
+   
 
-
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    
-//    NSString *title;
-//    
-//    MPMediaPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] playlist];
-//    self.currentPlaylist = currentPlaylist;
-//    NSArray *songsArray = [currentPlaylist items];
-//    title = [currentPlaylist valueForProperty:MPMediaPlaylistPropertyName];
-//    
-//    
-//    UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
-//    [self.navigationItem setLeftBarButtonItem:backItem];
-//    
-//    self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Songs"];
-//    
-//    
-//    
-//    if ((currentPlaylist) && ([currentPlaylist.items count] == 0)) {
-//        
-//    }else{
-//        
-//        
-//        
-//        
-//        self.songs = songsArray;
-//    }
-//    
-//     self.navigationController.delegate = self;
     
     
     
