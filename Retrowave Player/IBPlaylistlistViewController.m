@@ -216,20 +216,15 @@
     if (![vc.playlistName.text isEqualToString: @""]) {
         NSString *newPlaylistName = [[vc playlistName]text];
         
-        IBPlaylist *newPlaylist = [[IBPlaylist alloc] init];
-        newPlaylist.playlistName = newPlaylistName;
-        newPlaylist.songs = [NSArray array];
+        __weak IBPlaylistlistViewController *weakSelf = self;
         
+        [[MPMediaLibrary defaultMediaLibrary] getPlaylistWithUUID:[NSUUID UUID]
+    creationMetadata:[[MPMediaPlaylistCreationMetadata alloc] initWithName:newPlaylistName ]completionHandler:^(MPMediaPlaylist * _Nullable playlist, NSError * _Nullable error) {
+        [weakSelf.tableView reloadData];
+    }];
         
+    
         
-        
-        NSMutableArray *tempArray = [NSMutableArray arrayWithArray:self.playlists];
-        
-        [tempArray addObject:newPlaylist];
-        
-        self.playlists = nil;
-        self.playlists = tempArray;
-        [self.tableView reloadData]; 
     }
     
     
