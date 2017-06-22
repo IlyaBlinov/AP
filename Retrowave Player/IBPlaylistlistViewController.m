@@ -218,9 +218,18 @@
         
         __weak IBPlaylistlistViewController *weakSelf = self;
         
+        NSMutableArray *tempPlaylistArray = [NSMutableArray arrayWithArray:weakSelf.playlists]
+        ;
         [[MPMediaLibrary defaultMediaLibrary] getPlaylistWithUUID:[NSUUID UUID]
     creationMetadata:[[MPMediaPlaylistCreationMetadata alloc] initWithName:newPlaylistName ]completionHandler:^(MPMediaPlaylist * _Nullable playlist, NSError * _Nullable error) {
-        [weakSelf.tableView reloadData];
+        [tempPlaylistArray addObject:playlist];
+        
+        weakSelf.playlists = tempPlaylistArray;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+             [weakSelf.tableView reloadData];
+        });
+       
     }];
         
     
