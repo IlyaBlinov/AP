@@ -7,9 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "IBArtist.h"
 #import "IBContentViewController.h"
-#import "IBAlbum.h"
 #import "IBPlayerItem.h"
 
 

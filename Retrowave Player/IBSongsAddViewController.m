@@ -7,14 +7,13 @@
 //
 
 #import "IBSongsAddViewController.h"
-#import "IBSong.h"
 #import "IBSongCellTableViewCell.h"
 #import "IBArtistInfoViewController.h"
 #import "IBAllMediaViewController.h"
 #import "IBPlayerController.h"
 #import "IBVisualizerMusic.h"
 #import "IBPlayerItem.h"
-#import "IBCurrentParametersManager.h"
+
 
 
 
@@ -191,7 +190,6 @@
         [[IBCurrentParametersManager sharedManager] setIsEditing:YES];//playlist was saved to IBCurrentParametersManager in IBPlaylistsController
     
     [[IBCurrentParametersManager sharedManager] setChangingPlaylist:self.currentPlaylist];
-    
     [[IBCurrentParametersManager sharedManager] setReturnSongsViewController:self];
     
         IBAllMediaViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBAllMediaViewController"];
@@ -216,11 +214,7 @@
         
         
         self.currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
-        //NSMutableArray *tempArray = [NSMutableArray arrayWithArray:[[IBCurrentParametersManager sharedManager] addedSongs]];
-        
-        
-        
-//        self.songs = [NSArray arrayWithArray:[currentPlaylist items]];
+       
 NSLog(@"songsCount = %d", [[self.currentPlaylist items]count]);
         
         [[IBCurrentParametersManager sharedManager].addedSongs removeAllObjects];

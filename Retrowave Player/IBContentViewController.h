@@ -7,11 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "IBArtist.h"
-#import "IBAlbum.h"
 #import "IBFontAttributes.h"
-#import "IBPlaylist.h"
 #import <MediaPlayer/MediaPlayer.h>
+
 @interface IBContentViewController : UITableViewController
 
 

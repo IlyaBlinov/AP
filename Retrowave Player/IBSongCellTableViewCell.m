@@ -17,13 +17,8 @@
        self.backgroundColor = [UIColor darkGrayColor];    
         
         
-        UIButton *addToPlaylistButton = [[UIButton alloc] initWithFrame:CGRectMake(0,0, 32, 32)];
+
         
-        [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
-        
-        
-        [self.editingAccessoryView addSubview:  addToPlaylistButton];
-        ;
 
           }
     return self;

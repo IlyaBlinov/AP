@@ -220,6 +220,9 @@
         
         NSMutableArray *tempPlaylistArray = [NSMutableArray arrayWithArray:weakSelf.playlists]
         ;
+        
+      
+        
         [[MPMediaLibrary defaultMediaLibrary] getPlaylistWithUUID:[NSUUID UUID]
     creationMetadata:[[MPMediaPlaylistCreationMetadata alloc] initWithName:newPlaylistName ]completionHandler:^(MPMediaPlaylist * _Nullable playlist, NSError * _Nullable error) {
         [tempPlaylistArray addObject:playlist];
@@ -232,8 +235,7 @@
        
     }];
         
-    
-        
+     
     }
     
     

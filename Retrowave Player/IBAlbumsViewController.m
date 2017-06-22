@@ -11,35 +11,8 @@
 #import "IBAlbumViewCell.h"
 #import "IBArtistInfoViewController.h"
 #import "IBSongsViewController.h"
-#import "IBCurrentParametersManager.h"
 
 
-static NSString* firstNames[] = {
-    @"Tran", @"Lenore", @"Bud", @"Fredda", @"Katrice",
-    @"Clyde", @"Hildegard", @"Vernell", @"Nellie", @"Rupert",
-    @"Billie", @"Tamica", @"Crystle", @"Kandi", @"Caridad",
-    @"Vanetta", @"Taylor", @"Pinkie", @"Ben", @"Rosanna",
-    @"Eufemia", @"Britteny", @"Ramon", @"Jacque", @"Telma",
-    @"Colton", @"Monte", @"Pam", @"Tracy", @"Tresa",
-    @"Willard", @"Mireille", @"Roma", @"Elise", @"Trang",
-    @"Ty", @"Pierre", @"Floyd", @"Savanna", @"Arvilla",
-    @"Whitney", @"Denver", @"Norbert", @"Meghan", @"Tandra",
-    @"Jenise", @"Brent", @"Elenor", @"Sha", @"Jessie"
-};
-
-static NSString* lastNames[] = {
-    
-    @"Farrah", @"Laviolette", @"Heal", @"Sechrest", @"Roots",
-    @"Homan", @"Starns", @"Oldham", @"Yocum", @"Mancia",
-    @"Prill", @"Lush", @"Piedra", @"Castenada", @"Warnock",
-    @"Vanderlinden", @"Simms", @"Gilroy", @"Brann", @"Bodden",
-    @"Lenz", @"Gildersleeve", @"Wimbish", @"Bello", @"Beachy",
-    @"Jurado", @"William", @"Beaupre", @"Dyal", @"Doiron",
-    @"Plourde", @"Bator", @"Krause", @"Odriscoll", @"Corby",
-    @"Waltman", @"Michaud", @"Kobayashi", @"Sherrick", @"Woolfolk",
-    @"Holladay", @"Hornback", @"Moler", @"Bowles", @"Libbey",
-    @"Spano", @"Folson", @"Arguelles", @"Burke", @"Rook"
-};
 
 
 
@@ -47,7 +20,6 @@ static NSString* lastNames[] = {
 @interface IBAlbumsViewController ()
 
 @property (strong, nonatomic) NSArray *albums;
-@property (strong, nonatomic) UIImageView *arrowView;
 @property (strong, nonatomic) NSString *backItemTitle;
 @end
 
@@ -60,6 +32,25 @@ static NSString* lastNames[] = {
     
     
     [super viewDidLoad];
+    
+    
+    
+   [ self.tableView setEditing: [[IBCurrentParametersManager sharedManager] isEditing]];
+    
+    
+    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
+        
+        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
+        [addToPlaylistButton setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateNormal];
+        [addToPlaylistButton addTarget:self action:@selector(chooseSongs:) forControlEvents:UIControlEventTouchUpInside];
+
+        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:addToPlaylistButton];
+        
+        self.navigationItem.rightBarButtonItem = item;
+        
+        self.tableView.allowsSelectionDuringEditing = YES;
+        
+    }
     
     
     [self.navigationItem setHidesBackButton:NO animated:NO];
@@ -165,17 +156,28 @@ static NSString* lastNames[] = {
         
     
     
-    NSAttributedString *albumName = [[NSAttributedString alloc] initWithString:albumTitle];
+    NSAttributedString *albumName  = [[NSAttributedString alloc] initWithString:albumTitle];
     NSAttributedString *artistName = [[NSAttributedString alloc] initWithString:albumArtistTitle];
     
     
 
-    cell.albumImage.image = albumImage;
+    cell.albumImage.image            = albumImage;
     cell.albumTitle.attributedText   = albumName;
     cell.artistTitle.attributedText  = artistName;
-    //[cell.albumImage.layer setBackgroundColor:[UIColor magentaColor].CGColor];
     
-    
+    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
+        
+        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
+        [addToPlaylistButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+        
+        
+        [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+        cell.editingAccessoryView = addToPlaylistButton;
+        
+    }else{
+        
+        cell.editingAccessoryView = nil;
+    }
     
     return cell;
     
@@ -195,10 +197,7 @@ static NSString* lastNames[] = {
     
     NSString *identifier = @"IBSongsViewController";
     
-    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
-        identifier = @"IBSongsChooseViewController";
-    }
-
+    
     IBSongsViewController *vcSongs = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
     
         [self.navigationController pushViewController:vcSongs animated:YES];
@@ -208,7 +207,71 @@ static NSString* lastNames[] = {
 
 
 
+#pragma mark - Action
+
+- (void) addToPlaylistAction:(IBPlayerItem*) button{
+    
+    CGPoint point = [button convertPoint:CGPointZero toView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
+    
+    MPMediaItem *album = [self.albums objectAtIndex:indexPath.row];
+
+    NSString *title = [album valueForProperty:MPMediaItemPropertyAlbumTitle];
+    
+    MPMediaPropertyPredicate *albumNamePredicate =
+    [MPMediaPropertyPredicate predicateWithValue: title
+                                     forProperty: MPMediaItemPropertyAlbumTitle];
+    
+    MPMediaQuery *songsOfAlbum = [[MPMediaQuery alloc] init];
+    [songsOfAlbum addFilterPredicate:albumNamePredicate];
+
+    
+    
+    
+    NSArray *songs = [songsOfAlbum items];
+    
+    if (button.isSelected == NO) {
+        [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];
+        [button setIsSelected:YES];
+        [[IBCurrentParametersManager sharedManager].addedSongs addObjectsFromArray:songs];
+    }else{
+        [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+        [button setIsSelected:NO];
+        NSUInteger location = [[IBCurrentParametersManager sharedManager].addedSongs count] - [songs count] ;
+        
+        [[IBCurrentParametersManager sharedManager].addedSongs removeObjectsInRange:NSMakeRange(location, [songs count])];
+    }
+    
+    
+    NSLog(@"added songs = %u",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+    
+    
+}
 
 
+- (void)chooseSongs:(IBPlayerItem *) button{
+    
+    [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = playlist;
+    
+    MPMediaPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
+    
+    NSArray *addedSongs              = [NSArray arrayWithArray:[[IBCurrentParametersManager sharedManager] addedSongs]];
+    
+    IBSongsAddViewController *vc = [[IBCurrentParametersManager sharedManager] returnSongsViewController];
+    
+   // __weak IBSongsViewController        *weakVC   = vc;
+    __weak IBAlbumsViewController       *weakSelf = self;
+    
+    
+    
+    [currentPlaylist addMediaItems:addedSongs completionHandler:^(NSError * _Nullable error) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.navigationController popToViewController:vc animated:YES];
+        });
+        
+    }];
+    
+}
 
 @end

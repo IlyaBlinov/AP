@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		236727F21ED30C0A0054678D /* IBSongsAddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 236727F11ED30C0A0054678D /* IBSongsAddViewController.m */; };
-		236727F51ED30C2B0054678D /* IBSongsChooseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 236727F41ED30C2B0054678D /* IBSongsChooseViewController.m */; };
 		6F004C751EACCEFC007755C3 /* Automani.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B561EACCEFC007755C3 /* Automani.ttf */; };
 		6F004C761EACCEFC007755C3 /* Codystar.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B571EACCEFC007755C3 /* Codystar.ttf */; };
 		6F004C771EACCEFC007755C3 /* Codystart.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B581EACCEFC007755C3 /* Codystart.ttf */; };
@@ -269,8 +268,6 @@
 /* Begin PBXFileReference section */
 		236727F01ED30C0A0054678D /* IBSongsAddViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBSongsAddViewController.h; sourceTree = "<group>"; };
 		236727F11ED30C0A0054678D /* IBSongsAddViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBSongsAddViewController.m; sourceTree = "<group>"; };
-		236727F31ED30C2B0054678D /* IBSongsChooseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBSongsChooseViewController.h; sourceTree = "<group>"; };
-		236727F41ED30C2B0054678D /* IBSongsChooseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBSongsChooseViewController.m; sourceTree = "<group>"; };
 		6F004B561EACCEFC007755C3 /* Automani.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Automani.ttf; sourceTree = "<group>"; };
 		6F004B571EACCEFC007755C3 /* Codystar.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Codystar.ttf; sourceTree = "<group>"; };
 		6F004B581EACCEFC007755C3 /* Codystart.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Codystart.ttf; sourceTree = "<group>"; };
@@ -1003,8 +1000,6 @@
 				6F05DD081EACD5E1009C77BD /* IBSongsViewController.m */,
 				236727F01ED30C0A0054678D /* IBSongsAddViewController.h */,
 				236727F11ED30C0A0054678D /* IBSongsAddViewController.m */,
-				236727F31ED30C2B0054678D /* IBSongsChooseViewController.h */,
-				236727F41ED30C2B0054678D /* IBSongsChooseViewController.m */,
 				6F004B5C1EACCEFC007755C3 /* IBAlbumsViewController.h */,
 				6F004B5D1EACCEFC007755C3 /* IBAlbumsViewController.m */,
 				6F004B721EACCEFC007755C3 /* IBArtistsViewController.h */,
@@ -1518,7 +1513,6 @@
 				6F004C8E1EACCEFC007755C3 /* IBMainTitle.m in Sources */,
 				6F004C941EACCEFC007755C3 /* IBTabBarPlayerItem.m in Sources */,
 				6F004C871EACCEFC007755C3 /* IBContentViewController.m in Sources */,
-				236727F51ED30C2B0054678D /* IBSongsChooseViewController.m in Sources */,
 				6F004C7B1EACCEFC007755C3 /* IBAlbumViewCell.m in Sources */,
 				236727F21ED30C0A0054678D /* IBSongsAddViewController.m in Sources */,
 				6FCDBDCB1EB49CCE00B326D7 /* IBPlaylist.m in Sources */,

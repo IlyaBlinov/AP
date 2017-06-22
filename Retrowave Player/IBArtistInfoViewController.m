@@ -138,12 +138,6 @@
         [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = artist;
         
         NSString *identifier = @"IBSongsViewController";
-        
-        if ([[IBCurrentParametersManager sharedManager] isEditing]) {
-            identifier = @"IBSongsChooseViewController";
-        }
-
-        
         IBSongsViewController *vcSongs = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
         
         

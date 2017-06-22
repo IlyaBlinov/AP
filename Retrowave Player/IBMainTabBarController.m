@@ -12,7 +12,7 @@
 #import "IBVisualizerMusic.h"
 #import "IBSongsViewController.h"
 #import "IBCurrentParametersManager.h"
-#import "IBSongsChooseViewController.h"
+
 
 @interface IBMainTabBarController ()<UITabBarDelegate, UITabBarControllerDelegate>
 

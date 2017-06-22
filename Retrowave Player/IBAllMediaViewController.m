@@ -17,38 +17,56 @@
 #import "IBAllMediaCell.h"
 #import "IBCurrentParametersManager.h"
 #import "IBPlaylist.h"
-#import "IBSongsChooseViewController.h"
+
 
 
 
 @interface IBAllMediaViewController ()<UITabBarDelegate>
 @property (strong, nonatomic) NSArray *categories;
+@property (strong, nonatomic) NSTimer *timer;
 @end
 
 @implementation IBAllMediaViewController
 
+- (void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
+    
+    
+    
+    if ([IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode == playlist) {
+        
+        MPMediaPlaylist *playlist = [[IBCurrentParametersManager sharedManager] playlist];
+        
+        NSString *title = [NSString stringWithFormat:@"Playlist  %@", [playlist valueForProperty:MPMediaPlaylistPropertyName]];
+        
+        UIBarButtonItem *backItem =  [self setLeftBackBarButtonItem:title];
+        [self.navigationItem setLeftBarButtonItem:backItem];
+        
+        
+        
+    }
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    NSInteger status = [MPMediaLibrary authorizationStatus];
+    
+    if (status != MPMediaLibraryAuthorizationStatusAuthorized ) {
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(checkStatus) userInfo:nil repeats:YES];
+    }
+
+    
+    
     
     [self.navigationItem setHidesBackButton:NO animated:NO];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     
     
     
-    if ([IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode == playlist) {
     
-    MPMediaPlaylist *playlist = [[IBCurrentParametersManager sharedManager] playlist];
-        
-    NSString *title = [NSString stringWithFormat:@"Playlist  %@", [playlist valueForProperty:MPMediaPlaylistPropertyName]];
-    
-    UIBarButtonItem *backItem =  [self setLeftBackBarButtonItem:title];
-    [self.navigationItem setLeftBarButtonItem:backItem];
-    
-    
-    
-    }
        
     
     
@@ -147,21 +165,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    
-//    IBMainTabBarController *tabBarController = (IBMainTabBarController*)[self.navigationController tabBarController];
-    
-    
-    
     IBAllMediaCell *cell = (IBAllMediaCell*)[tableView cellForRowAtIndexPath:indexPath];
     
     if ([cell.categoryName.text isEqualToString:@"Songs"] | [cell.categoryName.text isEqualToString:@"Audio Books"]) {
         
         [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = allSongs;
         NSString *identifier = @"IBSongsViewController";
-        
-        if ([[IBCurrentParametersManager sharedManager] isEditing]) {
-            identifier = @"IBSongsChooseViewController";
-        }
+       
         
         IBSongsViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
         [self.navigationController pushViewController:vc animated:YES];
@@ -182,8 +192,65 @@
         
     }
 
+    IBSongsAddViewController *vc = [[IBCurrentParametersManager sharedManager] returnSongsViewController];
     
+    
+    for (IBContentViewController *popVC in [self.navigationController viewControllers]) {
+        
+        if ([popVC isEqual:vc]) {
+            NSLog(@"EQUAL");
+        }else{
+            NSLog(@"NOT EQUAL");
+        }
+
+        
+        
+    }
+
 }
 
+
+
+
+#pragma mark - Actions
+
+- (void) checkStatus{
+    __weak IBAllMediaViewController *weakSelf = self;
+    
+    
+    NSInteger status = [MPMediaLibrary authorizationStatus];
+    
+    switch (status) {
+            
+        case MPMediaLibraryAuthorizationStatusNotDetermined:
+            NSLog(@"MPMediaLibraryAuthorizationStatusNotDetermined");
+            break;
+            
+        case MPMediaLibraryAuthorizationStatusDenied:
+            NSLog(@"MPMediaLibraryAuthorizationStatusDenied");
+            break;
+            
+        case MPMediaLibraryAuthorizationStatusRestricted:
+            NSLog(@"MPMediaLibraryAuthorizationStatusRestricted");
+            break;
+            
+        case MPMediaLibraryAuthorizationStatusAuthorized:
+            [weakSelf.timer invalidate];
+            weakSelf.timer = nil;
+            [weakSelf.tableView reloadData];
+            NSLog(@"MPMediaLibraryAuthorizationStatusAuthorized");
+            break;
+            
+            
+            
+        default:
+            NSLog(@"Default");
+            break;
+    }
+    
+    
+    
+    
+}
 
 @end

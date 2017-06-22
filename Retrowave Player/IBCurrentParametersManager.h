@@ -7,11 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "IBArtist.h"
-#import "IBAlbum.h"
-#import "IBSong.h"
-#import "IBPlaylist.h"
 #import "IBSongsViewController.h"
+#import "IBSongsAddViewController.h"
 #import <MediaPlayer/MediaPlayer.h>
 
 typedef enum {
@@ -25,7 +22,7 @@ typedef enum {
 
 + (IBCurrentParametersManager*) sharedManager;
 
-@property (strong, nonatomic) IBSongsViewController *returnSongsViewController;
+@property (strong, nonatomic) IBSongsAddViewController *returnSongsViewController;
 
 
 @property (strong, nonatomic) MPMediaItem     *artist;

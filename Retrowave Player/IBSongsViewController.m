@@ -7,15 +7,13 @@
 //
 
 #import "IBSongsViewController.h"
-#import "IBSong.h"
 #import "IBSongCellTableViewCell.h"
 #import "IBArtistInfoViewController.h"
 #import "IBAllMediaViewController.h"
 #import "IBPlayerController.h"
 #import "IBVisualizerMusic.h"
 #import "IBPlayerItem.h"
-#import "IBCurrentParametersManager.h"
-
+#import "IBSongsAddViewController.h"
 
 
 
@@ -26,30 +24,21 @@
 
 @interface IBSongsViewController ()
 
-@property (strong, nonatomic) NSString *backItemTitle;
-@property (strong, nonatomic) NSTimer *timer;
+
+
 @end
 
 @implementation IBSongsViewController
 
 
 
-
-
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-      
-    NSInteger status = [MPMediaLibrary authorizationStatus];
+- (void)viewWillAppear:(BOOL)animated{
     
-    if (status != MPMediaLibraryAuthorizationStatusAuthorized ) {
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(checkStatus) userInfo:nil repeats:YES];
-    }
-   
+    [super viewWillAppear:animated];
     
     
-    NSDictionary *titleAndSongsDictionary = [[IBCurrentParametersManager sharedManager]getSongsAndTitleForSongViewController];
+    NSDictionary *titleAndSongsDictionary = [[IBCurrentParametersManager sharedManager]
+                                                                                    getSongsAndTitleForSongViewController];
     
     NSString *title = [titleAndSongsDictionary valueForKey:@"title"];
     NSArray *songs  = [titleAndSongsDictionary valueForKey:@"songs"];
@@ -59,9 +48,35 @@
     
     UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
     [self.navigationItem setLeftBarButtonItem:backItem];
+    self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Songs"];
+    
+    
+    
+    if ([self.navigationController.tabBarItem.title isEqualToString:@"Songs"]) {
+        [self.navigationItem setLeftBarButtonItem:nil];
+        [self.navigationController setNavigationBarHidden:YES];
+        [self.navigationItem setHidesBackButton:YES animated:NO];
+    }
+    
+    
+    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
+        
+        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
+        [addToPlaylistButton setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateNormal];
+        [addToPlaylistButton addTarget:self action:@selector(chooseSongs:) forControlEvents:UIControlEventTouchUpInside];
+        
+        
+        UIBarButtonItem *addToPlaylistItem = [[UIBarButtonItem alloc] initWithCustomView:addToPlaylistButton];
+        self.navigationItem.rightBarButtonItem = addToPlaylistItem;
+        
+        
+        [self.navigationController setNavigationBarHidden:NO];
+        [self.tableView setEditing:YES];
+        
+    }
 
     
-    self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Songs"];
+    [self.tableView reloadData];
     
     
  
@@ -136,6 +151,24 @@
     cell.artistTitle.attributedText  = artistName;
     cell.timeDuration.attributedText = timeDuration;
     cell.songCount.attributedText    = songCount;
+        
+        
+    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
+            
+            IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
+            [addToPlaylistButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+            
+            
+            [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+            cell.editingAccessoryView = addToPlaylistButton;
+            
+    }else{
+            
+            cell.editingAccessoryView = nil;
+        }
+    
+        
+        
     
     }
     
@@ -187,50 +220,75 @@
 }
 
 
-
 #pragma mark - Actions
 
 
+- (void) addToPlaylistAction:(IBPlayerItem*) button{
+    
+    
+    CGPoint point = [button convertPoint:CGPointZero toView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
+    
+    MPMediaItem *song = [self.songs objectAtIndex:indexPath.row];
+    
+    if (button.isSelected == NO) {
+        [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];
+        [button setIsSelected:YES];
+        [[IBCurrentParametersManager sharedManager].addedSongs addObject:song];
+    }else{
+        [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+        [button setIsSelected:NO];
+        [[IBCurrentParametersManager sharedManager].addedSongs removeObject:song];
+    }
+    
+    
+    NSLog(@"added songs = %u",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+    
+    
+}
 
-
-- (void) checkStatus{
-    __weak IBSongsViewController *weakSelf = self;
+- (void)chooseSongs:(IBPlayerItem *) button{
+    
+    [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = playlist;
+    
+    MPMediaPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
+    
+    NSArray *addedSongs              = [NSArray arrayWithArray:[[IBCurrentParametersManager sharedManager] addedSongs]];
+    
+    IBSongsAddViewController *vc = [[IBCurrentParametersManager sharedManager] returnSongsViewController];
     
     
-    NSInteger status = [MPMediaLibrary authorizationStatus];
-    
-    switch (status) {
-            
-        case MPMediaLibraryAuthorizationStatusNotDetermined:
-            NSLog(@"MPMediaLibraryAuthorizationStatusNotDetermined");
-            break;
-            
-        case MPMediaLibraryAuthorizationStatusDenied:
-            NSLog(@"MPMediaLibraryAuthorizationStatusDenied");
-            break;
-            
-        case MPMediaLibraryAuthorizationStatusRestricted:
-            NSLog(@"MPMediaLibraryAuthorizationStatusRestricted");
-            break;
-            
-        case MPMediaLibraryAuthorizationStatusAuthorized:
-            [weakSelf.timer invalidate];
-            weakSelf.timer = nil;
-            [weakSelf.tableView reloadData];
-            NSLog(@"MPMediaLibraryAuthorizationStatusAuthorized");
-            break;
-            
-            
-            
-        default:
-            NSLog(@"Default");
-            break;
+    for (IBContentViewController *popVC in [self.navigationController viewControllers]) {
+        
+        if ([popVC isEqual:vc]) {
+            NSLog(@"EQUAL");
+        }else{
+            NSLog(@"NOT EQUAL");
+        }
+        
+        
     }
     
     
     
+    __weak IBSongsViewController        *weakSelf = self;
+    
+    
+    
+    [currentPlaylist addMediaItems:addedSongs completionHandler:^(NSError * _Nullable error) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.navigationController popToViewController:vc animated:YES];
+        });
+        
+    }];
     
 }
+
+
+
+
+
 
 
 @end

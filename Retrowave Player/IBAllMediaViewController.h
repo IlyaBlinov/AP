@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "IBContentViewController.h"
+
 @interface IBAllMediaViewController : IBContentViewController
 
 @end

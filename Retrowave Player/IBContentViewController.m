@@ -8,6 +8,8 @@
 
 #import "IBContentViewController.h"
 #import "IBAllMediaViewController.h"
+#import "IBCurrentParametersManager.h"
+
 @interface IBContentViewController ()
 
 @end
@@ -29,6 +31,20 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+#pragma mark - UITableViewDelegate
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return UITableViewCellEditingStyleNone;
+}
+
+
+- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath{
+    return NO;
+}
+
+
 
 
 #pragma set left bar button item
@@ -54,9 +70,21 @@
     
     if ([self.navigationItem.leftBarButtonItem.title isEqualToString:@"All Media"]) {
         
+        if ([[IBCurrentParametersManager sharedManager] isEditing]) {
+        
+            [[IBCurrentParametersManager sharedManager] setSongsViewControllerDataViewMode:playlist];
+            MPMediaPlaylist *changingPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
+            [[IBCurrentParametersManager sharedManager] setPlaylist:changingPlaylist];
+            
+        }else{
+        
+            [[IBCurrentParametersManager sharedManager] setSongsViewControllerDataViewMode:allSongs];
+        }
+        
         for (IBContentViewController *vc in [self.navigationController viewControllers]) {
             
             if ([vc isKindOfClass:[IBAllMediaViewController class]]) {
+                
                  [self.navigationController popToViewController:vc animated:YES];
             }
         }
@@ -68,6 +96,23 @@
         
         [self.navigationController popToViewController:vc animated:YES];
     }
+    
+    IBSongsAddViewController *vc = [[IBCurrentParametersManager sharedManager] returnSongsViewController];
+    
+    
+    for (IBContentViewController *popVC in [self.navigationController viewControllers]) {
+        
+        if ([popVC isEqual:vc]) {
+            NSLog(@"EQUAL");
+            continue;
+        }else{
+              NSLog(@"NOT EQUAL");
+        }
+        
+        
+    }
+
+    
 }
 
 #pragma mark - sortingItems
