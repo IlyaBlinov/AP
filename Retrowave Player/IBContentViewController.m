@@ -33,6 +33,14 @@
 }
 
 
+- (void)dealloc
+{
+   
+
+    NSLog(@"%@ is deallocated", [self description]);
+}
+
+
 #pragma mark - UITableViewDelegate
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -68,6 +76,7 @@
     
     NSArray *allControllers = [self.navigationController viewControllers];
     
+    
     if ([self.navigationItem.leftBarButtonItem.title isEqualToString:@"All Media"]) {
         
         if ([[IBCurrentParametersManager sharedManager] isEditing]) {
@@ -81,39 +90,29 @@
             [[IBCurrentParametersManager sharedManager] setSongsViewControllerDataViewMode:allSongs];
         }
         
-        for (IBContentViewController *vc in [self.navigationController viewControllers]) {
-            
-            if ([vc isKindOfClass:[IBAllMediaViewController class]]) {
-                
-                 [self.navigationController popToViewController:vc animated:YES];
-            }
-        }
-        
-       
+    }
+    
+    IBContentViewController *vc;
+    
+    if ([allControllers count] > 1) {
+        vc = [allControllers objectAtIndex:[allControllers count] - 2];
     }else{
-        
-        IBContentViewController *vc = [allControllers objectAtIndex:[allControllers count] - 2];
-        
-        [self.navigationController popToViewController:vc animated:YES];
+         vc = [allControllers objectAtIndex:[allControllers count] - 1];
     }
     
-    IBSongsAddViewController *vc = [[IBCurrentParametersManager sharedManager] returnSongsViewController];
     
     
-    for (IBContentViewController *popVC in [self.navigationController viewControllers]) {
+    [self.navigationController popToViewController:vc animated:YES];
+    NSLog(@"popToViewController %@", [vc description]);
         
-        if ([popVC isEqual:vc]) {
-            NSLog(@"EQUAL");
-            continue;
-        }else{
-              NSLog(@"NOT EQUAL");
+    if ([vc isKindOfClass:[IBSongsAddViewController class]]) {
+            [[IBCurrentParametersManager sharedManager] setReturnSongsViewController:nil];
         }
         
         
-    }
-
+   }
     
-}
+
 
 #pragma mark - sortingItems
 
@@ -146,6 +145,10 @@
     return array;
     
 }
+
+
+
+
 
 
 @end

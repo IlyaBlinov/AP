@@ -250,35 +250,23 @@
 - (void)chooseSongs:(IBPlayerItem *) button{
     
     [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = playlist;
-    
     MPMediaPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
     
     NSArray *addedSongs              = [NSArray arrayWithArray:[[IBCurrentParametersManager sharedManager] addedSongs]];
-    
-    IBSongsAddViewController *vc = [[IBCurrentParametersManager sharedManager] returnSongsViewController];
-    
-    
-    for (IBContentViewController *popVC in [self.navigationController viewControllers]) {
-        
-        if ([popVC isEqual:vc]) {
-            NSLog(@"EQUAL");
-        }else{
-            NSLog(@"NOT EQUAL");
-        }
-        
-        
-    }
-    
+    IBSongsAddViewController *vc     = [[IBCurrentParametersManager sharedManager] returnSongsViewController];
     
     
     __weak IBSongsViewController        *weakSelf = self;
+    __weak IBSongsAddViewController     *weakVC   = vc;
     
     
+    NSLog(@"VC_COUNT = %d",[[self.navigationController viewControllers] count]);
+    NSLog(@"VC:%@",[[self.navigationController viewControllers] firstObject]);
     
     [currentPlaylist addMediaItems:addedSongs completionHandler:^(NSError * _Nullable error) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.navigationController popToViewController:vc animated:YES];
+            [weakSelf.navigationController popToViewController:weakVC animated:YES];
         });
         
     }];

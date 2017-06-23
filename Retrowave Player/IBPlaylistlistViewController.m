@@ -151,11 +151,6 @@
     
     NSString *identifier = @"IBSongsAddViewController";
     
-    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
-        identifier = @"IBSongsChooseViewController";
-    }
-
-    
     IBSongsViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
     
     

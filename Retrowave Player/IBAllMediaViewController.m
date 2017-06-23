@@ -32,7 +32,7 @@
     
     [super viewWillAppear:animated];
     
-    
+  
     
     if ([IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode == playlist) {
         
@@ -42,10 +42,11 @@
         
         UIBarButtonItem *backItem =  [self setLeftBackBarButtonItem:title];
         [self.navigationItem setLeftBarButtonItem:backItem];
-        
-        
-        
+ 
     }
+    
+    
+    
 }
 
 - (void)viewDidLoad
@@ -170,10 +171,7 @@
     if ([cell.categoryName.text isEqualToString:@"Songs"] | [cell.categoryName.text isEqualToString:@"Audio Books"]) {
         
         [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = allSongs;
-        NSString *identifier = @"IBSongsViewController";
-       
-        
-        IBSongsViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
+        IBSongsViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBSongsViewController"];
         [self.navigationController pushViewController:vc animated:YES];
         
     }else if ([cell.categoryName.text isEqualToString:@"Playlists"]) {
@@ -192,21 +190,7 @@
         
     }
 
-    IBSongsAddViewController *vc = [[IBCurrentParametersManager sharedManager] returnSongsViewController];
     
-    
-    for (IBContentViewController *popVC in [self.navigationController viewControllers]) {
-        
-        if ([popVC isEqual:vc]) {
-            NSLog(@"EQUAL");
-        }else{
-            NSLog(@"NOT EQUAL");
-        }
-
-        
-        
-    }
-
 }
 
 

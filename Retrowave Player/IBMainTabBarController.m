@@ -136,6 +136,12 @@
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item{
     
+  if([item.title isEqualToString:@"Playlists"]){
+      [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = playlist;
+    }else if([item.title isEqualToString:@"Songs"] | [item.title isEqualToString:@"Books"]){
+      [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = allSongs;
+       
+    }
     
     [self setAttributesForItem:item];
     
@@ -165,25 +171,27 @@
         
     }
 
-    
 }
 
-- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UINavigationController *)viewController{
-    
-    if ([viewController.tabBarItem.title isEqualToString:@"Songs"]  | [viewController.tabBarItem.title isEqualToString:@"Books"]) {
-       
-//        [self.navigationController setNavigationBarHidden:YES];
-//        [self.navigationItem setHidesBackButton:YES animated:NO];
-        
-    }else if([viewController.tabBarItem.title isEqualToString:@"Playlists"]){
-        [viewController setNavigationBarHidden:NO];
-    }else{
-        [self.navigationItem setHidesBackButton:NO animated:NO];
-        [self.navigationController setNavigationBarHidden:NO animated:NO];
-
-    }
-    
-}
+//- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UINavigationController *)viewController{
+//    
+//    if ([viewController.tabBarItem.title isEqualToString:@"Songs"]  | [viewController.tabBarItem.title isEqualToString:@"Books"]) {
+//       
+//    
+//        
+//    }else if([viewController.tabBarItem.title isEqualToString:@"Playlists"]){
+//        // [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = playlist;
+//        [viewController setNavigationBarHidden:NO];
+//      
+//    }else if([viewController.tabBarItem.title isEqualToString:@"  All Media"]){
+//         [self.navigationItem setHidesBackButton:YES animated:NO];
+//    }else{
+//        [self.navigationItem setHidesBackButton:NO animated:NO];
+//        [self.navigationController setNavigationBarHidden:NO animated:NO];
+//
+//    }
+//    
+//}
 
 
 
