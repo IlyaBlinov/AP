@@ -140,8 +140,12 @@
       [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = playlist;
     }else if([item.title isEqualToString:@"Songs"] | [item.title isEqualToString:@"Books"]){
       [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = allSongs;
-       
+    }else if ([item.title isEqualToString:@"  All Media"] && [[IBCurrentParametersManager sharedManager]isEditing]){
+        UINavigationController *nav = [self.viewControllers objectAtIndex:3];
+        
+        
     }
+    
     
     [self setAttributesForItem:item];
     
@@ -171,8 +175,12 @@
         
     }
 
-}
 
+
+
+
+
+}
 //- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UINavigationController *)viewController{
 //    
 //    if ([viewController.tabBarItem.title isEqualToString:@"Songs"]  | [viewController.tabBarItem.title isEqualToString:@"Books"]) {
@@ -192,7 +200,7 @@
 //    }
 //    
 //}
-
+//
 
 
 

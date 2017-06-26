@@ -143,6 +143,8 @@
         
        
          [self.navigationController pushViewController:vcSongs animated:YES];
+        
+        NSLog(@" pushViewController IBSongsViewController from IBArtistInfoViewController");
        
     }else if ([cell.textLabel.text isEqualToString:@"Albums"]) {
         
@@ -152,6 +154,8 @@
         
        
         [self.navigationController pushViewController:vcAlbum animated:YES];
+        
+         NSLog(@" pushViewController IBAlbumsViewController from IBArtistInfoViewController");
         
     }
         

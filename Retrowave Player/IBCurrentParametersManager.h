@@ -32,7 +32,7 @@ typedef enum {
 
 
 @property (assign, nonatomic) BOOL isEditing;
-
+@property (assign, nonatomic) BOOL isUpdating;
 
 @property (strong, nonatomic) MPMediaPlaylist *changingPlaylist;
 @property (strong, nonatomic) NSMutableArray  *addedSongs;

@@ -32,10 +32,14 @@
 
 
 
-- (void)viewWillAppear:(BOOL)animated{
+//- (void)viewWillAppear:(BOOL)animated{
+//    
+//    [super viewWillAppear:animated];
+- (void)viewDidLoad
+{
     
-    [super viewWillAppear:animated];
     
+    [super viewDidLoad];
     
     NSDictionary *titleAndSongsDictionary = [[IBCurrentParametersManager sharedManager]
                                                                                     getSongsAndTitleForSongViewController];
@@ -76,7 +80,7 @@
     }
 
     
-    [self.tableView reloadData];
+  //  [self.tableView reloadData];
     
     
  
@@ -256,8 +260,20 @@
     IBSongsAddViewController *vc     = [[IBCurrentParametersManager sharedManager] returnSongsViewController];
     
     
-    __weak IBSongsViewController        *weakSelf = self;
     __weak IBSongsAddViewController     *weakVC   = vc;
+    
+    
+    
+    NSLog(@"tabvccount = %d", [[self.tabBarController viewControllers]count]);
+    
+    UINavigationController *navAllVC = [self.tabBarController.viewControllers objectAtIndex:0];
+    
+   
+    
+    UINavigationController *navPlaylistVC = [self.tabBarController.viewControllers objectAtIndex:3];
+    __weak UINavigationController        *weakNavPlaylistVC = navPlaylistVC;
+    
+
     
     
     NSLog(@"VC_COUNT = %d",[[self.navigationController viewControllers] count]);
@@ -266,11 +282,12 @@
     [currentPlaylist addMediaItems:addedSongs completionHandler:^(NSError * _Nullable error) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.navigationController popToViewController:weakVC animated:YES];
-        });
+            [weakNavPlaylistVC popToViewController:vc animated:YES];
+                   });
         
     }];
-    
+    [navAllVC popToRootViewControllerAnimated:YES];
+
 }
 
 

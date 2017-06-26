@@ -195,6 +195,7 @@
         IBAllMediaViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBAllMediaViewController"];
         
         self.navigationController.delegate = self;
+    
         
         [self.navigationController pushViewController:vc animated:YES];
      

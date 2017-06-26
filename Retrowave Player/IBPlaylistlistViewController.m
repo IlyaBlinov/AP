@@ -37,22 +37,7 @@
     
     [super viewWillAppear:animated];
     
-    NSInteger number = [self.navigationController.viewControllers count] - 2;
-    
-    if (number >= 0) {
-        if ([[self.navigationController.viewControllers objectAtIndex:number] isKindOfClass:[IBAllMediaViewController class]]) {
-            NSString *title = @"All Media";
-            UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
-            [self.navigationItem setLeftBarButtonItem:backItem];
-            
-        }
-        
-    }
-    
-    
-    
-    
-    self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Playlists"];
+ 
     
     MPMediaQuery *playlistQuery = [MPMediaQuery playlistsQuery];
     NSArray *playlistArray = [playlistQuery collections];
@@ -73,7 +58,22 @@
 {
     [super viewDidLoad];
     
+    NSInteger number = [self.navigationController.viewControllers count] - 2;
     
+    if (number >= 0) {
+        if ([[self.navigationController.viewControllers objectAtIndex:number] isKindOfClass:[IBAllMediaViewController class]]) {
+            NSString *title = @"All Media";
+            UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
+            [self.navigationItem setLeftBarButtonItem:backItem];
+            
+        }
+        
+    }
+    
+    
+    
+    
+    self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Playlists"];
     
     
 }

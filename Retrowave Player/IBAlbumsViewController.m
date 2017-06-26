@@ -201,6 +201,10 @@
     IBSongsViewController *vcSongs = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
     
         [self.navigationController pushViewController:vcSongs animated:YES];
+    
+    
+    NSLog(@" pushViewController IBSongsViewController from IBAlbumsViewController");
+    
         
     }
 

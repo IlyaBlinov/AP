@@ -28,26 +28,7 @@
 
 @implementation IBAllMediaViewController
 
-- (void)viewWillAppear:(BOOL)animated{
-    
-    [super viewWillAppear:animated];
-    
-  
-    
-    if ([IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode == playlist) {
-        
-        MPMediaPlaylist *playlist = [[IBCurrentParametersManager sharedManager] playlist];
-        
-        NSString *title = [NSString stringWithFormat:@"Playlist  %@", [playlist valueForProperty:MPMediaPlaylistPropertyName]];
-        
-        UIBarButtonItem *backItem =  [self setLeftBackBarButtonItem:title];
-        [self.navigationItem setLeftBarButtonItem:backItem];
- 
-    }
-    
-    
-    
-}
+
 
 - (void)viewDidLoad
 {
@@ -66,7 +47,16 @@
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     
     
-    
+    if (([IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode == playlist) && [[IBCurrentParametersManager sharedManager] isEditing]) {
+        
+        MPMediaPlaylist *playlist = [[IBCurrentParametersManager sharedManager] playlist];
+        
+        NSString *title = [NSString stringWithFormat:@"Playlist  %@", [playlist valueForProperty:MPMediaPlaylistPropertyName]];
+        
+        UIBarButtonItem *backItem =  [self setLeftBackBarButtonItem:title];
+        [self.navigationItem setLeftBarButtonItem:backItem];
+        
+    }
     
        
     
