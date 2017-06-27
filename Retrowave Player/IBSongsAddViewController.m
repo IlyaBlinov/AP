@@ -27,8 +27,25 @@
 @implementation IBSongsAddViewController
 
 
+- (void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
 
+    
+    if ([self isEqual:[[IBCurrentParametersManager sharedManager]returnSongsViewController]]) {
+        
+    self.currentPlaylist = nil;
+    self.currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
+    
+    NSLog(@"songsCount = %d", [[self.currentPlaylist items]count]);
+    
+    [[IBCurrentParametersManager sharedManager].addedSongs removeAllObjects];
+    [[IBCurrentParametersManager sharedManager] setChangingPlaylist:nil];
+    [[IBCurrentParametersManager sharedManager] setReturnSongsViewController:nil];
+    [self.tableView reloadData];
 
+}
+}
 
 - (void)viewDidLoad
 {
@@ -194,38 +211,12 @@
     
         IBAllMediaViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBAllMediaViewController"];
         
-        self.navigationController.delegate = self;
+   //     self.navigationController.delegate = self;
     
         
         [self.navigationController pushViewController:vc animated:YES];
      
 }
 
-- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(IBSongsAddViewController *)viewController animated:(BOOL)animated{
-    
-    
-    
-    if ([viewController isKindOfClass:[IBSongsAddViewController class]] && ([[IBCurrentParametersManager sharedManager] isEditing])) {
-       
-        NSLog(@"songsCount = %d", [[self.currentPlaylist items]count]);
-        
-        [[IBCurrentParametersManager sharedManager] setIsEditing:NO];
-        
-        self.navigationController.delegate = nil;
-        
-        
-        self.currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
-       
-NSLog(@"songsCount = %d", [[self.currentPlaylist items]count]);
-        
-        [[IBCurrentParametersManager sharedManager].addedSongs removeAllObjects];
-        [[IBCurrentParametersManager sharedManager] setChangingPlaylist:nil];
-        
-        [self.tableView reloadData];
-        
-        
-    }
-    
-    
-}
+
 @end

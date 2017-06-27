@@ -32,9 +32,43 @@
 
 
 
-//- (void)viewWillAppear:(BOOL)animated{
-//    
-//    [super viewWillAppear:animated];
+- (void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
+    
+    
+    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
+        
+        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
+        [addToPlaylistButton setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateNormal];
+        [addToPlaylistButton addTarget:self action:@selector(chooseSongs:) forControlEvents:UIControlEventTouchUpInside];
+        
+        
+        UIBarButtonItem *addToPlaylistItem = [[UIBarButtonItem alloc] initWithCustomView:addToPlaylistButton];
+        self.navigationItem.rightBarButtonItem = addToPlaylistItem;
+        
+        
+        [self.navigationController setNavigationBarHidden:NO];
+        [self.tableView setEditing:YES];
+         [self.tableView reloadData];
+        
+    }
+    
+    if ([self.navigationController.tabBarItem.title isEqualToString:@"Songs"] && [[IBCurrentParametersManager sharedManager] isEditing]) {
+        [self.navigationItem setLeftBarButtonItem:nil];
+        [self.navigationController setNavigationBarHidden:NO];
+        [self.navigationItem setHidesBackButton:YES animated:NO];
+       
+    }else if ([self.navigationController.tabBarItem.title isEqualToString:@"Songs"] && ![[IBCurrentParametersManager sharedManager] isEditing]){
+        
+        [self.navigationItem setLeftBarButtonItem:nil];
+        [self.navigationController setNavigationBarHidden:YES];
+        [self.navigationItem setHidesBackButton:YES animated:NO];
+        
+        
+    }
+
+}
 - (void)viewDidLoad
 {
     
@@ -53,37 +87,6 @@
     UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
     [self.navigationItem setLeftBarButtonItem:backItem];
     self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Songs"];
-    
-    
-    
-    if ([self.navigationController.tabBarItem.title isEqualToString:@"Songs"]) {
-        [self.navigationItem setLeftBarButtonItem:nil];
-        [self.navigationController setNavigationBarHidden:YES];
-        [self.navigationItem setHidesBackButton:YES animated:NO];
-    }
-    
-    
-    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
-        
-        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-        [addToPlaylistButton setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateNormal];
-        [addToPlaylistButton addTarget:self action:@selector(chooseSongs:) forControlEvents:UIControlEventTouchUpInside];
-        
-        
-        UIBarButtonItem *addToPlaylistItem = [[UIBarButtonItem alloc] initWithCustomView:addToPlaylistButton];
-        self.navigationItem.rightBarButtonItem = addToPlaylistItem;
-        
-        
-        [self.navigationController setNavigationBarHidden:NO];
-        [self.tableView setEditing:YES];
-        
-    }
-
-    
-  //  [self.tableView reloadData];
-    
-    
- 
     
 }
 
@@ -251,44 +254,6 @@
     
 }
 
-- (void)chooseSongs:(IBPlayerItem *) button{
-    
-    [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = playlist;
-    MPMediaPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
-    
-    NSArray *addedSongs              = [NSArray arrayWithArray:[[IBCurrentParametersManager sharedManager] addedSongs]];
-    IBSongsAddViewController *vc     = [[IBCurrentParametersManager sharedManager] returnSongsViewController];
-    
-    
-    __weak IBSongsAddViewController     *weakVC   = vc;
-    
-    
-    
-    NSLog(@"tabvccount = %d", [[self.tabBarController viewControllers]count]);
-    
-    UINavigationController *navAllVC = [self.tabBarController.viewControllers objectAtIndex:0];
-    
-   
-    
-    UINavigationController *navPlaylistVC = [self.tabBarController.viewControllers objectAtIndex:3];
-    __weak UINavigationController        *weakNavPlaylistVC = navPlaylistVC;
-    
-
-    
-    
-    NSLog(@"VC_COUNT = %d",[[self.navigationController viewControllers] count]);
-    NSLog(@"VC:%@",[[self.navigationController viewControllers] firstObject]);
-    
-    [currentPlaylist addMediaItems:addedSongs completionHandler:^(NSError * _Nullable error) {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakNavPlaylistVC popToViewController:vc animated:YES];
-                   });
-        
-    }];
-    [navAllVC popToRootViewControllerAnimated:YES];
-
-}
 
 
 

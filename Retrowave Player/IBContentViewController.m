@@ -72,6 +72,56 @@
 
 #pragma mark - Actions
 
+
+- (void)chooseSongs:(IBPlayerItem *) button{
+    
+    [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = playlist;
+    
+    MPMediaPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
+    NSArray *addedSongs              = [NSArray arrayWithArray:[[IBCurrentParametersManager sharedManager] addedSongs]];
+    
+    IBSongsAddViewController *vc     = [[IBCurrentParametersManager sharedManager] returnSongsViewController];
+    __weak IBSongsAddViewController     *weakVC   = vc;
+    
+    UINavigationController *navAllVC = [self.tabBarController.viewControllers objectAtIndex:0];
+    __weak UINavigationController        *weakNavAllVC = navAllVC;
+    __weak IBContentViewController       *weakSongsVC = self;
+    
+    
+    
+    
+    UINavigationController *navPlaylistVC = [self.tabBarController.viewControllers objectAtIndex:3];
+    __weak UINavigationController        *weakNavPlaylistVC = navPlaylistVC;
+    
+    [[IBCurrentParametersManager sharedManager] setIsEditing:NO];
+    
+    
+    [currentPlaylist addMediaItems:addedSongs completionHandler:^(NSError * _Nullable error) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakNavPlaylistVC popToViewController:weakVC animated:YES];
+            [weakSongsVC.tabBarController setSelectedIndex:3];
+            [weakNavAllVC popToRootViewControllerAnimated:YES];
+            
+            
+            if ([weakSongsVC.navigationController.tabBarItem.title isEqualToString:@"Songs"]) {
+                [weakSongsVC.navigationItem setLeftBarButtonItem:nil];
+                [weakSongsVC.navigationController setNavigationBarHidden:YES];
+                [weakSongsVC.navigationItem setHidesBackButton:YES animated:NO];
+                [weakSongsVC.tableView reloadData];
+            }
+            
+        });
+        
+    }];
+    
+    
+}
+
+
+
+
+
 - (void) backItemAction:(UIBarButtonItem*) barButtonItem{
     
     NSArray *allControllers = [self.navigationController viewControllers];
