@@ -13,10 +13,9 @@
 @interface IBPlaylistlistViewController : IBContentViewController
 
 
-@property (weak, nonatomic) IBOutlet UIButton *addPlaylist;
 
 
-- (IBAction)addNewPlaylist:(UIButton*) button;
+
 
 
 @end

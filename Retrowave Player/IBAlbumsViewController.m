@@ -59,7 +59,7 @@
     NSString *title;
     NSArray *albums;
     
-    if ([IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode == artist) {
+    if ([IBCurrentParametersManager sharedManager].songsViewType == artist) {
         
         MPMediaItem *artist = [[IBCurrentParametersManager sharedManager] artist];
                             
@@ -192,7 +192,7 @@
     
     MPMediaItem *currentAlbum = [self.albums objectAtIndex:indexPath.row];
     
-    [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = album;
+    [IBCurrentParametersManager sharedManager].songsViewType = album;
     [[IBCurrentParametersManager sharedManager] setAlbum:currentAlbum];
     
     NSString *identifier = @"IBSongsViewController";

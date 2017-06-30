@@ -14,7 +14,7 @@
 #import "IBVisualizerMusic.h"
 #import "IBPlayerItem.h"
 #import "IBSongsAddViewController.h"
-
+#import "IBFileManager.h"
 
 
 
@@ -23,8 +23,6 @@
 
 
 @interface IBSongsViewController ()
-
-
 
 @end
 
@@ -43,14 +41,13 @@
         [addToPlaylistButton setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateNormal];
         [addToPlaylistButton addTarget:self action:@selector(chooseSongs:) forControlEvents:UIControlEventTouchUpInside];
         
-        
         UIBarButtonItem *addToPlaylistItem = [[UIBarButtonItem alloc] initWithCustomView:addToPlaylistButton];
         self.navigationItem.rightBarButtonItem = addToPlaylistItem;
         
         
         [self.navigationController setNavigationBarHidden:NO];
         [self.tableView setEditing:YES];
-         [self.tableView reloadData];
+        [self.tableView reloadData];
         
     }
     
@@ -75,8 +72,8 @@
     
     [super viewDidLoad];
     
-    NSDictionary *titleAndSongsDictionary = [[IBCurrentParametersManager sharedManager]
-                                                                                    getSongsAndTitleForSongViewController];
+    IBSongsViewType songsType = [[IBCurrentParametersManager sharedManager] songsViewType];
+    NSDictionary *titleAndSongsDictionary = [[IBFileManager sharedManager] getSongsAndTitleFor:songsType];
     
     NSString *title = [titleAndSongsDictionary valueForKey:@"title"];
     NSArray *songs  = [titleAndSongsDictionary valueForKey:@"songs"];

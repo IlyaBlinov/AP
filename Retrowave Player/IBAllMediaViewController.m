@@ -41,20 +41,19 @@
     }
 
     
-    
-    
     [self.navigationItem setHidesBackButton:NO animated:NO];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     
     
-    if (([IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode == playlist) && [[IBCurrentParametersManager sharedManager] isEditing]) {
+    if (([IBCurrentParametersManager sharedManager].songsViewType == playlist) && [[IBCurrentParametersManager sharedManager] isEditing]) {
+       
+        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
+        [addToPlaylistButton setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateNormal];
+        [addToPlaylistButton addTarget:self action:@selector(chooseSongs:) forControlEvents:UIControlEventTouchUpInside];
         
-        MPMediaPlaylist *playlist = [[IBCurrentParametersManager sharedManager] playlist];
         
-        NSString *title = [NSString stringWithFormat:@"Playlist  %@", [playlist valueForProperty:MPMediaPlaylistPropertyName]];
-        
-        UIBarButtonItem *backItem =  [self setLeftBackBarButtonItem:title];
-        [self.navigationItem setLeftBarButtonItem:backItem];
+        UIBarButtonItem *addToPlaylistItem = [[UIBarButtonItem alloc] initWithCustomView:addToPlaylistButton];
+        self.navigationItem.rightBarButtonItem = addToPlaylistItem;
         
     }
     
@@ -160,21 +159,21 @@
     
     if ([cell.categoryName.text isEqualToString:@"Songs"] | [cell.categoryName.text isEqualToString:@"Audio Books"]) {
         
-        [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = allSongs;
+        [IBCurrentParametersManager sharedManager].songsViewType = allSongs;
         IBSongsViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBSongsViewController"];
         [self.navigationController pushViewController:vc animated:YES];
         
     }else if ([cell.categoryName.text isEqualToString:@"Playlists"]) {
-        [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = playlist;
+        [IBCurrentParametersManager sharedManager].songsViewType = playlist;
         IBPlaylistlistViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBPlaylistlistViewController"];
         [self.navigationController pushViewController:vc animated:YES];
     }else if ([cell.categoryName.text isEqualToString:@"Artists"]) {
-        [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = artist;
+        [IBCurrentParametersManager sharedManager].songsViewType = artist;
         IBArtistsViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBArtistsViewController"];
         [self.navigationController pushViewController:vc animated:YES];
 
     }else if ([cell.categoryName.text isEqualToString:@"Albums"]) {
-        [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = album;
+        [IBCurrentParametersManager sharedManager].songsViewType = album;
         IBAlbumsViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBAlbumsViewController"];
         [self.navigationController pushViewController:vc animated:YES];
         

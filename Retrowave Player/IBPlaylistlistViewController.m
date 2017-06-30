@@ -37,13 +37,24 @@
     
     [super viewWillAppear:animated];
     
- 
+    IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
+    
+    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
+        
+        [addToPlaylistButton setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateNormal];
+        [addToPlaylistButton addTarget:self action:@selector(chooseSongs:) forControlEvents:UIControlEventTouchUpInside];
+        
+    }else{
+        [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+        [addToPlaylistButton addTarget:self action:@selector(addNewPlaylist) forControlEvents:UIControlEventTouchUpInside];
+       
+    }
+    
+    UIBarButtonItem *addToPlaylistItem = [[UIBarButtonItem alloc] initWithCustomView:addToPlaylistButton];
+    self.navigationItem.rightBarButtonItem = addToPlaylistItem;
     
     MPMediaQuery *playlistQuery = [MPMediaQuery playlistsQuery];
     NSArray *playlistArray = [playlistQuery collections];
-    
-    
-    
     self.playlists = playlistArray;
     
     [self.tableView reloadData];
@@ -126,7 +137,17 @@
     
     
     IBPlayerItem *accessoryButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-     [accessoryButton setImage: [UIImage imageNamed:@"skip-track.png"]forState:UIControlStateNormal];
+        
+        NSString *imageName;
+        
+        if ([[IBCurrentParametersManager sharedManager] isEditing]) {
+            imageName = @"add 64 x 64.png";
+        }else{
+            imageName = @"skip-track.png";
+        }
+        
+        
+    [accessoryButton setImage: [UIImage imageNamed:imageName]forState:UIControlStateNormal];
     
     cell.playlistTitle.attributedText    = playlistTitle;
     cell.songCount.attributedText        = songCount;
@@ -147,7 +168,7 @@
     
     MPMediaPlaylist *currentPlaylist = [self.playlists objectAtIndex:indexPath.row];
     
-    [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = playlist;
+    [IBCurrentParametersManager sharedManager].songsViewType = playlist;
     
     NSString *identifier = @"IBSongsAddViewController";
     
@@ -167,7 +188,7 @@
 #pragma mark - Actions
 
 
-- (IBAction)addNewPlaylist:(UIButton*) button{
+- (void)addNewPlaylist{
  
     IBAddPlaylistViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBAddPlaylistViewController"];
     

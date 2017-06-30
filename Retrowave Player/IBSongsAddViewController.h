@@ -20,7 +20,7 @@
 
 
 @property (strong, nonatomic) NSArray *songs;
-- (IBAction) addNewSongs:(IBPlayerItem *) button;
+
 
 
 

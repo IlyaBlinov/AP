@@ -114,26 +114,10 @@
                             <outlet property="delegate" destination="9WW-SI-j9Q" id="8yv-JZ-g4P"/>
                         </connections>
                     </tableView>
-                    <toolbarItems>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="glr-5C-u7p"/>
-                    </toolbarItems>
-                    <navigationItem key="navigationItem" id="ON6-7Y-kMy">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="TZL-hu-TsB" userLabel="Create">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vvi-de-wD5" userLabel="Create">
-                                <rect key="frame" x="279" y="9" width="25" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="add 64 x 64.png"/>
-                                <connections>
-                                    <action selector="addNewPlaylist:" destination="9WW-SI-j9Q" eventType="touchUpInside" id="VYs-dt-lfC"/>
-                                </connections>
-                            </button>
-                        </barButtonItem>
-                    </navigationItem>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="ON6-7Y-kMy"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
-                    <connections>
-                        <outlet property="addPlaylist" destination="vvi-de-wD5" id="enh-wK-9nO"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EyJ-Q6-dze" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -436,7 +420,7 @@
         <!--  All Media-->
         <scene sceneID="J3K-tf-v5z">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ACF-29-SqK" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="IBAllMediaNavigationViewController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ACF-29-SqK" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="  All Media" id="biZ-p5-Twn"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="gte-QQ-0Z0">

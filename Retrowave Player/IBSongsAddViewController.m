@@ -32,6 +32,16 @@
     [super viewWillAppear:animated];
 
     
+    IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
+    [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+    [addToPlaylistButton addTarget:self action:@selector(addNewSongs) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    UIBarButtonItem *addToPlaylistItem = [[UIBarButtonItem alloc] initWithCustomView:addToPlaylistButton];
+    self.navigationItem.rightBarButtonItem = addToPlaylistItem;
+
+    
+    
     if ([self isEqual:[[IBCurrentParametersManager sharedManager]returnSongsViewController]]) {
         
     self.currentPlaylist = nil;
@@ -103,8 +113,6 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    
-    
     return [[self.currentPlaylist items] count];
 }
 
@@ -202,19 +210,17 @@
 #pragma mark - Actions
 
 
-- (IBAction)addNewSongs:(IBPlayerItem *) button{
+- (void)addNewSongs{
     
         [[IBCurrentParametersManager sharedManager] setIsEditing:YES];//playlist was saved to IBCurrentParametersManager in IBPlaylistsController
     
     [[IBCurrentParametersManager sharedManager] setChangingPlaylist:self.currentPlaylist];
     [[IBCurrentParametersManager sharedManager] setReturnSongsViewController:self];
     
-        IBAllMediaViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBAllMediaViewController"];
-        
-   //     self.navigationController.delegate = self;
+    UINavigationController *nav = [self.storyboard instantiateViewControllerWithIdentifier:@"IBAllMediaNavigationViewController"];
     
         
-        [self.navigationController pushViewController:vc animated:YES];
+        [self.navigationController presentViewController:nav animated:YES completion:nil];
      
 }
 

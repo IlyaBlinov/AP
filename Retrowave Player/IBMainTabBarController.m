@@ -32,7 +32,7 @@
     
     [super loadView];
     
-    [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = allSongs;
+    [IBCurrentParametersManager sharedManager].songsViewType = allSongs;
     
     [self.tabBar layoutSubviews];
     
@@ -137,11 +137,11 @@
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item{
     
   if([item.title isEqualToString:@"Playlists"]){
-      [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = playlist;
+      [IBCurrentParametersManager sharedManager].songsViewType = playlist;
     }else if([item.title isEqualToString:@"Songs"] | [item.title isEqualToString:@"Books"]){
-      [IBCurrentParametersManager sharedManager].songsViewControllerDataViewMode = allSongs;
+      [IBCurrentParametersManager sharedManager].songsViewType = allSongs;
     }else if ([item.title isEqualToString:@"  All Media"] && [[IBCurrentParametersManager sharedManager]isEditing]){
-        UINavigationController *nav = [self.viewControllers objectAtIndex:3];
+       
         
         
     }

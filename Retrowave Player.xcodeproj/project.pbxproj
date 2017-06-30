@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		230B68A11F06848700476F44 /* IBFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B68A01F06848700476F44 /* IBFileManager.m */; };
 		236727F21ED30C0A0054678D /* IBSongsAddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 236727F11ED30C0A0054678D /* IBSongsAddViewController.m */; };
 		6F004C751EACCEFC007755C3 /* Automani.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B561EACCEFC007755C3 /* Automani.ttf */; };
 		6F004C761EACCEFC007755C3 /* Codystar.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B571EACCEFC007755C3 /* Codystar.ttf */; };
@@ -266,6 +267,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		230B689F1F06848700476F44 /* IBFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBFileManager.h; sourceTree = "<group>"; };
+		230B68A01F06848700476F44 /* IBFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBFileManager.m; sourceTree = "<group>"; };
 		236727F01ED30C0A0054678D /* IBSongsAddViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBSongsAddViewController.h; sourceTree = "<group>"; };
 		236727F11ED30C0A0054678D /* IBSongsAddViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBSongsAddViewController.m; sourceTree = "<group>"; };
 		6F004B561EACCEFC007755C3 /* Automani.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Automani.ttf; sourceTree = "<group>"; };
@@ -1121,6 +1124,8 @@
 				6F004B971EACCEFC007755C3 /* IBVisualizerMusic.m */,
 				6FCDBDDD1EC2018600B326D7 /* IBCurrentParametersManager.h */,
 				6FCDBDDE1EC2018600B326D7 /* IBCurrentParametersManager.m */,
+				230B689F1F06848700476F44 /* IBFileManager.h */,
+				230B68A01F06848700476F44 /* IBFileManager.m */,
 			);
 			name = Visualizer;
 			sourceTree = "<group>";
@@ -1484,6 +1489,7 @@
 				6F004C8F1EACCEFC007755C3 /* IBPlayerController.m in Sources */,
 				6F004C921EACCEFC007755C3 /* IBSongCellTableViewCell.m in Sources */,
 				6F004C7C1EACCEFC007755C3 /* IBAllMediaViewController.m in Sources */,
+				230B68A11F06848700476F44 /* IBFileManager.m in Sources */,
 				6F004C791EACCEFC007755C3 /* IBAlbum.m in Sources */,
 				6FD252E11EB261A900EB3721 /* IBAllMediaCell.m in Sources */,
 				6F004C8D1EACCEFC007755C3 /* IBMainTabBarController.m in Sources */,

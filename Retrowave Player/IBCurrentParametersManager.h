@@ -16,7 +16,7 @@ typedef enum {
     album,
     playlist,
     allSongs
-}IBSongsViewControllerTypeDataToView;
+}IBSongsViewType;
 
 @interface IBCurrentParametersManager : NSObject
 
@@ -28,7 +28,7 @@ typedef enum {
 @property (strong, nonatomic) MPMediaItem     *artist;
 @property (strong, nonatomic) MPMediaItem     *album;
 @property (strong, nonatomic) MPMediaPlaylist *playlist;
-@property (assign, nonatomic) IBSongsViewControllerTypeDataToView songsViewControllerDataViewMode;
+@property (assign, nonatomic) IBSongsViewType songsViewType;
 
 
 @property (assign, nonatomic) BOOL isEditing;
@@ -37,7 +37,7 @@ typedef enum {
 @property (strong, nonatomic) MPMediaPlaylist *changingPlaylist;
 @property (strong, nonatomic) NSMutableArray  *addedSongs;
 
-- (NSDictionary*) getSongsAndTitleForSongViewController;
+
 
 
 
