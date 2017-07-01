@@ -12,6 +12,7 @@
 #import "IBSongsViewController.h"
 #import "IBAlbumsViewController.h"
 #import "IBCurrentParametersManager.h"
+#import "IBFileManager.h"
 @interface IBArtistInfoViewController ()
 
 @property (strong, nonatomic) NSDictionary *parameters;
@@ -33,36 +34,20 @@
    
     
     MPMediaItem *artist = [[IBCurrentParametersManager sharedManager] artist];
-    NSString *artistName = [artist valueForProperty:MPMediaItemPropertyArtist];
     
-    MPMediaPropertyPredicate *artistNamePredicate =
-    [MPMediaPropertyPredicate predicateWithValue: artistName
-                                     forProperty: MPMediaItemPropertyArtist];
+    NSDictionary       *artistParameters = [[IBFileManager sharedManager] getArtistParams:artist];
+    NSString *artistParameterSongs = [artistParameters objectForKey:@"numberOfSongs"];
+    NSString *artistParameterAlbums = [artistParameters objectForKey:@"numberOfAlbums"];
+    NSAttributedString *artistName = [artistParameters objectForKey:@"artistName"];
     
-    
-    MPMediaQuery *albumsOfArtist = [[MPMediaQuery alloc] init];
-    
-    [albumsOfArtist setGroupingType:MPMediaGroupingAlbum];
-    [albumsOfArtist addFilterPredicate:artistNamePredicate];
-    
-    NSUInteger numberOfAlbums =  [[albumsOfArtist collections] count];
-    
-    
-    MPMediaQuery *songsOfArtist = [[MPMediaQuery alloc] init];
-    
-    [songsOfArtist setGroupingType:MPMediaGroupingTitle];
-    [songsOfArtist addFilterPredicate:artistNamePredicate];
-    
-    NSUInteger numberOfSongs = [[songsOfArtist collections] count];
-    
-    self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:artistName];
+    self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:[artistName string]];
 
 
     UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:@"Artists"];
     [self.navigationItem setLeftBarButtonItem:backItem];
     
-    NSArray *keys = [[NSArray alloc] initWithObjects:@"Songs", @"Albums", nil];
-    NSArray *objects = [[NSArray alloc] initWithObjects:[NSNumber numberWithUnsignedInteger: numberOfSongs], [NSNumber numberWithUnsignedInteger: numberOfAlbums], nil];
+    NSArray *keys    = [[NSArray alloc] initWithObjects:@"Songs", @"Albums", nil];
+    NSArray *objects = [[NSArray alloc] initWithObjects:artistParameterSongs, artistParameterAlbums,nil];
     
     
      self.parameters = [[NSDictionary alloc] initWithObjects:objects forKeys:keys];
@@ -83,9 +68,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    
-    
+{ 
     return [self.parameters count];
 }
 
@@ -102,18 +85,17 @@
                                             reuseIdentifier:identifier];
     }
     
-    NSString *parameter = [[self.parameters allKeys] objectAtIndex:indexPath.row];
+    NSString *parameterKey = [[self.parameters allKeys] objectAtIndex:indexPath.row];
+    NSString *parameterNumber = [self.parameters valueForKey:parameterKey];
     
-    NSUInteger parameterNumber = [[self.parameters valueForKey:parameter] unsignedIntegerValue];
-    
-    NSMutableAttributedString *attributedParameter = [[NSMutableAttributedString alloc] initWithString:parameter];
+    NSMutableAttributedString *attributedParameter = [[NSMutableAttributedString alloc] initWithString:parameterKey];
     
     [attributedParameter setAttributes:[IBFontAttributes attributesOfDetailedTitle] range:NSMakeRange(0, [attributedParameter length])];
     
     [cell.textLabel setAttributedText:attributedParameter];
     
     
-    NSMutableAttributedString *attributedNumberOfParameter = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%u", parameterNumber]];
+    NSMutableAttributedString *attributedNumberOfParameter = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@", parameterNumber]];
     
     [attributedNumberOfParameter setAttributes:[IBFontAttributes attributesOfTimeDurationTitle] range:NSMakeRange(0, [attributedNumberOfParameter length])];
     

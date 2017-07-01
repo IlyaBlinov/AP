@@ -12,7 +12,7 @@
 #import "IBArtistTableViewCell.h"
 #import "IBAllMediaViewController.h"
 #import "IBCurrentParametersManager.h"
-
+#import "IBFileManager.h"
 
 
 
@@ -37,20 +37,15 @@
     
     NSString *title = @"All Media";
     
-        UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
+    UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
     [self.navigationItem setLeftBarButtonItem:backItem];
     
     
     self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Artists"];
     
     
-    MPMediaQuery *artistsQuery = [MPMediaQuery artistsQuery];
-    
-    NSArray *artistsArray = [artistsQuery items];
-    
-    self.artists = [self sortingItems:artistsArray ByProperty:MPMediaItemPropertyArtist] ;
+    self.artists = [[IBFileManager sharedManager] getArtists] ;
 
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -87,53 +82,29 @@
     
     MPMediaItem *artist = [self.artists objectAtIndex:indexPath.row];
     
-    NSString *artistTitle = [artist valueForProperty:MPMediaItemPropertyArtist];
     
+    NSDictionary       *artistParameters = [[IBFileManager sharedManager] getArtistParams:artist];
     
-    MPMediaPropertyPredicate *artistNamePredicate =
-    [MPMediaPropertyPredicate predicateWithValue: artistTitle
-                                     forProperty: MPMediaItemPropertyArtist];
+    NSAttributedString *artistParameterSongs = [[NSAttributedString alloc] initWithString:
+                                                [NSString stringWithFormat:@"Songs: %@",
+                                                 [artistParameters objectForKey:@"numberOfSongs"]]];
     
+    NSAttributedString *artistParameterAlbums = [[NSAttributedString alloc] initWithString:
+                                                 [NSString stringWithFormat:@"Albums: %@",
+                                                  [artistParameters objectForKey:@"numberOfAlbums"]]];
     
-    MPMediaQuery *albumsOfArtist = [[MPMediaQuery alloc] init];
+    NSAttributedString *artistName = [artistParameters objectForKey:@"artistName"];
     
-    [albumsOfArtist setGroupingType:MPMediaGroupingAlbum];
-    [albumsOfArtist addFilterPredicate:artistNamePredicate];
-    
-    NSUInteger numberOfAlbums =  [[albumsOfArtist collections] count];
-
-    
-    MPMediaQuery *songsOfArtist = [[MPMediaQuery alloc] init];
-    
-    [songsOfArtist setGroupingType:MPMediaGroupingTitle];
-    [songsOfArtist addFilterPredicate:artistNamePredicate];
-    
-    NSUInteger numberOfSongs = [[songsOfArtist collections] count];
-    
-    
-    NSAttributedString *artistName = [[NSAttributedString alloc] initWithString:artistTitle];
-    
-    
-    
-    
-    NSAttributedString *artistParameterSongs = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Songs: %u",numberOfSongs]];
-    
-     NSAttributedString *artistParameterAlbums = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Albums: %u",numberOfAlbums]];
-    
-    
-    
-    NSAttributedString *artistCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", indexPath.row + 1]];
+    NSAttributedString *artistCount = [[NSAttributedString alloc] initWithString:
+                                                [NSString stringWithFormat:@"%d", indexPath.row + 1]];
     
     cell.artistName.attributedText = artistName;
     cell.artistSongParameter.attributedText = artistParameterSongs;
     cell.artistAlbumParameter.attributedText = artistParameterAlbums;
     cell.artistCount.attributedText = artistCount;
     
-    
-    
-    
+  
     return cell;
-    
 }
 
 

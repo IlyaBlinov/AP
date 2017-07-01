@@ -1122,12 +1122,19 @@
 				6F004B951EACCEFC007755C3 /* IBVisualizerLayer.m */,
 				6F004B961EACCEFC007755C3 /* IBVisualizerMusic.h */,
 				6F004B971EACCEFC007755C3 /* IBVisualizerMusic.m */,
+			);
+			name = Visualizer;
+			sourceTree = "<group>";
+		};
+		6F408F251F07AE7300240480 /* File Manager */ = {
+			isa = PBXGroup;
+			children = (
 				6FCDBDDD1EC2018600B326D7 /* IBCurrentParametersManager.h */,
 				6FCDBDDE1EC2018600B326D7 /* IBCurrentParametersManager.m */,
 				230B689F1F06848700476F44 /* IBFileManager.h */,
 				230B68A01F06848700476F44 /* IBFileManager.m */,
 			);
-			name = Visualizer;
+			name = "File Manager";
 			sourceTree = "<group>";
 		};
 		6FA46FA11E1BF4B2008B9F33 = {
@@ -1155,6 +1162,7 @@
 				6FA46FD01E1C0854008B9F33 /* Images */,
 				6FA46FB01E1BF4B3008B9F33 /* AppDelegate.h */,
 				6FA46FB11E1BF4B3008B9F33 /* AppDelegate.m */,
+				6F408F251F07AE7300240480 /* File Manager */,
 				6F004D621EACD2D4007755C3 /* Visualizer */,
 				6F004D5C1EACD0F0007755C3 /* Fonts */,
 				6F004D5E1EACD186007755C3 /* Models */,

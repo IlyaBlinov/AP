@@ -146,35 +146,35 @@
 
 #pragma mark - sortingItems
 
-- (NSArray*) sortingItems:(NSArray*) items ByProperty:(NSString*) property{
-    
-    NSMutableArray *array = [NSMutableArray arrayWithArray:items];
-    
-    for (int i = 0; i < [items count] - 1; i++) {
-        
-        MPMediaItem *item1 = [items objectAtIndex:i];
-        MPMediaItem *item2 = [items objectAtIndex:i + 1];
-        
-        NSString *itemTitle1 = [item1 valueForProperty:property];
-        NSString *itemTitle2 = [item2 valueForProperty:property];
-        
-        
-        if ([itemTitle1 isEqualToString:itemTitle2]) {
-            [array removeObject:item1];
-        }
-        
-        if ([itemTitle1 isEqualToString:@""] | (itemTitle1 == nil) ){
-            [array removeObject:item1];
-        }
-        
-        if ([itemTitle2 isEqualToString:@""] | (itemTitle2 == nil)){
-            [array removeObject:item2];
-        }
-        
-    }
-    return array;
-    
-}
+//- (NSArray*) sortingItems:(NSArray*) items ByProperty:(NSString*) property{
+//    
+//    NSMutableArray *array = [NSMutableArray arrayWithArray:items];
+//    
+//    for (int i = 0; i < [items count] - 1; i++) {
+//        
+//        MPMediaItem *item1 = [items objectAtIndex:i];
+//        MPMediaItem *item2 = [items objectAtIndex:i + 1];
+//        
+//        NSString *itemTitle1 = [item1 valueForProperty:property];
+//        NSString *itemTitle2 = [item2 valueForProperty:property];
+//        
+//        
+//        if ([itemTitle1 isEqualToString:itemTitle2]) {
+//            [array removeObject:item1];
+//        }
+//        
+//        if ([itemTitle1 isEqualToString:@""] | (itemTitle1 == nil) ){
+//            [array removeObject:item1];
+//        }
+//        
+//        if ([itemTitle2 isEqualToString:@""] | (itemTitle2 == nil)){
+//            [array removeObject:item2];
+//        }
+//        
+//    }
+//    return array;
+//    
+//}
 
 
 

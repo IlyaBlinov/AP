@@ -16,7 +16,7 @@
 
 
 
-- (NSArray*) sortingItems:(NSArray*) items ByProperty:(NSString*) property;
+//- (NSArray*) sortingItems:(NSArray*) items ByProperty:(NSString*) property;
 
 - (UIBarButtonItem*) setLeftBackBarButtonItem:(NSString *) titleItem;
 

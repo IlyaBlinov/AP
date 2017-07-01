@@ -11,7 +11,7 @@
 #import "IBAlbumViewCell.h"
 #import "IBArtistInfoViewController.h"
 #import "IBSongsViewController.h"
-
+#import "IBFileManager.h"
 
 
 
@@ -56,49 +56,20 @@
     [self.navigationItem setHidesBackButton:NO animated:NO];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     
-    NSString *title;
-    NSArray *albums;
     
-    if ([IBCurrentParametersManager sharedManager].songsViewType == artist) {
-        
-        MPMediaItem *artist = [[IBCurrentParametersManager sharedManager] artist];
-                            
-        NSString *artistName = [artist valueForProperty:MPMediaItemPropertyArtist];
-        title = artistName;
-        
-        MPMediaPropertyPredicate *artistNamePredicate =
-        [MPMediaPropertyPredicate predicateWithValue: artistName
-                                         forProperty: MPMediaItemPropertyArtist];
-        
-        MPMediaQuery *albumsOfArtist = [[MPMediaQuery alloc] init];
-        [albumsOfArtist setGroupingType:MPMediaGroupingAlbum];
-        
-        [albumsOfArtist addFilterPredicate:artistNamePredicate];
-        
-        NSMutableArray *albumsItemsArray = [NSMutableArray array];
-        
-        for (MPMediaItemCollection *album in [albumsOfArtist collections]) {
-            MPMediaItem *albumItem = [album representativeItem];
-            [albumsItemsArray addObject:albumItem];
-        
-        }
-         albums = [[NSArray alloc] initWithArray:albumsItemsArray];
+    IBSongsViewType songsType = [[IBCurrentParametersManager sharedManager] songsViewType];
+    NSDictionary *titleAndAlbumsDictionary = [[IBFileManager sharedManager] getAlbumsAndTitleFor:songsType];
+    
+    NSString *title = [titleAndAlbumsDictionary valueForKey:@"title"];
+    NSArray  *albums  = [titleAndAlbumsDictionary valueForKey:@"albums"];
+    self.albums = [NSArray arrayWithArray:albums];
 
-        
-        
-       }else{
-        title = @"All Media";
-        MPMediaQuery *albumsQuery = [MPMediaQuery albumsQuery];
-        albums = [albumsQuery items];
-
-    }
-
+    
     UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
     [self.navigationItem setLeftBarButtonItem:backItem];
     
     self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Albums"];
     
-    self.albums = [NSArray arrayWithArray:[self sortingItems:albums ByProperty:MPMediaItemPropertyAlbumTitle]];
     
     
 }
