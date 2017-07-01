@@ -47,18 +47,9 @@
     
     if (([IBCurrentParametersManager sharedManager].songsViewType == playlist) && [[IBCurrentParametersManager sharedManager] isEditing]) {
        
-        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-        [addToPlaylistButton setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateNormal];
-        [addToPlaylistButton addTarget:self action:@selector(chooseSongs:) forControlEvents:UIControlEventTouchUpInside];
-        
-        
-        UIBarButtonItem *addToPlaylistItem = [[UIBarButtonItem alloc] initWithCustomView:addToPlaylistButton];
-        self.navigationItem.rightBarButtonItem = addToPlaylistItem;
+        [self createChooseSongsItem];
         
     }
-    
-       
-    
     
     NSArray* categories = [NSArray arrayWithObjects:
                            @"Songs", @"Artists", @"Albums", @"Audio Books", @"Playlists", nil];

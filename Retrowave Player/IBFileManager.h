@@ -18,9 +18,13 @@
 
 - (NSDictionary*) getSongsAndTitleFor :(IBSongsViewType) type;
 - (NSDictionary*) getAlbumsAndTitleFor:(IBSongsViewType) type;
-- (NSArray*) getArtists;
 - (NSDictionary*) getArtistParams:(MPMediaItem*) artist;
+- (NSDictionary*) getPlaylistParams:(MPMediaPlaylist*) playlist;
 
+
+
+- (NSArray*) getArtists;
+- (NSArray*) getPlaylists;
 
 
 

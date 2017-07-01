@@ -16,5 +16,5 @@
 
 
 
-//- (void) setIsSelected:(BOOL)isSelected;
+
 @end

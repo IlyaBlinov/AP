@@ -19,7 +19,7 @@
 
 
 
-@property (strong, nonatomic) NSArray *songs;
+
 
 
 

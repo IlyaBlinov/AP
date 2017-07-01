@@ -149,6 +149,28 @@
     
 }
 
+- (NSArray*) getPlaylists{
+    
+    MPMediaQuery *playlistQuery = [MPMediaQuery playlistsQuery];
+    return [playlistQuery collections];
+
+}
+
+- (NSDictionary*) getPlaylistParams:(MPMediaPlaylist*) playlist{
+    
+    NSArray   *songs = [playlist items];
+    NSString  *title = [playlist valueForProperty:MPMediaPlaylistPropertyName];
+    
+    NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:songs, @"songs",title, @"title", nil];
+    
+    return parameters;
+    
+}
+
+
+
+
+
 - (NSDictionary*) getArtistParams:(MPMediaItem*) artist{
     
     NSString *artistTitle = [artist valueForProperty:MPMediaItemPropertyArtist];

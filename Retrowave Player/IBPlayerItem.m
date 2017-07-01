@@ -14,18 +14,6 @@
 
 
 
-//
-//- (void) setIsSelected:(BOOL)isSelected{
-//    
-//    if (isSelected) {
-//        [self.imageView setImage: [UIImage imageNamed:@"music-player-pause-lines(4).png"]];
-//    }else{
-//        [self.imageView setImage: [UIImage imageNamed:@"music-player-play(4).png"]]
-//        ;
-//    }
-//    
-//       
-//}
 
 
 

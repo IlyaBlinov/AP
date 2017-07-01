@@ -40,13 +40,7 @@
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-        [addToPlaylistButton setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateNormal];
-        [addToPlaylistButton addTarget:self action:@selector(chooseSongs:) forControlEvents:UIControlEventTouchUpInside];
-
-        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:addToPlaylistButton];
-        
-        self.navigationItem.rightBarButtonItem = item;
+        [self createChooseSongsItem];
         
         self.tableView.allowsSelectionDuringEditing = YES;
         

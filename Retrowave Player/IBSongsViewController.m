@@ -37,12 +37,7 @@
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-        [addToPlaylistButton setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateNormal];
-        [addToPlaylistButton addTarget:self action:@selector(chooseSongs:) forControlEvents:UIControlEventTouchUpInside];
-        
-        UIBarButtonItem *addToPlaylistItem = [[UIBarButtonItem alloc] initWithCustomView:addToPlaylistButton];
-        self.navigationItem.rightBarButtonItem = addToPlaylistItem;
+        [self createChooseSongsItem];
         
         
         [self.navigationController setNavigationBarHidden:NO];
@@ -161,7 +156,6 @@
             
             IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
             [addToPlaylistButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
-            
             
             [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
             cell.editingAccessoryView = addToPlaylistButton;

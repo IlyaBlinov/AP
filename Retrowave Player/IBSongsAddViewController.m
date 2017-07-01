@@ -13,7 +13,7 @@
 #import "IBPlayerController.h"
 #import "IBVisualizerMusic.h"
 #import "IBPlayerItem.h"
-
+#import "IBFileManager.h"
 
 
 
@@ -21,6 +21,7 @@
 @interface IBSongsAddViewController ()<UINavigationControllerDelegate>
 
 @property (strong, nonatomic) MPMediaPlaylist *currentPlaylist;
+@property (strong, nonatomic) NSArray *songs;
 
 @end
 
@@ -45,8 +46,12 @@
     if ([self isEqual:[[IBCurrentParametersManager sharedManager]returnSongsViewController]]) {
         
     self.currentPlaylist = nil;
-    self.currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
-    
+    MPMediaPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
+    NSDictionary *parameters = [[IBFileManager sharedManager] getPlaylistParams:currentPlaylist];
+    self.songs      = [parameters objectForKey:@"songs"];
+
+    self.currentPlaylist = currentPlaylist;
+        
     NSLog(@"songsCount = %d", [[self.currentPlaylist items]count]);
     
     [[IBCurrentParametersManager sharedManager].addedSongs removeAllObjects];
@@ -61,37 +66,20 @@
 {
     [super viewDidLoad];
     
-    NSString *title;
     
     MPMediaPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] playlist];
     self.currentPlaylist = currentPlaylist;
-    NSArray *songsArray = [currentPlaylist items];
-    title = [currentPlaylist valueForProperty:MPMediaPlaylistPropertyName];
+    
+    NSDictionary *parameters = [[IBFileManager sharedManager] getPlaylistParams:currentPlaylist];
+    self.songs      = [parameters objectForKey:@"songs"];
+    NSString *title = [parameters objectForKey:@"title"];
     
     
     UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
     [self.navigationItem setLeftBarButtonItem:backItem];
     
     self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Songs"];
-    
-    
-    
-    if ((currentPlaylist) && ([currentPlaylist.items count] == 0)) {
-        
-    }else{
-        
-        self.songs = nil;
-        
-        self.songs = [NSArray arrayWithArray:songsArray];
-    }
-    
     self.navigationController.delegate = self;
-    
-    
-   
-
-    
-    
     
 }
 
@@ -113,7 +101,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[self.currentPlaylist items] count];
+    return [self.songs count];
 }
 
 
@@ -129,7 +117,7 @@
                                               reuseIdentifier:identifier];
     }
     
-    MPMediaItem *song = [[self.currentPlaylist items] objectAtIndex:indexPath.row];
+    MPMediaItem *song = [self.songs objectAtIndex:indexPath.row];
     
     NSString *songTitle = [song valueForProperty:MPMediaItemPropertyTitle];
     NSString *artistTitle = [song valueForProperty:MPMediaItemPropertyArtist];

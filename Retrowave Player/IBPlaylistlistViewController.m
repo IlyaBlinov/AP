@@ -16,7 +16,7 @@
 #import "IBTransitionViewController.h"
 #import "IBTransitionDismissViewController.h"
 #import "IBCurrentParametersManager.h"
-
+#import "IBFileManager.h"
 
 
 
@@ -37,25 +37,27 @@
     
     [super viewWillAppear:animated];
     
-    IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
+     [ self.tableView setEditing: [[IBCurrentParametersManager sharedManager] isEditing]];
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-        [addToPlaylistButton setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateNormal];
-        [addToPlaylistButton addTarget:self action:@selector(chooseSongs:) forControlEvents:UIControlEventTouchUpInside];
+        [self createChooseSongsItem];
+         self.tableView.allowsSelectionDuringEditing = YES;
         
     }else{
+        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
         [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
         [addToPlaylistButton addTarget:self action:@selector(addNewPlaylist) forControlEvents:UIControlEventTouchUpInside];
+        
+        UIBarButtonItem *addToPlaylistItem = [[UIBarButtonItem alloc] initWithCustomView:addToPlaylistButton];
+        self.navigationItem.rightBarButtonItem = addToPlaylistItem;
        
     }
     
-    UIBarButtonItem *addToPlaylistItem = [[UIBarButtonItem alloc] initWithCustomView:addToPlaylistButton];
-    self.navigationItem.rightBarButtonItem = addToPlaylistItem;
     
-    MPMediaQuery *playlistQuery = [MPMediaQuery playlistsQuery];
-    NSArray *playlistArray = [playlistQuery collections];
-    self.playlists = playlistArray;
+    
+
+    self.playlists = [[IBFileManager sharedManager] getPlaylists];
     
     [self.tableView reloadData];
     
@@ -81,11 +83,7 @@
         
     }
     
-    
-    
-    
     self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Playlists"];
-    
     
 }
 
@@ -135,24 +133,41 @@
     
     NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d",[playlist.items count]]];
     
-    
-    IBPlayerItem *accessoryButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
         
-        NSString *imageName;
+        cell.playlistTitle.attributedText    = playlistTitle;
+        cell.songCount.attributedText        = songCount;
+        
+        
+        
         
         if ([[IBCurrentParametersManager sharedManager] isEditing]) {
-            imageName = @"add 64 x 64.png";
+            
+            IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
+            [addToPlaylistButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+            
+            
+            [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+            cell.editingAccessoryView = addToPlaylistButton;
+            
         }else{
-            imageName = @"skip-track.png";
+            
+            IBPlayerItem *accessoryButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
+            
+            NSString *imageName;
+            
+            if ([[IBCurrentParametersManager sharedManager] isEditing]) {
+                imageName = @"add 64 x 64.png";
+            }else{
+                imageName = @"skip-track.png";
+            }
+            
+            [accessoryButton setImage: [UIImage imageNamed:imageName]forState:UIControlStateNormal];
+            
+            cell.accessoryView = accessoryButton;
+
         }
         
-        
-    [accessoryButton setImage: [UIImage imageNamed:imageName]forState:UIControlStateNormal];
-    
-    cell.playlistTitle.attributedText    = playlistTitle;
-    cell.songCount.attributedText        = songCount;
-    cell.accessoryView = accessoryButton;
-    }
+        }
   
     return cell;
     
@@ -188,6 +203,38 @@
 #pragma mark - Actions
 
 
+
+
+- (void) addToPlaylistAction:(IBPlayerItem*) button{
+    
+    CGPoint point = [button convertPoint:CGPointZero toView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
+    
+    
+    MPMediaPlaylist   *currentPlaylist = [self.playlists objectAtIndex:indexPath.row];;
+    
+    
+   NSDictionary *parameters = [[IBFileManager sharedManager] getPlaylistParams:currentPlaylist];
+   NSArray *songs = [parameters objectForKey:@"songs"];
+    
+    if (button.isSelected == NO) {
+        [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];
+        [button setIsSelected:YES];
+        [[IBCurrentParametersManager sharedManager].addedSongs addObjectsFromArray:songs];
+    }else{
+        [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+        [button setIsSelected:NO];
+        NSUInteger location = [[IBCurrentParametersManager sharedManager].addedSongs count] - [songs count] ;
+        
+        [[IBCurrentParametersManager sharedManager].addedSongs removeObjectsInRange:NSMakeRange(location, [songs count])];
+    }
+    
+    
+    NSLog(@"added songs = %u",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+
+    
+    
+}
 - (void)addNewPlaylist{
  
     IBAddPlaylistViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBAddPlaylistViewController"];
@@ -251,11 +298,8 @@
        
     }];
         
-     
     }
-    
-    
-    
+ 
     return self.dismissAnimator;
 }
 
