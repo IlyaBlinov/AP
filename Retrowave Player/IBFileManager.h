@@ -16,16 +16,27 @@
 
 
 
-- (NSDictionary*) getSongsAndTitleFor :(IBSongsViewType) type;
-- (NSDictionary*) getAlbumsAndTitleFor:(IBSongsViewType) type;
-- (NSDictionary*) getArtistParams:(MPMediaItem*) artist;
-- (NSDictionary*) getPlaylistParams:(MPMediaPlaylist*) playlist;
+- (NSDictionary*) getSongsAndTitleFor :(IBSongsViewType) type;//Songs, Title
+
+- (NSDictionary*) getAlbumsAndTitleFor:(IBSongsViewType) type;//Albums, Title
 
 
 
-- (NSArray*) getArtists;
+- (NSDictionary*) getPlaylistParams:(MPMediaPlaylist*) playlist;//Songs, Title
 - (NSArray*) getPlaylists;
 
+
+
+
+- (NSDictionary*) getArtistParams:(MPMediaItem*) artist;//artistName, number of Albums, number of Songs
+- (NSArray*) getArtists;
+- (NSArray*) getSongsOfArtist:(MPMediaItem*) artist withParameter:(NSString*) parameter;//parameter:Songs, Albums
+- (NSArray*) getAllSongsOfArtist:(MPMediaItem*) artist;
+- (NSArray*) getSongsFromAllAlbumsOfArtist:(MPMediaItem*) artist;
+
+
+
+- (NSArray*) getAllSongsOfAlbum:(MPMediaItem*) album;
 
 
 

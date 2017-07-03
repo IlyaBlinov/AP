@@ -71,6 +71,17 @@
 {
     [super viewDidLoad];
     
+   
+    
+    IBPlayerItem *removeFromPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
+    [removeFromPlaylistButton setImage: [UIImage imageNamed: @"cancel-music(4).png"]forState:UIControlStateNormal];
+    [removeFromPlaylistButton addTarget:self action:@selector(removeFromPlaylist) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    UIBarButtonItem *removeFromPlaylistItem = [[UIBarButtonItem alloc] initWithCustomView:removeFromPlaylistButton];
+
+  
+
     NSInteger number = [self.navigationController.viewControllers count] - 2;
     
     if (number >= 0) {
@@ -78,10 +89,13 @@
             NSString *title = @"All Media";
             UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
             [self.navigationItem setLeftBarButtonItem:backItem];
+            [self.navigationItem setLeftBarButtonItems:[NSArray arrayWithObjects: backItem, removeFromPlaylistItem, nil]] ;
             
         }
-        
+    }else{
+        [self.navigationItem setLeftBarButtonItem:removeFromPlaylistItem];
     }
+
     
     self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Playlists"];
     
@@ -142,29 +156,14 @@
         
         if ([[IBCurrentParametersManager sharedManager] isEditing]) {
             
-            IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-            [addToPlaylistButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
-            
-            
-            [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
-            cell.editingAccessoryView = addToPlaylistButton;
+             cell.editingAccessoryView = [self createAddSongsToPlaylistButton];
             
         }else{
             
             IBPlayerItem *accessoryButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-            
-            NSString *imageName;
-            
-            if ([[IBCurrentParametersManager sharedManager] isEditing]) {
-                imageName = @"add 64 x 64.png";
-            }else{
-                imageName = @"skip-track.png";
-            }
-            
-            [accessoryButton setImage: [UIImage imageNamed:imageName]forState:UIControlStateNormal];
+            [accessoryButton setImage: [UIImage imageNamed:@"skip-track.png"]forState:UIControlStateNormal];
             
             cell.accessoryView = accessoryButton;
-
         }
         
         }
@@ -189,11 +188,8 @@
     
     IBSongsViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
     
-    
     [[IBCurrentParametersManager sharedManager] setPlaylist:currentPlaylist];
-    
-    
-    
+
     [self.navigationController pushViewController:vc animated:YES];
     
  
@@ -202,7 +198,10 @@
 
 #pragma mark - Actions
 
-
+- (void) removeFromPlaylist{
+    
+    
+}
 
 
 - (void) addToPlaylistAction:(IBPlayerItem*) button{

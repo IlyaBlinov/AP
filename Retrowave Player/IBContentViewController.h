@@ -18,6 +18,8 @@
 
 - (void) createChooseSongsItem;
 
+- (IBPlayerItem*) createAddSongsToPlaylistButton;
+
 - (UIBarButtonItem*) setLeftBackBarButtonItem:(NSString *) titleItem;
 
 - (void)chooseSongs:(IBPlayerItem *) button;

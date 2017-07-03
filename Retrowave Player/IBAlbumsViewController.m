@@ -132,12 +132,7 @@
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-        [addToPlaylistButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
-        
-        
-        [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
-        cell.editingAccessoryView = addToPlaylistButton;
+        cell.editingAccessoryView = [self createAddSongsToPlaylistButton];
         
     }else{
         
@@ -183,21 +178,10 @@
     CGPoint point = [button convertPoint:CGPointZero toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
     
+    
     MPMediaItem *album = [self.albums objectAtIndex:indexPath.row];
-
-    NSString *title = [album valueForProperty:MPMediaItemPropertyAlbumTitle];
+    NSArray *songs = [[IBFileManager sharedManager] getAllSongsOfAlbum:album];
     
-    MPMediaPropertyPredicate *albumNamePredicate =
-    [MPMediaPropertyPredicate predicateWithValue: title
-                                     forProperty: MPMediaItemPropertyAlbumTitle];
-    
-    MPMediaQuery *songsOfAlbum = [[MPMediaQuery alloc] init];
-    [songsOfAlbum addFilterPredicate:albumNamePredicate];
-
-    
-    
-    
-    NSArray *songs = [songsOfAlbum items];
     
     if (button.isSelected == NO) {
         [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];

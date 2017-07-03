@@ -116,12 +116,7 @@
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-        [addToPlaylistButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
-        
-        
-        [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
-        cell.editingAccessoryView = addToPlaylistButton;
+         cell.editingAccessoryView = [self createAddSongsToPlaylistButton];
         
     }else{
         
@@ -184,58 +179,15 @@
     
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
     
+    UITableViewCell *currentCell = [self.tableView cellForRowAtIndexPath:indexPath];
+    
+    NSString *artistRequestParamater = currentCell.textLabel.text;
     
     MPMediaItem     *currentArtist = [[IBCurrentParametersManager sharedManager] artist];
-    NSString *artistName = [currentArtist valueForProperty:MPMediaItemPropertyArtist];
-    NSArray *songs;
-    
-    if (indexPath.row == 0) {
    
-    MPMediaPropertyPredicate *artistNamePredicate =
-    [MPMediaPropertyPredicate predicateWithValue: artistName
-                                     forProperty: MPMediaItemPropertyArtist];
+    NSArray *songs = [[IBFileManager sharedManager] getSongsOfArtist:currentArtist withParameter:artistRequestParamater];
     
-    MPMediaQuery *songsOfArtist = [[MPMediaQuery alloc] init];
-    [songsOfArtist addFilterPredicate:artistNamePredicate];
     
-    songs = [songsOfArtist items];
-    
-    }else{
-        
-        MPMediaPropertyPredicate *artistNamePredicate =
-        [MPMediaPropertyPredicate predicateWithValue: artistName
-                                         forProperty: MPMediaItemPropertyArtist];
-        
-        MPMediaQuery *albumsOfArtist = [[MPMediaQuery alloc] init];
-        [albumsOfArtist setGroupingType:MPMediaGroupingAlbum];
-        
-        [albumsOfArtist addFilterPredicate:artistNamePredicate];
-        
-        NSMutableArray *tempSongsArray = [NSMutableArray array];
-        
-        for (MPMediaItemCollection *album in [albumsOfArtist collections]) {
-            MPMediaItem *albumItem = [album representativeItem];
-            
-           NSString *title = [albumItem valueForProperty:MPMediaItemPropertyAlbumTitle];
-            
-            MPMediaPropertyPredicate *albumNamePredicate =
-            [MPMediaPropertyPredicate predicateWithValue: title
-                                             forProperty: MPMediaItemPropertyAlbumTitle];
-            
-            MPMediaQuery *songsOfAlbum = [[MPMediaQuery alloc] init];
-            [songsOfAlbum addFilterPredicate:albumNamePredicate];
-            
-            [tempSongsArray addObjectsFromArray:[songsOfAlbum items]];
-
-            
-        }
-        
-        songs = tempSongsArray;
-        
-        
-        
-        
-    }
     if (button.isSelected == NO) {
         [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];
         [button setIsSelected:YES];

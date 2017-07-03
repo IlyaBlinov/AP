@@ -161,6 +161,24 @@
 }
 
 
+- (IBPlayerItem*) createAddSongsToPlaylistButton{
+    
+    IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
+    [addToPlaylistButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+    
+    return addToPlaylistButton;
+}
+
+
+
+- (void) addToPlaylistAction:(IBPlayerItem*) button{
+    
+    
+    
+}
 
 
 

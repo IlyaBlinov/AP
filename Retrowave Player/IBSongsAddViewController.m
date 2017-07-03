@@ -32,15 +32,25 @@
     
     [super viewWillAppear:animated];
 
+    [ self.tableView setEditing: [[IBCurrentParametersManager sharedManager] isEditing]];
     
-    IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-    [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
-    [addToPlaylistButton addTarget:self action:@selector(addNewSongs) forControlEvents:UIControlEventTouchUpInside];
-    
-    
-    UIBarButtonItem *addToPlaylistItem = [[UIBarButtonItem alloc] initWithCustomView:addToPlaylistButton];
-    self.navigationItem.rightBarButtonItem = addToPlaylistItem;
+    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
+        
+        [self createChooseSongsItem];
+        
+    }else{
+        
+        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
+        [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+        [addToPlaylistButton addTarget:self action:@selector(addNewSongs) forControlEvents:UIControlEventTouchUpInside];
+        
+        
+        UIBarButtonItem *addToPlaylistItem = [[UIBarButtonItem alloc] initWithCustomView:addToPlaylistButton];
+        self.navigationItem.rightBarButtonItem = addToPlaylistItem;
 
+    }
+
+  
     
     
     if ([self isEqual:[[IBCurrentParametersManager sharedManager]returnSongsViewController]]) {
@@ -147,7 +157,15 @@
     cell.songCount.attributedText    = songCount;
 
     
+    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
+        cell.editingAccessoryView = [self createAddSongsToPlaylistButton];
+        
+    }else{
+        
+        cell.editingAccessoryView = nil;
+    }
+   
     
     return cell;
     
@@ -196,6 +214,33 @@
 
 
 #pragma mark - Actions
+
+
+- (void) addToPlaylistAction:(IBPlayerItem*) button{
+    
+    
+    CGPoint point = [button convertPoint:CGPointZero toView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
+    
+    MPMediaItem *song = [self.songs objectAtIndex:indexPath.row];
+    
+    if (button.isSelected == NO) {
+        [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];
+        [button setIsSelected:YES];
+        [[IBCurrentParametersManager sharedManager].addedSongs addObject:song];
+    }else{
+        [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+        [button setIsSelected:NO];
+        [[IBCurrentParametersManager sharedManager].addedSongs removeObject:song];
+    }
+    
+    
+    NSLog(@"added songs = %u",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+    
+    
+}
+
+
 
 
 - (void)addNewSongs{
