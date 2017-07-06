@@ -8,12 +8,22 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum{
+    choose,
+    add,
+    user_defaults
+    
+    
+}ButtonStyle;
 
 @interface IBPlayerItem : UIButton
 
 
 @property (assign, nonatomic) BOOL isSelected;
+@property (assign, nonatomic) ButtonStyle buttonStyle;
 
+
+- (instancetype)initWithButtonStyle:(ButtonStyle) style;
 
 
 

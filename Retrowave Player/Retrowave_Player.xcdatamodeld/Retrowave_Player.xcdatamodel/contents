@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16A323" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+    <entity name="IBPlaylist" representedClassName="IBPlaylist" syncable="YES" codeGenerationType="class">
+        <attribute name="playlistName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="playlistsLibrary" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="IBPlaylistsLibrary" inverseName="playlists" inverseEntity="IBPlaylistsLibrary" syncable="YES"/>
+        <relationship name="songs" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="IBSong" inverseName="playlists" inverseEntity="IBSong" syncable="YES"/>
+    </entity>
+    <entity name="IBPlaylistsLibrary" representedClassName="IBPlaylistsLibrary" syncable="YES" codeGenerationType="class">
+        <relationship name="playlists" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="IBPlaylist" inverseName="playlistsLibrary" inverseEntity="IBPlaylist" syncable="YES"/>
+    </entity>
+    <entity name="IBSong" representedClassName="IBSong" syncable="YES" codeGenerationType="class">
+        <relationship name="playlists" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="IBPlaylist" inverseName="songs" inverseEntity="IBPlaylist" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="IBPlaylist" positionX="-1701" positionY="-18" width="128" height="88"/>
+        <element name="IBPlaylistsLibrary" positionX="-1881" positionY="-18" width="128" height="58"/>
+        <element name="IBSong" positionX="-1496" positionY="-4" width="128" height="58"/>
+    </elements>
 </model>

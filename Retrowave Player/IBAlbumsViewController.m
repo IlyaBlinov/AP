@@ -7,7 +7,6 @@
 //
 
 #import "IBAlbumsViewController.h"
-#import "IBAlbum.h"
 #import "IBAlbumViewCell.h"
 #import "IBArtistInfoViewController.h"
 #import "IBSongsViewController.h"

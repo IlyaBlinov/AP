@@ -8,8 +8,6 @@
 
 #import "IBPlaylistlistViewController.h"
 #import "IBPlaylistCell.h"
-#import "IBPlaylist.h"
-#import "IBSong.h"
 #import "IBSongsAddViewController.h"
 #import "IBAllMediaViewController.h"
 #import "IBAddPlaylistViewController.h"
@@ -75,7 +73,7 @@
     
     IBPlayerItem *removeFromPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
     [removeFromPlaylistButton setImage: [UIImage imageNamed: @"cancel-music(4).png"]forState:UIControlStateNormal];
-    [removeFromPlaylistButton addTarget:self action:@selector(removeFromPlaylist) forControlEvents:UIControlEventTouchUpInside];
+    [removeFromPlaylistButton addTarget:self action:@selector(removeFromPlaylists) forControlEvents:UIControlEventTouchUpInside];
     
     
     UIBarButtonItem *removeFromPlaylistItem = [[UIBarButtonItem alloc] initWithCustomView:removeFromPlaylistButton];
@@ -90,8 +88,8 @@
             UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
             [self.navigationItem setLeftBarButtonItem:backItem];
             [self.navigationItem setLeftBarButtonItems:[NSArray arrayWithObjects: backItem, removeFromPlaylistItem, nil]] ;
-            
         }
+        
     }else{
         [self.navigationItem setLeftBarButtonItem:removeFromPlaylistItem];
     }
@@ -198,8 +196,17 @@
 
 #pragma mark - Actions
 
-- (void) removeFromPlaylist{
+- (void) removeFromPlaylists{
     
+     NSArray *playlists = [[IBFileManager sharedManager] getPlaylists];
+    
+    NSMutableArray *tempPlaylistArray = [NSMutableArray arrayWithArray:playlists];
+    
+    MPMediaPlaylist *deletingPlaylist = [playlists lastObject];
+    
+    [tempPlaylistArray removeObject:deletingPlaylist];
+    
+    [self.tableView reloadData];
     
 }
 

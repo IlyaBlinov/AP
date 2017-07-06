@@ -8,7 +8,6 @@
 
 #import "IBArtistsViewController.h"
 #import "IBArtistInfoViewController.h"
-#import "IBArtist.h"
 #import "IBArtistTableViewCell.h"
 #import "IBAllMediaViewController.h"
 #import "IBCurrentParametersManager.h"
