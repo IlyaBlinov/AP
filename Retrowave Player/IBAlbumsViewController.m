@@ -39,7 +39,7 @@
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-        [self createChooseSongsItem];
+       self.navigationItem.rightBarButtonItem =  [self createChooseSongsItem];
         
         self.tableView.allowsSelectionDuringEditing = YES;
         

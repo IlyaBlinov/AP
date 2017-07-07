@@ -29,6 +29,11 @@
             case choose:
                 imageName = @"Added.png";
                 break;
+               
+            case del:
+                imageName = @"cancel-music(4).png";
+                break;
+                
                 
             default:
                 break;

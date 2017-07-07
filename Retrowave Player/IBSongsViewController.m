@@ -37,8 +37,7 @@
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-        [self createChooseSongsItem];
-        
+        self.navigationItem.rightBarButtonItem = [self createChooseSongsItem];
         
         [self.navigationController setNavigationBarHidden:NO];
         [self.tableView setEditing:YES];

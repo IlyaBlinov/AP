@@ -73,7 +73,7 @@
 #pragma mark - Actions
 
 
-- (void)chooseSongs:(IBPlayerItem *) button{
+- (void)chooseSongs{
     
     [IBCurrentParametersManager sharedManager].songsViewType = playlist;
     
@@ -147,29 +147,15 @@
 #pragma mark - addSongs
 
 
-- (void) createChooseSongsItem{
+- (IBBarButtonItem*) createChooseSongsItem{
     
-    IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-    [addToPlaylistButton setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateNormal];
-    [addToPlaylistButton addTarget:self action:@selector(chooseSongs:) forControlEvents:UIControlEventTouchUpInside];
+    IBPlayerItem *chooseButton = [[IBPlayerItem alloc] initWithButtonStyle:choose];
+    [chooseButton addTarget:self action:@selector(chooseSongs) forControlEvents:UIControlEventTouchUpInside];
+    IBBarButtonItem *item = [[IBBarButtonItem alloc] initWithButton:chooseButton];
     
-    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:addToPlaylistButton];
-    
-    self.navigationItem.rightBarButtonItem = item;
+    return item;
 
     
-}
-
-
-- (IBPlayerItem*) createAddSongsToPlaylistButton{
-    
-    IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-    [addToPlaylistButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
-    
-    
-    [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
-    
-    return addToPlaylistButton;
 }
 
 

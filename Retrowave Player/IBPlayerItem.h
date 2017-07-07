@@ -11,6 +11,7 @@
 typedef enum{
     choose,
     add,
+    del,
     user_defaults
     
     

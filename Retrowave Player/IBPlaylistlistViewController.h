@@ -8,14 +8,20 @@
 
 #import <UIKit/UIKit.h>
 #import "IBContentViewController.h"
-
+#import "IBTransitionViewController.h"
+#import "IBTransitionDismissViewController.h"
+#import "IBSongsAddViewController.h"
+#import "IBAllMediaViewController.h"
+#import "IBAddPlaylistViewController.h"
+#import "IBFileManager.h"
+#import "IBPlaylistCell.h"
 
 @interface IBPlaylistlistViewController : IBContentViewController
 
 
+@property (strong, nonatomic) NSArray *playlists;
 
-
-
+- (void)addNewPlaylist;
 
 
 @end

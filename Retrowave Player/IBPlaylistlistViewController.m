@@ -7,19 +7,14 @@
 //
 
 #import "IBPlaylistlistViewController.h"
-#import "IBPlaylistCell.h"
-#import "IBSongsAddViewController.h"
-#import "IBAllMediaViewController.h"
-#import "IBAddPlaylistViewController.h"
-#import "IBTransitionViewController.h"
-#import "IBTransitionDismissViewController.h"
-#import "IBCurrentParametersManager.h"
-#import "IBFileManager.h"
+
+
+
 
 
 
 @interface IBPlaylistlistViewController ()<UIViewControllerTransitioningDelegate>
-@property (strong, nonatomic) NSArray *playlists;
+
 @property (strong, nonatomic) NSString *backItemTitle;
 @property (strong, nonatomic) IBTransitionViewController *animator;
 @property (strong, nonatomic) IBTransitionDismissViewController *dismissAnimator;
@@ -69,16 +64,7 @@
 {
     [super viewDidLoad];
     
-   
-    
-    IBPlayerItem *removeFromPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-    [removeFromPlaylistButton setImage: [UIImage imageNamed: @"cancel-music(4).png"]forState:UIControlStateNormal];
-    [removeFromPlaylistButton addTarget:self action:@selector(removeFromPlaylists) forControlEvents:UIControlEventTouchUpInside];
-    
-    
-    UIBarButtonItem *removeFromPlaylistItem = [[UIBarButtonItem alloc] initWithCustomView:removeFromPlaylistButton];
 
-  
 
     NSInteger number = [self.navigationController.viewControllers count] - 2;
     
@@ -87,11 +73,9 @@
             NSString *title = @"All Media";
             UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
             [self.navigationItem setLeftBarButtonItem:backItem];
-            [self.navigationItem setLeftBarButtonItems:[NSArray arrayWithObjects: backItem, removeFromPlaylistItem, nil]] ;
+            
         }
         
-    }else{
-        [self.navigationItem setLeftBarButtonItem:removeFromPlaylistItem];
     }
 
     
@@ -196,19 +180,6 @@
 
 #pragma mark - Actions
 
-- (void) removeFromPlaylists{
-    
-     NSArray *playlists = [[IBFileManager sharedManager] getPlaylists];
-    
-    NSMutableArray *tempPlaylistArray = [NSMutableArray arrayWithArray:playlists];
-    
-    MPMediaPlaylist *deletingPlaylist = [playlists lastObject];
-    
-    [tempPlaylistArray removeObject:deletingPlaylist];
-    
-    [self.tableView reloadData];
-    
-}
 
 
 - (void) addToPlaylistAction:(IBPlayerItem*) button{

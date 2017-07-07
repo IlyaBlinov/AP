@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-
+#import "IBCoreDataManager.h"
 @interface AppDelegate ()
 
 @end
@@ -50,6 +50,9 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     // Saves changes in the application's managed object context before the application terminates.
    
+    [[IBCoreDataManager sharedManager]saveContext];
+    
+    
 }
 
 

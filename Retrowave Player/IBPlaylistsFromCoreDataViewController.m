@@ -7,14 +7,51 @@
 //
 
 #import "IBPlaylistsFromCoreDataViewController.h"
+#import "IBPlaylist+CoreDataClass.h"
 
-@interface IBPlaylistsFromCoreDataViewController ()
-
+@interface IBPlaylistsFromCoreDataViewController ()<UIViewControllerTransitioningDelegate>
+@property (strong, nonatomic) IBTransitionViewController *animator;
+@property (strong, nonatomic) IBTransitionDismissViewController *dismissAnimator;
 @end
 
 @implementation IBPlaylistsFromCoreDataViewController
 
 @synthesize fetchedResultsController = _fetchedResultsController;
+
+
+
+- (void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
+    
+    [ self.tableView setEditing: [[IBCurrentParametersManager sharedManager] isEditing]];
+    
+    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
+        
+        [self createChooseSongsItem];
+        
+        self.tableView.allowsSelectionDuringEditing = YES;
+        
+    }else{
+        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
+        [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+        [addToPlaylistButton addTarget:self action:@selector(addNewPlaylist) forControlEvents:UIControlEventTouchUpInside];
+        
+        UIBarButtonItem *addToPlaylistItem = [[UIBarButtonItem alloc] initWithCustomView:addToPlaylistButton];
+        self.navigationItem.rightBarButtonItem = addToPlaylistItem;
+        
+    }
+    
+    
+    
+    [self.tableView reloadData];
+    
+}
+
+
+
+
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -67,5 +104,100 @@
     
     return _fetchedResultsController;
 }
+
+
+
+
+- (IBPlaylistCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    static  NSString *identifier = @"cell";
+    
+    IBPlaylistCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    
+    if (!cell) {
+        cell = [[IBPlaylistCell alloc] initWithStyle:UITableViewCellStyleSubtitle
+                                     reuseIdentifier:identifier];
+    }
+    
+    
+    IBPlaylist *playlist = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    NSString *playlistName = playlist.playlistName;
+    
+    if ((playlist != nil) && (playlistName != nil) && (![playlistName isEqualToString:@""])){
+        
+        
+        
+        NSAttributedString *playlistTitle = [[NSAttributedString alloc] initWithString:playlistName];
+        
+        NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d",[playlist.songs count]]];
+        
+        
+        cell.playlistTitle.attributedText    = playlistTitle;
+        cell.songCount.attributedText        = songCount;
+        
+        
+        
+        
+        if ([[IBCurrentParametersManager sharedManager] isEditing]) {
+            
+            cell.editingAccessoryView = [self createAddSongsToPlaylistButton];
+            
+        }else{
+            
+            IBPlayerItem *accessoryButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
+            [accessoryButton setImage: [UIImage imageNamed:@"skip-track.png"]forState:UIControlStateNormal];
+            
+            cell.accessoryView = accessoryButton;
+        }
+        
+    }
+    
+    return cell;
+    
+}
+
+
+
+
+
+#pragma mark - UITableViewDelegate
+
+
+
+
+#pragma mark - UIViewControllerTransitioningDelegate
+
+- (id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(IBAddPlaylistViewController *)presenting sourceController:(UIViewController *)source {
+    
+    self.animator = [[IBTransitionViewController alloc] init];
+    
+    return self.animator;
+}
+
+- (id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UINavigationController *)dismissed{
+    self.dismissAnimator = [[IBTransitionDismissViewController alloc] init];
+    
+    
+    IBAddPlaylistViewController *vc =(IBAddPlaylistViewController*) [dismissed topViewController];
+    
+    
+    if (![vc.playlistName.text isEqualToString: @""]) {
+        NSString *newPlaylistName = [[vc playlistName]text];
+        
+       NSManagedObjectContext *managedObjectContext = self.persistentContainer.viewContext;
+        
+        IBPlaylist *newPlaylist = [NSEntityDescription insertNewObjectForEntityForName:@"IBPlaylist" inManagedObjectContext:managedObjectContext];
+        newPlaylist.playlistName = newPlaylistName;
+        
+        [self.tableView reloadData];
+        
+    }
+    
+    return self.dismissAnimator;
+}
+
+
 
 @end

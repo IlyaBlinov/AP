@@ -36,16 +36,15 @@
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-        [self createChooseSongsItem];
+       self.navigationItem.rightBarButtonItem =  [self createChooseSongsItem];
         
     }else{
         
-        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-        [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithButtonStyle:add];
         [addToPlaylistButton addTarget:self action:@selector(addNewSongs) forControlEvents:UIControlEventTouchUpInside];
         
+        IBBarButtonItem *addToPlaylistItem = [[IBBarButtonItem alloc] initWithButton:addToPlaylistButton];
         
-        UIBarButtonItem *addToPlaylistItem = [[UIBarButtonItem alloc] initWithCustomView:addToPlaylistButton];
         self.navigationItem.rightBarButtonItem = addToPlaylistItem;
 
     }
@@ -159,7 +158,10 @@
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-        cell.editingAccessoryView = [self createAddSongsToPlaylistButton];
+      IBPlayerItem *addButton = [[IBPlayerItem alloc]initWithButtonStyle:add];
+        [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+        cell.editingAccessoryView = addButton;
         
     }else{
         

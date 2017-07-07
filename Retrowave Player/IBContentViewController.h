@@ -10,18 +10,18 @@
 #import "IBFontAttributes.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "IBPlayerItem.h"
-
+#import "IBBarButtonItem.h"
 @interface IBContentViewController : UITableViewController
 
 
 
 
-- (void) createChooseSongsItem;
+- (IBBarButtonItem*) createChooseSongsItem;
 
 - (IBPlayerItem*) createAddSongsToPlaylistButton;
 
 - (UIBarButtonItem*) setLeftBackBarButtonItem:(NSString *) titleItem;
 
-- (void)chooseSongs:(IBPlayerItem *) button;
+- (void)chooseSongs;
 
 @end
