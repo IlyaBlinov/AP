@@ -12,11 +12,11 @@
 		230B69261F0E444400476F44 /* IBCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B69251F0E444400476F44 /* IBCoreDataManager.m */; };
 		230B692A1F0E509000476F44 /* IBCoreDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B69291F0E509000476F44 /* IBCoreDataViewController.m */; };
 		230B692D1F0E67B300476F44 /* IBPlaylistsFromCoreDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B692C1F0E67B300476F44 /* IBPlaylistsFromCoreDataViewController.m */; };
-		230B69301F0E6C4500476F44 /* IBBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B692F1F0E6C4500476F44 /* IBBarButtonItem.m */; };
-		230B69D11F0FB1D900476F44 /* IBPlaylist+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B69CA1F0FB1D900476F44 /* IBPlaylist+CoreDataClass.m */; };
-		230B69D21F0FB1D900476F44 /* IBPlaylist+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B69CC1F0FB1D900476F44 /* IBPlaylist+CoreDataProperties.m */; };
-		230B69D31F0FB1D900476F44 /* IBSong+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B69CE1F0FB1D900476F44 /* IBSong+CoreDataClass.m */; };
-		230B69D41F0FB1D900476F44 /* IBSong+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B69D01F0FB1D900476F44 /* IBSong+CoreDataProperties.m */; };
+		230B69DE1F13841500476F44 /* IBBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B69D61F13841500476F44 /* IBBarButtonItem.m */; };
+		230B69DF1F13841500476F44 /* IBPlaylist+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B69D81F13841500476F44 /* IBPlaylist+CoreDataClass.m */; };
+		230B69E01F13841500476F44 /* IBPlaylist+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B69DA1F13841500476F44 /* IBPlaylist+CoreDataProperties.m */; };
+		230B69E11F13841500476F44 /* IBSong+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B69DC1F13841500476F44 /* IBSong+CoreDataClass.m */; };
+		230B69E31F13842200476F44 /* IBSong+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B69E21F13842200476F44 /* IBSong+CoreDataProperties.m */; };
 		236727F21ED30C0A0054678D /* IBSongsAddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 236727F11ED30C0A0054678D /* IBSongsAddViewController.m */; };
 		6F004C751EACCEFC007755C3 /* Automani.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B561EACCEFC007755C3 /* Automani.ttf */; };
 		6F004C761EACCEFC007755C3 /* Codystar.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B571EACCEFC007755C3 /* Codystar.ttf */; };
@@ -281,16 +281,16 @@
 		230B69291F0E509000476F44 /* IBCoreDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBCoreDataViewController.m; sourceTree = "<group>"; };
 		230B692B1F0E67B300476F44 /* IBPlaylistsFromCoreDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBPlaylistsFromCoreDataViewController.h; sourceTree = "<group>"; };
 		230B692C1F0E67B300476F44 /* IBPlaylistsFromCoreDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBPlaylistsFromCoreDataViewController.m; sourceTree = "<group>"; };
-		230B692E1F0E6C4500476F44 /* IBBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IBBarButtonItem.h; path = ../IBBarButtonItem.h; sourceTree = "<group>"; };
-		230B692F1F0E6C4500476F44 /* IBBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IBBarButtonItem.m; path = ../IBBarButtonItem.m; sourceTree = "<group>"; };
-		230B69C91F0FB1D900476F44 /* IBPlaylist+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "IBPlaylist+CoreDataClass.h"; path = "../IBPlaylist+CoreDataClass.h"; sourceTree = "<group>"; };
-		230B69CA1F0FB1D900476F44 /* IBPlaylist+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "IBPlaylist+CoreDataClass.m"; path = "../IBPlaylist+CoreDataClass.m"; sourceTree = "<group>"; };
-		230B69CB1F0FB1D900476F44 /* IBPlaylist+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "IBPlaylist+CoreDataProperties.h"; path = "../IBPlaylist+CoreDataProperties.h"; sourceTree = "<group>"; };
-		230B69CC1F0FB1D900476F44 /* IBPlaylist+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "IBPlaylist+CoreDataProperties.m"; path = "../IBPlaylist+CoreDataProperties.m"; sourceTree = "<group>"; };
-		230B69CD1F0FB1D900476F44 /* IBSong+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "IBSong+CoreDataClass.h"; path = "../IBSong+CoreDataClass.h"; sourceTree = "<group>"; };
-		230B69CE1F0FB1D900476F44 /* IBSong+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "IBSong+CoreDataClass.m"; path = "../IBSong+CoreDataClass.m"; sourceTree = "<group>"; };
-		230B69CF1F0FB1D900476F44 /* IBSong+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "IBSong+CoreDataProperties.h"; path = "../IBSong+CoreDataProperties.h"; sourceTree = "<group>"; };
-		230B69D01F0FB1D900476F44 /* IBSong+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "IBSong+CoreDataProperties.m"; path = "../IBSong+CoreDataProperties.m"; sourceTree = "<group>"; };
+		230B69D51F13841500476F44 /* IBBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBBarButtonItem.h; sourceTree = "<group>"; };
+		230B69D61F13841500476F44 /* IBBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBBarButtonItem.m; sourceTree = "<group>"; };
+		230B69D71F13841500476F44 /* IBPlaylist+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBPlaylist+CoreDataClass.h"; sourceTree = "<group>"; };
+		230B69D81F13841500476F44 /* IBPlaylist+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBPlaylist+CoreDataClass.m"; sourceTree = "<group>"; };
+		230B69D91F13841500476F44 /* IBPlaylist+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBPlaylist+CoreDataProperties.h"; sourceTree = "<group>"; };
+		230B69DA1F13841500476F44 /* IBPlaylist+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBPlaylist+CoreDataProperties.m"; sourceTree = "<group>"; };
+		230B69DB1F13841500476F44 /* IBSong+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBSong+CoreDataClass.h"; sourceTree = "<group>"; };
+		230B69DC1F13841500476F44 /* IBSong+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBSong+CoreDataClass.m"; sourceTree = "<group>"; };
+		230B69DD1F13841500476F44 /* IBSong+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBSong+CoreDataProperties.h"; sourceTree = "<group>"; };
+		230B69E21F13842200476F44 /* IBSong+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBSong+CoreDataProperties.m"; sourceTree = "<group>"; };
 		236727F01ED30C0A0054678D /* IBSongsAddViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBSongsAddViewController.h; sourceTree = "<group>"; };
 		236727F11ED30C0A0054678D /* IBSongsAddViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBSongsAddViewController.m; sourceTree = "<group>"; };
 		6F004B561EACCEFC007755C3 /* Automani.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Automani.ttf; sourceTree = "<group>"; };
@@ -619,8 +619,8 @@
 		230B69311F0E6C5300476F44 /* BarButtons */ = {
 			isa = PBXGroup;
 			children = (
-				230B692E1F0E6C4500476F44 /* IBBarButtonItem.h */,
-				230B692F1F0E6C4500476F44 /* IBBarButtonItem.m */,
+				230B69D51F13841500476F44 /* IBBarButtonItem.h */,
+				230B69D61F13841500476F44 /* IBBarButtonItem.m */,
 				6F004B901EACCEFC007755C3 /* IBTabBarPlayerItem.h */,
 				6F004B911EACCEFC007755C3 /* IBTabBarPlayerItem.m */,
 			);
@@ -630,14 +630,14 @@
 		230B69441F0F932D00476F44 /* CoreDataModels */ = {
 			isa = PBXGroup;
 			children = (
-				230B69C91F0FB1D900476F44 /* IBPlaylist+CoreDataClass.h */,
-				230B69CA1F0FB1D900476F44 /* IBPlaylist+CoreDataClass.m */,
-				230B69CB1F0FB1D900476F44 /* IBPlaylist+CoreDataProperties.h */,
-				230B69CC1F0FB1D900476F44 /* IBPlaylist+CoreDataProperties.m */,
-				230B69CD1F0FB1D900476F44 /* IBSong+CoreDataClass.h */,
-				230B69CE1F0FB1D900476F44 /* IBSong+CoreDataClass.m */,
-				230B69CF1F0FB1D900476F44 /* IBSong+CoreDataProperties.h */,
-				230B69D01F0FB1D900476F44 /* IBSong+CoreDataProperties.m */,
+				230B69D71F13841500476F44 /* IBPlaylist+CoreDataClass.h */,
+				230B69D81F13841500476F44 /* IBPlaylist+CoreDataClass.m */,
+				230B69D91F13841500476F44 /* IBPlaylist+CoreDataProperties.h */,
+				230B69DA1F13841500476F44 /* IBPlaylist+CoreDataProperties.m */,
+				230B69DB1F13841500476F44 /* IBSong+CoreDataClass.h */,
+				230B69DC1F13841500476F44 /* IBSong+CoreDataClass.m */,
+				230B69DD1F13841500476F44 /* IBSong+CoreDataProperties.h */,
+				230B69E21F13842200476F44 /* IBSong+CoreDataProperties.m */,
 			);
 			name = CoreDataModels;
 			sourceTree = "<group>";
@@ -1542,19 +1542,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F004C7A1EACCEFC007755C3 /* IBAlbumsViewController.m in Sources */,
-				230B69D31F0FB1D900476F44 /* IBSong+CoreDataClass.m in Sources */,
 				6F004C8F1EACCEFC007755C3 /* IBPlayerController.m in Sources */,
 				6F004C921EACCEFC007755C3 /* IBSongCellTableViewCell.m in Sources */,
+				230B69E31F13842200476F44 /* IBSong+CoreDataProperties.m in Sources */,
+				230B69DE1F13841500476F44 /* IBBarButtonItem.m in Sources */,
 				6F004C7C1EACCEFC007755C3 /* IBAllMediaViewController.m in Sources */,
 				230B68A11F06848700476F44 /* IBFileManager.m in Sources */,
 				6FD252E11EB261A900EB3721 /* IBAllMediaCell.m in Sources */,
 				6F004C8D1EACCEFC007755C3 /* IBMainTabBarController.m in Sources */,
 				6F004C961EACCEFC007755C3 /* IBVisualizerLayer.m in Sources */,
 				6F004C8A1EACCEFC007755C3 /* IBDetailedTitle.m in Sources */,
-				230B69D11F0FB1D900476F44 /* IBPlaylist+CoreDataClass.m in Sources */,
 				6F004C8C1EACCEFC007755C3 /* IBLabel.m in Sources */,
 				6FCDBDD41EB920DC00B326D7 /* IBTransitionViewController.m in Sources */,
-				230B69D21F0FB1D900476F44 /* IBPlaylist+CoreDataProperties.m in Sources */,
 				6FCDBDDF1EC2018600B326D7 /* IBCurrentParametersManager.m in Sources */,
 				6F004C811EACCEFC007755C3 /* IBArtistNameTitle.m in Sources */,
 				6FCDBDD11EB9148C00B326D7 /* IBAddPlaylistViewController.m in Sources */,
@@ -1566,6 +1565,7 @@
 				6FCDBDD71EBDFC8A00B326D7 /* IBButton.m in Sources */,
 				6F004C861EACCEFC007755C3 /* IBArtistTableViewCell.m in Sources */,
 				6F004C821EACCEFC007755C3 /* IBArtistNumberAlbumsTitle.m in Sources */,
+				230B69E11F13841500476F44 /* IBSong+CoreDataClass.m in Sources */,
 				6F05DD091EACD5E1009C77BD /* IBSongsViewController.m in Sources */,
 				6F004C841EACCEFC007755C3 /* IBArtistParameter.m in Sources */,
 				6F004C8B1EACCEFC007755C3 /* IBFontAttributes.m in Sources */,
@@ -1576,16 +1576,16 @@
 				6F004C941EACCEFC007755C3 /* IBTabBarPlayerItem.m in Sources */,
 				6F004C871EACCEFC007755C3 /* IBContentViewController.m in Sources */,
 				6F004C7B1EACCEFC007755C3 /* IBAlbumViewCell.m in Sources */,
-				230B69D41F0FB1D900476F44 /* IBSong+CoreDataProperties.m in Sources */,
 				236727F21ED30C0A0054678D /* IBSongsAddViewController.m in Sources */,
 				6F004C971EACCEFC007755C3 /* IBVisualizerMusic.m in Sources */,
 				230B692A1F0E509000476F44 /* IBCoreDataViewController.m in Sources */,
-				230B69301F0E6C4500476F44 /* IBBarButtonItem.m in Sources */,
 				6F004C7D1EACCEFC007755C3 /* IBAnimationManager.m in Sources */,
 				230B69261F0E444400476F44 /* IBCoreDataManager.m in Sources */,
 				6F004C901EACCEFC007755C3 /* IBPlayerItem.m in Sources */,
 				6F004C931EACCEFC007755C3 /* IBSongCount.m in Sources */,
+				230B69E01F13841500476F44 /* IBPlaylist+CoreDataProperties.m in Sources */,
 				6F004C851EACCEFC007755C3 /* IBArtistsViewController.m in Sources */,
+				230B69DF1F13841500476F44 /* IBPlaylist+CoreDataClass.m in Sources */,
 				6F004C801EACCEFC007755C3 /* IBArtistInfoViewController.m in Sources */,
 				6FCDBDC81EB498D700B326D7 /* IBPlaylistlistViewController.m in Sources */,
 				230B692D1F0E67B300476F44 /* IBPlaylistsFromCoreDataViewController.m in Sources */,
