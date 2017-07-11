@@ -116,7 +116,10 @@
   
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-        cell.editingAccessoryView = [self createAddSongsToPlaylistButton];
+        IBPlayerItem *addButton = [[IBPlayerItem alloc]initWithButtonStyle:add];
+        [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+        
+        cell.editingAccessoryView = addButton;
         
     }else{
         

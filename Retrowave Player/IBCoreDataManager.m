@@ -72,6 +72,89 @@
 }
 
 
+#pragma mark - Core Data Actions
+
+
+- (NSArray*) allObjects {
+    
+    NSManagedObjectContext *context = self.persistentContainer.viewContext;
+    
+    NSFetchRequest* request = [[NSFetchRequest alloc] init];
+    
+    NSEntityDescription* description =
+    [NSEntityDescription entityForName:@"IBItem"
+                inManagedObjectContext:context];
+    
+    [request setEntity:description];
+    
+    NSError* requestError = nil;
+    NSArray* resultArray = [context executeFetchRequest:request error:&requestError];
+    if (requestError) {
+        NSLog(@"%@", [requestError localizedDescription]);
+    }
+    
+    return resultArray;
+}
+
+
+- (NSArray*) playlists {
+    
+    NSManagedObjectContext *context = self.persistentContainer.viewContext;
+    
+    NSFetchRequest* request = [[NSFetchRequest alloc] init];
+    
+    NSEntityDescription* description =
+    [NSEntityDescription entityForName:@"IBPlaylist"
+                inManagedObjectContext:context];
+    
+    [request setEntity:description];
+    
+    NSError* requestError = nil;
+    NSArray* resultArray = [context executeFetchRequest:request error:&requestError];
+    if (requestError) {
+        NSLog(@"%@", [requestError localizedDescription]);
+    }
+    
+    return resultArray;
+}
+
+
+
+
+
+- (void) printArray:(NSArray*) array {
+    
+    for (id object in array) {
+        
+        
+    }
+    
+    NSLog(@"COUNT = %d", [array count]);
+}
+
+- (void) printAllObjects {
+    
+    NSArray* allObjects = [self allObjects];
+    
+    [self printArray:allObjects];
+}
+
+- (void) deleteAllObjects {
+    
+    NSArray* allObjects = [self allObjects];
+    NSManagedObjectContext *context = self.persistentContainer.viewContext;
+    
+    
+    for (id object in allObjects) {
+        [context deleteObject:object];
+    }
+    [context save:nil];
+}
+
+
+
+
+
 
 
 @end

@@ -187,7 +187,7 @@
         
         if (indexOfChangingPlaylist != [playliststTempArray count] - 1) {
             
-            for (int i = indexOfChangingPlaylist + 1; i < [playliststTempArray count]; i++) {
+            for (long int i = indexOfChangingPlaylist + 1; i < [playliststTempArray count]; i++) {
                 MPMediaPlaylist *playlist = [playliststTempArray objectAtIndex:i];
                 [arrayPlaylistsAfterChangingPlaylist addObject:playlist];
             }
@@ -250,7 +250,7 @@
     [albumsOfArtist setGroupingType:MPMediaGroupingAlbum];
     [albumsOfArtist addFilterPredicate:artistNamePredicate];
     NSUInteger numberOfAlbums =  [[albumsOfArtist collections] count];
-    NSString *artistParameterAlbums = [NSString stringWithFormat:@"%u",numberOfAlbums];
+    NSString *artistParameterAlbums = [NSString stringWithFormat:@"%lu",(unsigned long)numberOfAlbums];
     
     
     
@@ -258,7 +258,7 @@
     [songsOfArtist setGroupingType:MPMediaGroupingTitle];
     [songsOfArtist addFilterPredicate:artistNamePredicate];
     NSUInteger numberOfSongs = [[songsOfArtist collections] count];
-    NSString *artistParameterSongs = [NSString stringWithFormat:@"%u",numberOfSongs];
+    NSString *artistParameterSongs = [NSString stringWithFormat:@"%lu",(unsigned long)numberOfSongs];
     
    
     
@@ -336,8 +336,18 @@
 }
 
 
+#pragma mark - Get Persistent ID's
 
 
+- (NSArray*) getPersistentIDFromSongs:(NSArray*)songs{
+    
+    
+    NSArray *persistentIDsArray = [songs valueForKeyPath:@"@distinctUnionOfObjects.persistentID"];
+    
+    return persistentIDsArray;
+    
+    
+}
 
 
 

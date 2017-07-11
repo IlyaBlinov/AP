@@ -47,7 +47,7 @@
     
     if (([IBCurrentParametersManager sharedManager].songsViewType == playlist) && [[IBCurrentParametersManager sharedManager] isEditing]) {
        
-        [self createChooseSongsItem];
+      self.navigationItem.rightBarButtonItem = [self createChooseSongsItem];
         
     }
     
@@ -55,9 +55,6 @@
                            @"Songs", @"Artists", @"Albums", @"Audio Books", @"Playlists", nil];
     
     self.categories = [NSArray arrayWithArray:categories];
-        
-    
-
  
 }
 

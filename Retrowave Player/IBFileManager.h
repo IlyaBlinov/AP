@@ -37,7 +37,7 @@
 
 
 - (NSArray*) getAllSongsOfAlbum:(MPMediaItem*) album;
-
+- (NSArray*) getPersistentIDFromSongs:(NSArray*)songs;
 
 
 @end

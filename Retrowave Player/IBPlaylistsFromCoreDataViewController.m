@@ -24,6 +24,8 @@
     
     [super viewWillAppear:animated];
     
+    
+    
     [ self.tableView setEditing: [[IBCurrentParametersManager sharedManager] isEditing]];
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
@@ -33,13 +35,22 @@
         self.tableView.allowsSelectionDuringEditing = YES;
         
     }else{
-        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-        [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+        
+        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithButtonStyle:add];
         [addToPlaylistButton addTarget:self action:@selector(addNewPlaylist) forControlEvents:UIControlEventTouchUpInside];
         
-        UIBarButtonItem *addToPlaylistItem = [[UIBarButtonItem alloc] initWithCustomView:addToPlaylistButton];
+        IBBarButtonItem *addToPlaylistItem = [[IBBarButtonItem alloc] initWithButton:addToPlaylistButton];
+        
         self.navigationItem.rightBarButtonItem = addToPlaylistItem;
         
+        
+        IBPlayerItem *removePlaylistButton = [[IBPlayerItem alloc] initWithButtonStyle:del];
+        [removePlaylistButton addTarget:self action:@selector(removePlaylist:) forControlEvents:UIControlEventTouchUpInside];
+        
+        IBBarButtonItem *removePlaylistItem = [[IBBarButtonItem alloc] initWithButton:removePlaylistButton];
+        
+        self.navigationItem.leftBarButtonItem = removePlaylistItem;
+
     }
     
     
@@ -131,7 +142,7 @@
         
         NSAttributedString *playlistTitle = [[NSAttributedString alloc] initWithString:playlistName];
         
-        NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d",[playlist.songs count]]];
+        NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d",[playlist.songItems count]]];
         
         
         cell.playlistTitle.attributedText    = playlistTitle;
@@ -164,8 +175,37 @@
 
 #pragma mark - UITableViewDelegate
 
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if ([[IBCurrentParametersManager sharedManager]isEditing]) {
+        return UITableViewCellEditingStyleNone;
+    }else{
+        return UITableViewCellEditingStyleDelete;
+    }
+    
+    
+}
 
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+    IBPlaylist *removingPlaylist = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    NSManagedObjectContext *context = [self.persistentContainer viewContext];
+    [context deleteObject:removingPlaylist];
+    
+    [[IBCoreDataManager sharedManager]saveContext];
+    }
+}
+
+
+//- (nullable NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath{
+//    
+//    
+//    
+//    
+//}
 
 #pragma mark - UIViewControllerTransitioningDelegate
 
@@ -190,13 +230,63 @@
         
         IBPlaylist *newPlaylist = [NSEntityDescription insertNewObjectForEntityForName:@"IBPlaylist" inManagedObjectContext:managedObjectContext];
         newPlaylist.playlistName = newPlaylistName;
-        
+    
         [self.tableView reloadData];
+    
+        [[IBCoreDataManager sharedManager]saveContext];
         
     }
     
     return self.dismissAnimator;
 }
+
+
+#pragma mark - Action
+
+- (void) addToPlaylistAction:(IBPlayerItem*) button{
+    
+    CGPoint point = [button convertPoint:CGPointZero toView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
+    
+    
+    IBPlaylist   *currentPlaylist = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    NSArray *songs = [currentPlaylist.songItems allObjects];
+    
+    if (button.isSelected == NO) {
+        [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];
+        [button setIsSelected:YES];
+        [[IBCurrentParametersManager sharedManager].addedSongs addObjectsFromArray:songs];
+    }else{
+        [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+        [button setIsSelected:NO];
+        NSUInteger location = [[IBCurrentParametersManager sharedManager].addedSongs count] - [songs count] ;
+        
+        [[IBCurrentParametersManager sharedManager].addedSongs removeObjectsInRange:NSMakeRange(location, [songs count])];
+    }
+    
+    
+    NSLog(@"added songs = %u",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+    
+    
+}
+
+
+
+
+- (void) removePlaylist:(IBPlayerItem*) button{
+    
+    
+    if ([self.tableView isEditing]) {
+        [self.tableView setEditing:NO animated:YES];
+    }else{
+        [self.tableView setEditing:YES animated:YES];
+    }
+    
+    
+    
+}
+
 
 
 

@@ -2,7 +2,7 @@
 //  IBPlaylist+CoreDataProperties.m
 //  Retrowave Player
 //
-//  Created by eastwood on 07/07/2017.
+//  Created by eastwood on 11/07/2017.
 //  Copyright © 2017 Илья Блинов. All rights reserved.
 //
 
@@ -14,7 +14,10 @@
 	return [[NSFetchRequest alloc] initWithEntityName:@"IBPlaylist"];
 }
 
+@dynamic persistentID;
 @dynamic playlistName;
-@dynamic songs;
+@dynamic songItems;
+@dynamic artistItems;
+@dynamic albumItems;
 
 @end

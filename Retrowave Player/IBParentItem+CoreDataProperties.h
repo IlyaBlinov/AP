@@ -1,22 +1,21 @@
 //
-//  IBPlaylist+CoreDataClass.h
+//  IBParentItem+CoreDataProperties.h
 //  Retrowave Player
 //
 //  Created by eastwood on 11/07/2017.
 //  Copyright © 2017 Илья Блинов. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "IBParentItem+CoreDataClass.h"
 
-@class IBAlbumItem, IBArtistItem, IBSongItem;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface IBPlaylist : IBParentItem
+@interface IBParentItem (CoreDataProperties)
+
++ (NSFetchRequest<IBParentItem *> *)fetchRequest;
+
 
 @end
 
 NS_ASSUME_NONNULL_END
-
-#import "IBPlaylist+CoreDataProperties.h"

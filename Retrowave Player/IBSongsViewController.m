@@ -73,7 +73,7 @@
     NSArray *songs  = [titleAndSongsDictionary valueForKey:@"songs"];
     self.songs = [NSArray arrayWithArray:songs];
 
-    
+    NSLog(@"%@",[[IBFileManager sharedManager] getPersistentIDFromSongs:songs]);
     
     UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
     [self.navigationItem setLeftBarButtonItem:backItem];
@@ -153,16 +153,17 @@
         
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
             
-            cell.editingAccessoryView = [self createAddSongsToPlaylistButton];;
+        IBPlayerItem *addButton = [[IBPlayerItem alloc]initWithButtonStyle:add];
+        [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+        
+        cell.editingAccessoryView = addButton;
             
     }else{
             
             cell.editingAccessoryView = nil;
         }
     
-        
-        
-    
+
     }
     
     

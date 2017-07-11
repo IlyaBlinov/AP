@@ -20,4 +20,10 @@
 
 
 
+
+
+- (NSArray*) allObjects;
+- (NSArray*) playlists;
+
+
 @end

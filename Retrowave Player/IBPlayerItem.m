@@ -34,6 +34,8 @@
                 imageName = @"cancel-music(4).png";
                 break;
                 
+            case move_next:
+                imageName = @"skip-track.png";
                 
             default:
                 break;

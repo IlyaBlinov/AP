@@ -12,6 +12,7 @@ typedef enum{
     choose,
     add,
     del,
+    move_next,
     user_defaults
     
     

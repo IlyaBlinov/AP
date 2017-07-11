@@ -52,6 +52,8 @@
 
     self.playlists = [[IBFileManager sharedManager] getPlaylists];
     
+    
+    NSLog(@"%@", [[IBFileManager sharedManager] getPersistentIDFromSongs:self.playlists]);
     [self.tableView reloadData];
     
 }
@@ -138,12 +140,14 @@
         
         if ([[IBCurrentParametersManager sharedManager] isEditing]) {
             
-             cell.editingAccessoryView = [self createAddSongsToPlaylistButton];
+            IBPlayerItem *addButton = [[IBPlayerItem alloc]initWithButtonStyle:add];
+            [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+            
+            cell.editingAccessoryView = addButton;
             
         }else{
             
-            IBPlayerItem *accessoryButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-            [accessoryButton setImage: [UIImage imageNamed:@"skip-track.png"]forState:UIControlStateNormal];
+            IBPlayerItem *accessoryButton = [[IBPlayerItem alloc] initWithButtonStyle:move_next];
             
             cell.accessoryView = accessoryButton;
         }
