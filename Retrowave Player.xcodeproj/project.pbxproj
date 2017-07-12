@@ -24,6 +24,7 @@
 		23D81FC21F14F7250044148D /* IBParentItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D81FB61F14F7250044148D /* IBParentItem+CoreDataProperties.m */; };
 		23D81FC31F14F7250044148D /* IBSongItem+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D81FB81F14F7250044148D /* IBSongItem+CoreDataClass.m */; };
 		23D81FC41F14F7250044148D /* IBSongItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D81FBA1F14F7250044148D /* IBSongItem+CoreDataProperties.m */; };
+		23D81FC71F16566D0044148D /* IBTableViewRowAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D81FC61F16566D0044148D /* IBTableViewRowAction.m */; };
 		6F004C751EACCEFC007755C3 /* Automani.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B561EACCEFC007755C3 /* Automani.ttf */; };
 		6F004C761EACCEFC007755C3 /* Codystar.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B571EACCEFC007755C3 /* Codystar.ttf */; };
 		6F004C771EACCEFC007755C3 /* Codystart.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B581EACCEFC007755C3 /* Codystart.ttf */; };
@@ -311,6 +312,8 @@
 		23D81FB81F14F7250044148D /* IBSongItem+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBSongItem+CoreDataClass.m"; sourceTree = "<group>"; };
 		23D81FB91F14F7250044148D /* IBSongItem+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBSongItem+CoreDataProperties.h"; sourceTree = "<group>"; };
 		23D81FBA1F14F7250044148D /* IBSongItem+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBSongItem+CoreDataProperties.m"; sourceTree = "<group>"; };
+		23D81FC51F16566D0044148D /* IBTableViewRowAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBTableViewRowAction.h; sourceTree = "<group>"; };
+		23D81FC61F16566D0044148D /* IBTableViewRowAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBTableViewRowAction.m; sourceTree = "<group>"; };
 		6F004B561EACCEFC007755C3 /* Automani.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Automani.ttf; sourceTree = "<group>"; };
 		6F004B571EACCEFC007755C3 /* Codystar.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Codystar.ttf; sourceTree = "<group>"; };
 		6F004B581EACCEFC007755C3 /* Codystart.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Codystart.ttf; sourceTree = "<group>"; };
@@ -630,6 +633,8 @@
 				230B69291F0E509000476F44 /* IBCoreDataViewController.m */,
 				230B692B1F0E67B300476F44 /* IBPlaylistsFromCoreDataViewController.h */,
 				230B692C1F0E67B300476F44 /* IBPlaylistsFromCoreDataViewController.m */,
+				23D81FC51F16566D0044148D /* IBTableViewRowAction.h */,
+				23D81FC61F16566D0044148D /* IBTableViewRowAction.m */,
 			);
 			name = "Core Data";
 			sourceTree = "<group>";
@@ -1598,6 +1603,7 @@
 				6F004C821EACCEFC007755C3 /* IBArtistNumberAlbumsTitle.m in Sources */,
 				23D81FBE1F14F7250044148D /* IBArtistItem+CoreDataProperties.m in Sources */,
 				6F05DD091EACD5E1009C77BD /* IBSongsViewController.m in Sources */,
+				23D81FC71F16566D0044148D /* IBTableViewRowAction.m in Sources */,
 				6F004C841EACCEFC007755C3 /* IBArtistParameter.m in Sources */,
 				23D81FC11F14F7250044148D /* IBParentItem+CoreDataClass.m in Sources */,
 				6F004C8B1EACCEFC007755C3 /* IBFontAttributes.m in Sources */,

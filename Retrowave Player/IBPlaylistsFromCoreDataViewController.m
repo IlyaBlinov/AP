@@ -8,6 +8,7 @@
 
 #import "IBPlaylistsFromCoreDataViewController.h"
 #import "IBPlaylist+CoreDataClass.h"
+#import "IBTableViewRowAction.h"
 
 @interface IBPlaylistsFromCoreDataViewController ()<UIViewControllerTransitioningDelegate>
 @property (strong, nonatomic) IBTransitionViewController *animator;
@@ -200,12 +201,18 @@
 }
 
 
-//- (nullable NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath{
-//    
-//    
-//    
-//    
-//}
+- (nullable NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    
+    
+    IBPlaylistCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    
+    
+    IBTableViewRowAction *rowAction = [[IBTableViewRowAction rowActionForCell:cell];
+    
+    return [NSArray arrayWithObject:rowAction];
+    
+}
 
 #pragma mark - UIViewControllerTransitioningDelegate
 
@@ -282,8 +289,6 @@
     }else{
         [self.tableView setEditing:YES animated:YES];
     }
-    
-    
     
 }
 
