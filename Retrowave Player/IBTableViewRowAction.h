@@ -12,7 +12,7 @@
 
 
 
-- (UITableViewRowAction*) rowActionForCell:(UITableViewCell*) cell;
+- (IBTableViewRowAction*) rowActionForCell:(UITableViewCell*) cell;
 
 
 @end
