@@ -59,7 +59,7 @@
     self.playlists = [[IBFileManager sharedManager] getPlaylists];
     
     
-    NSLog(@"%@", [[IBFileManager sharedManager] getPersistentIDFromSongs:self.playlists]);
+  //  NSLog(@"%@", [[IBFileManager sharedManager] getPersistentIDFromSongs:self.playlists]);
     [self.tableView reloadData];
     
 }

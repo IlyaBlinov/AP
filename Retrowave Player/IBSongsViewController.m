@@ -182,23 +182,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
        MPMediaItem *song = [self.songs objectAtIndex:indexPath.row];
-    
-    
-    
-    
-    NSArray *persistentIDs = [[IBFileManager sharedManager] getPersistentIDFromSongs:[NSArray arrayWithObject:song]];
-    
-    NSLog(@"persistentIDs = %@", persistentIDs);
-    
-    MPMediaItem *item = [[IBFileManager sharedManager] getSongByPersistentID:[persistentIDs firstObject]];
-    
-    
-    NSString *itemTitle = [item valueForProperty:MPMediaItemPropertyTitle];
-    
-    NSLog(@"title = %@",itemTitle);
-    
-    
-    
+   
     
 //    IBPlayerController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBPlayerController"];
 //    

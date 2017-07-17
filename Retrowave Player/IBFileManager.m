@@ -96,30 +96,11 @@
     if (type == artist) {
         
         MPMediaItem *artist = [[IBCurrentParametersManager sharedManager] artist];
-        
         NSString *artistName = [artist valueForProperty:MPMediaItemPropertyArtist];
+        
+        albums = [self getAllAlbumsOfArtist:artist];
+        
         title = artistName;
-        
-        MPMediaPropertyPredicate *artistNamePredicate =
-        [MPMediaPropertyPredicate predicateWithValue: artistName
-                                         forProperty: MPMediaItemPropertyArtist];
-        
-        MPMediaQuery *albumsOfArtist = [[MPMediaQuery alloc] init];
-        [albumsOfArtist setGroupingType:MPMediaGroupingAlbum];
-        
-        [albumsOfArtist addFilterPredicate:artistNamePredicate];
-        
-        NSMutableArray *albumsItemsArray = [NSMutableArray array];
-        
-        for (MPMediaItemCollection *album in [albumsOfArtist collections]) {
-            MPMediaItem *albumItem = [album representativeItem];
-            [albumsItemsArray addObject:albumItem];
-            
-        }
-        albums = [[NSArray alloc] initWithArray:albumsItemsArray];
-        
-        
-        
     }else{
         title = @"All Media";
         MPMediaQuery *albumsQuery = [MPMediaQuery albumsQuery];
@@ -138,6 +119,35 @@
     
 }
 
+
+
+
+- (NSArray*) getAllAlbumsOfArtist:(MPMediaItem*) artist{
+    
+    NSString *artistName = [artist valueForProperty:MPMediaItemPropertyArtist];
+    
+    
+    MPMediaPropertyPredicate *artistNamePredicate =
+    [MPMediaPropertyPredicate predicateWithValue: artistName
+                                     forProperty: MPMediaItemPropertyArtist];
+    
+    MPMediaQuery *albumsOfArtist = [[MPMediaQuery alloc] init];
+    [albumsOfArtist setGroupingType:MPMediaGroupingAlbum];
+    
+    [albumsOfArtist addFilterPredicate:artistNamePredicate];
+    
+    NSMutableArray *albumsItemsArray = [NSMutableArray array];
+    
+    for (MPMediaItemCollection *album in [albumsOfArtist collections]) {
+        MPMediaItem *albumItem = [album representativeItem];
+        [albumsItemsArray addObject:albumItem];
+        
+    }
+    NSArray *albums = [[NSArray alloc] initWithArray:albumsItemsArray];
+    
+    return albums;
+  
+}
 
 
 - (NSArray*) getAllSongsOfAlbum:(MPMediaItem*) album{
@@ -339,7 +349,7 @@
 #pragma mark - Get Persistent ID's
 
 
-- (NSArray*) getPersistentIDFromSongs:(NSArray*)songs{
+- (NSArray*) getPersistentIDsFromSongs:(NSArray*)songs{
     
     
     NSArray *persistentIDsArray = [songs valueForKeyPath:@"@distinctUnionOfObjects.persistentID"];
@@ -349,7 +359,73 @@
     
 }
 
+- (NSArray*) getPersistentIDsFromAlbums:(NSArray*)albums{
+    
+    
+    NSArray *persistentIDsArray = [albums valueForKeyPath:@"@distinctUnionOfObjects.albumPersistentID"];
+    
+    return persistentIDsArray;
+    
+    
+}
 
+
+
+- (NSArray*) getSongsPersistentIDsByAlbumPersistentID:(NSNumber*) persistentID{
+    
+    MPMediaItem *album = [self getAlbumByPersistentID:persistentID];
+    
+    NSArray *itemsArray = [self getAllSongsOfAlbum:album];
+    
+    NSArray *persistentIDsArray = [self getPersistentIDsFromSongs:itemsArray];
+    
+    return persistentIDsArray;
+    
+}
+
+
+
+
+
+- (NSArray*) getPersistentIDsFromArtists:(NSArray*)artists{
+    
+    
+    NSArray *persistentIDsArray = [artists valueForKeyPath:@"@distinctUnionOfObjects.artistPersistentID"];
+    
+    return persistentIDsArray;
+ 
+}
+
+
+- (NSArray*) getAlbumsPersistentIDsByArtistPersistentID:(NSNumber*) persistentID{
+    
+    MPMediaItem *artist = [self getArtistByPersistentID:persistentID];
+    
+    NSArray *albumsOfArtist = [self getAllAlbumsOfArtist:artist];
+    
+    NSArray *persitentIDsArray = [self getPersistentIDsFromAlbums:albumsOfArtist];
+    
+    return persitentIDsArray;
+    
+}
+
+- (NSArray*) getSongsPersistentIDsByArtistPersistentID:(NSNumber*) persistentID{
+    
+     MPMediaItem *artist = [self getArtistByPersistentID:persistentID];
+    
+    NSArray *allSongsOfArtist = [self getAllAlbumsOfArtist:artist];
+    
+    NSArray *persistentIDsArray = [self getPersistentIDsFromSongs:allSongsOfArtist];
+   
+    return persistentIDsArray;
+    
+}
+
+
+
+
+
+#pragma mark - return MPMediaItems By PersistentID
 
 - (MPMediaItem*) getSongByPersistentID:(NSNumber*) persistentID{
 
@@ -370,6 +446,95 @@
     
 }
 
+
+- (NSArray*) getSongsByPersistentIDs:(NSArray*) persistentIDs{
+    
+    NSMutableArray *mediaItemsArray = [NSMutableArray array];
+    
+    for (NSNumber *persistentID in persistentIDs) {
+       
+       MPMediaItem *item = [self getSongByPersistentID:persistentID];
+        
+        [mediaItemsArray addObject:item];
+    }
+    
+    return mediaItemsArray;
+}
+
+
+
+
+
+- (MPMediaItem*) getAlbumByPersistentID:(NSNumber*) persistentID{
+
+    MPMediaPropertyPredicate *persisitentIDPredicate =
+    [MPMediaPropertyPredicate predicateWithValue: persistentID
+                                     forProperty: MPMediaItemPropertyAlbumPersistentID];
+    
+    MPMediaQuery *albumPersistentID = [[MPMediaQuery alloc] init];
+    [albumPersistentID addFilterPredicate:persisitentIDPredicate];
+    
+    if ([albumPersistentID.items count] > 0) {
+        return [albumPersistentID.items firstObject];
+    }else{
+        return nil;
+    }
+
+}
+
+
+- (NSArray*) getAlbumsByPersistentIDs:(NSArray*) persistentIDs{
+    
+    NSMutableArray *mediaItemsArray = [NSMutableArray array];
+    
+    for (NSNumber *persistentID in persistentIDs) {
+        
+        MPMediaItem *item = [self getAlbumByPersistentID:persistentID];
+        
+        [mediaItemsArray addObject:item];
+    }
+    
+    return mediaItemsArray;
+}
+
+
+
+
+
+
+
+- (MPMediaItem*) getArtistByPersistentID:(NSNumber*) persistentID{
+    
+    MPMediaPropertyPredicate *persisitentIDPredicate =
+    [MPMediaPropertyPredicate predicateWithValue: persistentID
+                                     forProperty: MPMediaItemPropertyArtistPersistentID];
+    
+    MPMediaQuery *artistPersistentID = [[MPMediaQuery alloc] init];
+    [artistPersistentID addFilterPredicate:persisitentIDPredicate];
+    
+    if ([artistPersistentID.items count] > 0) {
+        return [artistPersistentID.items firstObject];
+    }else{
+        return nil;
+    }
+    
+}
+
+
+
+- (NSArray*) getArtistsByPersistentIDs:(NSArray*) persistentIDs{
+    
+    NSMutableArray *mediaItemsArray = [NSMutableArray array];
+    
+    for (NSNumber *persistentID in persistentIDs) {
+        
+        MPMediaItem *item = [self getArtistByPersistentID:persistentID];
+        
+        [mediaItemsArray addObject:item];
+    }
+    
+    return mediaItemsArray;
+}
 
 
 
