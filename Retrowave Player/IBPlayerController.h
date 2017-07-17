@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "IBCurrentParametersManager.h"
 
-@class IBPlayerItem, IBVisualizerMusic;
+
+@class IBPlayerItem, IBVisualizerMusic, MPMediaItem;
 
 @interface IBPlayerController : UIViewController
 

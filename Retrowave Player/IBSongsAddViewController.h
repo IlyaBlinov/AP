@@ -7,7 +7,7 @@
 //
 #import <UIKit/UIKit.h>
 #import "IBContentViewController.h"
-#import "IBPlayerItem.h"
+
 
 @interface IBSongsAddViewController : IBContentViewController
 

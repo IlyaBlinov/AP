@@ -11,8 +11,7 @@
 #import "IBMainTabBarController.h"
 #import "IBSongsViewController.h"
 #import "IBAlbumsViewController.h"
-#import "IBCurrentParametersManager.h"
-#import "IBFileManager.h"
+
 @interface IBArtistInfoViewController ()
 
 @property (strong, nonatomic) NSDictionary *parameters;
@@ -204,7 +203,7 @@
     }
     
     
-    NSLog(@"added songs = %u",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+    NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
     
     
 }

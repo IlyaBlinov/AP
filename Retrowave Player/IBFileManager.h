@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "IBCurrentParametersManager.h"
+
 @interface IBFileManager : NSObject
 
 
@@ -16,7 +17,8 @@
 
 
 
-- (NSDictionary*) getSongsAndTitleFor :(IBSongsViewType) type;//Songs, Title
+- (NSDictionary*) getSongsAndTitleFor: (IBSongsViewType) type;//Songs, Title
+
 
 - (NSDictionary*) getAlbumsAndTitleFor:(IBSongsViewType) type;//Albums, Title
 

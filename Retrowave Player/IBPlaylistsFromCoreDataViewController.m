@@ -8,7 +8,11 @@
 
 #import "IBPlaylistsFromCoreDataViewController.h"
 #import "IBPlaylist+CoreDataClass.h"
-#import "IBTableViewRowAction.h"
+#import "IBTransitionViewController.h"
+#import "IBTransitionDismissViewController.h"
+#import "IBAddPlaylistViewController.h"
+#import "IBPlaylistCell.h"
+#import "IBAllMediaViewController.h"
 
 @interface IBPlaylistsFromCoreDataViewController ()<UIViewControllerTransitioningDelegate>
 @property (strong, nonatomic) IBTransitionViewController *animator;
@@ -31,7 +35,7 @@
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-        [self createChooseSongsItem];
+        self.navigationItem.rightBarButtonItem =  [self createChooseSongsItem];
         
         self.tableView.allowsSelectionDuringEditing = YES;
         
@@ -65,9 +69,27 @@
 
 
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    
+    
+    NSInteger number = [self.navigationController.viewControllers count] - 2;
+    
+    if (number >= 0) {
+        if ([[self.navigationController.viewControllers objectAtIndex:number] isKindOfClass:[IBAllMediaViewController class]]) {
+            NSString *title = @"All Media";
+            UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
+            [self.navigationItem setLeftBarButtonItem:backItem];
+            
+        }
+        
+    }
+    
+    
+    self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Playlists"];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -100,6 +122,19 @@
     
     [fetchRequest setSortDescriptors:sortDescriptors];
     
+    
+    if ([[IBCurrentParametersManager sharedManager]isEditing]) {
+        
+        IBPlaylist *exceptionPlaylist = [[IBCurrentParametersManager sharedManager] coreDataChangingPlaylist];
+        
+        NSPredicate* predicate = [NSPredicate predicateWithFormat:@"playlistName != %@", exceptionPlaylist.playlistName];
+        
+        [fetchRequest setPredicate:predicate];
+    }
+    
+  
+    
+    
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
     NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:managedObjectContext sectionNameKeyPath:nil cacheName:@"Master"];
@@ -117,7 +152,14 @@
     return _fetchedResultsController;
 }
 
+#pragma mark - UITableViewDataSource
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    
+    return [[self.fetchedResultsController fetchedObjects]count];
+    
+    
+}
 
 
 - (IBPlaylistCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -143,7 +185,7 @@
         
         NSAttributedString *playlistTitle = [[NSAttributedString alloc] initWithString:playlistName];
         
-        NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d",[playlist.songItems count]]];
+        NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%lu",[playlist.songItems count]]];
         
         
         cell.playlistTitle.attributedText    = playlistTitle;
@@ -154,15 +196,18 @@
         
         if ([[IBCurrentParametersManager sharedManager] isEditing]) {
             
-            cell.editingAccessoryView = [self createAddSongsToPlaylistButton];
+            IBPlayerItem *addButton = [[IBPlayerItem alloc]initWithButtonStyle:add];
+            [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+            
+            cell.editingAccessoryView = addButton;
             
         }else{
             
-            IBPlayerItem *accessoryButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-            [accessoryButton setImage: [UIImage imageNamed:@"skip-track.png"]forState:UIControlStateNormal];
+            IBPlayerItem *accessoryButton = [[IBPlayerItem alloc] initWithButtonStyle:move_next];
             
             cell.accessoryView = accessoryButton;
         }
+
         
     }
     
@@ -187,6 +232,16 @@
 }
 
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+      
+    IBPlaylist *playlist = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    [IBCurrentParametersManager sharedManager].coreDataPlaylist = playlist;
+    
+}
+
+
 
 - (nullable NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -204,6 +259,8 @@
         
         if (cell.editingStyle == UITableViewCellEditingStyleDelete) {
             
+            [weakSelf.tableView beginUpdates];
+            
             IBPlaylist *removingPlaylist = [weakSelf.fetchedResultsController objectAtIndexPath:indexPath];
             
             NSManagedObjectContext *context = [weakSelf.persistentContainer viewContext];
@@ -217,7 +274,7 @@
             }
             
            
-        }
+                   }
 
         
     }];
@@ -232,7 +289,6 @@
     return [NSArray arrayWithObject:rowAction];
     
 }
-
 
 
 
@@ -275,6 +331,32 @@
 
 #pragma mark - Action
 
+- (void)addNewPlaylist{
+    
+    IBAddPlaylistViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBAddPlaylistViewController"];
+    
+    
+    vc.modalPresentationStyle = UIModalPresentationFormSheet;
+    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:vc];
+    
+    
+    [nav setModalPresentationStyle:UIModalPresentationCustom];
+    nav.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    
+    
+    nav.transitioningDelegate = self;
+    
+    [self presentViewController:nav animated:YES
+                     completion:^{
+                         NSLog(@"modal viewcontroller is created");
+                     }];
+    
+    
+}
+
+
+
+
 - (void) addToPlaylistAction:(IBPlayerItem*) button{
     
     CGPoint point = [button convertPoint:CGPointZero toView:self.tableView];
@@ -298,7 +380,7 @@
     }
     
     
-    NSLog(@"added songs = %u",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+    NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
     
     
 }
@@ -376,5 +458,14 @@
     return stringTitleWS;
 }
 
+
+#pragma Mark - Segue
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+  
+    
+
+
+}
 
 @end

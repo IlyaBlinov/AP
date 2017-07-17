@@ -12,9 +12,8 @@
 #import "IBAllMediaViewController.h"
 #import "IBPlayerController.h"
 #import "IBVisualizerMusic.h"
-#import "IBPlayerItem.h"
 #import "IBSongsAddViewController.h"
-#import "IBFileManager.h"
+
 
 
 
@@ -142,7 +141,7 @@
     NSAttributedString *songName     = [[NSAttributedString alloc] initWithString:songTitle];
     NSAttributedString *artistName   = [[NSAttributedString alloc] initWithString:artistTitle];
     NSAttributedString *timeDuration = [[NSAttributedString alloc] initWithString:songDurationTitle];
-    NSAttributedString *songCount    = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", indexPath.row + 1]];
+    NSAttributedString *songCount    = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%ld", indexPath.row + 1]];
     
     
     cell.songTitle.attributedText    = songName;
@@ -236,7 +235,7 @@
     }
     
     
-    NSLog(@"added songs = %u",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+    NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
     
     
 }

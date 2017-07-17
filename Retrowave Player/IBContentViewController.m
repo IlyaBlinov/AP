@@ -8,7 +8,10 @@
 
 #import "IBContentViewController.h"
 #import "IBAllMediaViewController.h"
-#import "IBFileManager.h"
+#import "IBFontAttributes.h"
+#import "IBSongsAddViewController.h"
+#import "IBSongsFromCoreDataViewController.h"
+#import "IBCoreDataManager.h"
 
 @interface IBContentViewController ()
 
@@ -77,14 +80,19 @@
     
     [IBCurrentParametersManager sharedManager].songsViewType = playlist;
     
-    MPMediaPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
+    
     NSArray *addedSongs              = [NSArray arrayWithArray:[[IBCurrentParametersManager sharedManager] addedSongs]];
     
-  
-    __weak IBContentViewController       *weakSongsVC = self;
+    IBContentViewController *returnedVC = [[IBCurrentParametersManager sharedManager]returnSongsViewController];
     
     [[IBCurrentParametersManager sharedManager] setIsEditing:NO];
     
+    if ([returnedVC isKindOfClass:[IBSongsAddViewController class]]) {
+ 
+    MPMediaPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
+    
+    
+    __weak IBContentViewController       *weakSongsVC = self;
     
     [currentPlaylist addMediaItems:addedSongs completionHandler:^(NSError * _Nullable error) {
         
@@ -96,6 +104,23 @@
         
     }];
     
+    }else{
+        
+        IBSongsFromCoreDataViewController *coreDataSongsVC = (IBSongsFromCoreDataViewController*)returnedVC;
+        
+        
+        
+        IBPlaylist *changingPlaylist = [[IBCurrentParametersManager sharedManager] coreDataChangingPlaylist];
+        
+        
+        NSSet *setOfSongsItems = [[NSSet alloc] initWithArray:addedSongs];
+        
+        [changingPlaylist addSongItems:setOfSongsItems];
+        
+        [coreDataSongsVC dismissViewControllerAnimated:YES completion:nil];
+        [[IBCoreDataManager sharedManager] saveContext];
+        
+    }
 }
 
 
@@ -135,11 +160,11 @@
     [self.navigationController popToViewController:vc animated:YES];
     NSLog(@"popToViewController %@", [vc description]);
         
-    if ([vc isKindOfClass:[IBSongsAddViewController class]]) {
+    if ([vc isKindOfClass:[IBSongsAddViewController class]] | [vc isKindOfClass:[IBSongsFromCoreDataViewController class]]) {
             [[IBCurrentParametersManager sharedManager] setReturnSongsViewController:nil];
         }
-        
-        
+
+    
    }
     
 

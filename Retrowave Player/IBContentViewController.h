@@ -7,10 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "IBFontAttributes.h"
-#import <MediaPlayer/MediaPlayer.h>
-#import "IBPlayerItem.h"
+#import "IBFileManager.h"
 #import "IBBarButtonItem.h"
+#import "IBFontAttributes.h"
+
+
+
+@class IBBarButtonItem, IBPlayerItem;
+
 @interface IBContentViewController : UITableViewController
 
 
@@ -18,7 +22,7 @@
 
 - (IBBarButtonItem*) createChooseSongsItem;
 
-- (IBPlayerItem*) createAddSongsToPlaylistButton;
+//- (IBPlayerItem*) createAddSongsToPlaylistButton;
 
 - (UIBarButtonItem*) setLeftBackBarButtonItem:(NSString *) titleItem;
 

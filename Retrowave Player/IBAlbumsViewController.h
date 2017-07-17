@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "IBContentViewController.h"
-#import "IBCurrentParametersManager.h"
+
 @interface IBAlbumsViewController : IBContentViewController
 
 

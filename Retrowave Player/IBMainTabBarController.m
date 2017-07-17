@@ -36,7 +36,7 @@
     
     [self.tabBar layoutSubviews];
     
-    NSLog(@"subviews count = %u",[[self.tabBar subviews] count]);
+    NSLog(@"subviews count = %lu",(unsigned long)[[self.tabBar subviews] count]);
     
     UIView *playerItemView = [[self.tabBar subviews] objectAtIndex:3];
     

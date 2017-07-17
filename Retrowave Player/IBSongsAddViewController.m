@@ -12,13 +12,12 @@
 #import "IBAllMediaViewController.h"
 #import "IBPlayerController.h"
 #import "IBVisualizerMusic.h"
-#import "IBPlayerItem.h"
-#import "IBFileManager.h"
 
 
 
 
-@interface IBSongsAddViewController ()<UINavigationControllerDelegate>
+
+@interface IBSongsAddViewController ()
 
 @property (strong, nonatomic) MPMediaPlaylist *currentPlaylist;
 @property (strong, nonatomic) NSArray *songs;
@@ -61,7 +60,7 @@
 
     self.currentPlaylist = currentPlaylist;
         
-    NSLog(@"songsCount = %d", [[self.currentPlaylist items]count]);
+    NSLog(@"songsCount = %lu", (unsigned long)[[self.currentPlaylist items]count]);
     
     [[IBCurrentParametersManager sharedManager].addedSongs removeAllObjects];
     [[IBCurrentParametersManager sharedManager] setChangingPlaylist:nil];
@@ -88,7 +87,7 @@
     [self.navigationItem setLeftBarButtonItem:backItem];
     
     self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Songs"];
-    self.navigationController.delegate = self;
+    
     
 }
 
@@ -147,7 +146,7 @@
     NSAttributedString *songName = [[NSAttributedString alloc] initWithString:songTitle];
     NSAttributedString *artistName = [[NSAttributedString alloc] initWithString:artistTitle];
     NSAttributedString *timeDuration = [[NSAttributedString alloc] initWithString:songDurationTitle];
-    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", indexPath.row + 1]];
+    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%ld", indexPath.row + 1]];
     
     
     cell.songTitle.attributedText    = songName;
@@ -237,7 +236,7 @@
     }
     
     
-    NSLog(@"added songs = %u",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+    NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
     
     
 }

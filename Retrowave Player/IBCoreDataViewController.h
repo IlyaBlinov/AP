@@ -6,10 +6,10 @@
 //  Copyright © 2017 Илья Блинов. All rights reserved.
 //
 
-#import "IBPlaylistlistViewController.h"
+#import "IBContentViewController.h"
 #import "IBCoreDataManager.h"
 
-@interface IBCoreDataViewController : IBPlaylistlistViewController<NSFetchedResultsControllerDelegate>
+@interface IBCoreDataViewController : IBContentViewController<NSFetchedResultsControllerDelegate>
 
 
 

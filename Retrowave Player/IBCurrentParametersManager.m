@@ -7,6 +7,9 @@
 //
 
 #import "IBCurrentParametersManager.h"
+#import "IBSongsViewController.h"
+#import "IBSongsAddViewController.h"
+#import "IBContentViewController.h"
 
 @implementation IBCurrentParametersManager
 

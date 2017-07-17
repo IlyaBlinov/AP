@@ -10,7 +10,7 @@
 #import "IBAlbumViewCell.h"
 #import "IBArtistInfoViewController.h"
 #import "IBSongsViewController.h"
-#import "IBFileManager.h"
+
 
 
 
@@ -198,7 +198,7 @@
     }
     
     
-    NSLog(@"added songs = %u",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+    NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
     
     
 }

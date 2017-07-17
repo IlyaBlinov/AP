@@ -10,8 +10,7 @@
 #import "IBArtistInfoViewController.h"
 #import "IBArtistTableViewCell.h"
 #import "IBAllMediaViewController.h"
-#import "IBCurrentParametersManager.h"
-#import "IBFileManager.h"
+
 
 
 
@@ -106,7 +105,7 @@
     NSAttributedString *artistName = [artistParameters objectForKey:@"artistName"];
     
     NSAttributedString *artistCount = [[NSAttributedString alloc] initWithString:
-                                                [NSString stringWithFormat:@"%d", indexPath.row + 1]];
+                                                [NSString stringWithFormat:@"%ld", indexPath.row + 1]];
     
     cell.artistName.attributedText = artistName;
     cell.artistSongParameter.attributedText = artistParameterSongs;
@@ -173,7 +172,7 @@
     }
     
     
-    NSLog(@"added songs = %u",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+    NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
     
     
 }

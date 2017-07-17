@@ -7,7 +7,6 @@
 //
 
 #import "IBAllMediaViewController.h"
-#import "IBFontAttributes.h"
 #import "IBSongCellTableViewCell.h"
 #import "IBMainTabBarController.h"
 #import "IBArtistsViewController.h"
@@ -15,14 +14,14 @@
 #import "IBSongsViewController.h"
 #import "IBPlaylistlistViewController.h"
 #import "IBAllMediaCell.h"
-#import "IBCurrentParametersManager.h"
+#import "IBSongsAddViewController.h"
+#import "IBSongsFromCoreDataViewController.h"
 
 
 
 
 
 @interface IBAllMediaViewController ()<UITabBarDelegate>
-@property (strong, nonatomic) NSArray *categories;
 @property (strong, nonatomic) NSTimer *timer;
 @end
 
@@ -51,10 +50,7 @@
         
     }
     
-    NSArray* categories = [NSArray arrayWithObjects:
-                           @"Songs", @"Artists", @"Albums", @"Audio Books", @"Playlists", nil];
-    
-    self.categories = [NSArray arrayWithArray:categories];
+   
  
 }
 
@@ -64,81 +60,114 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Table view data source
+#pragma mark - UITableViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-
-     return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-
-   
-    return [self.categories count];
-}
 
 
 - (IBAllMediaCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *identifier = @"cell";
     
     
-    IBAllMediaCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+       IBAllMediaCell *cell = (IBAllMediaCell*)[super tableView:tableView cellForRowAtIndexPath:indexPath];
     
-    if (!cell){
-        cell = [[IBAllMediaCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+    if ([cell.reuseIdentifier isEqualToString:@"songsCell"]) {
+        
+        cell = [self configureCell:cell cellTitle:@"Songs"];
+
+    }else if ([cell.reuseIdentifier isEqualToString:@"artistsCell"]) {
+        
+        cell = [self configureCell:cell cellTitle:@"Artists"];
+        
+    }else if ([cell.reuseIdentifier isEqualToString:@"albumsCell"]) {
+        
+        cell = [self configureCell:cell cellTitle:@"Albums"];
+        
+    }else if ([cell.reuseIdentifier isEqualToString:@"audioBooksCell"]) {
+        
+        cell = [self configureCell:cell cellTitle:@"Audio Books"];
+        
+    }else if ([cell.reuseIdentifier isEqualToString:@"itunesPlaylistsCell"]) {
+        
+        cell = [self configureCell:cell cellTitle:@"ITunes Playlists"];
+        
+//        if ([vc isKindOfClass:[IBSongsFromCoreDataViewController class]] && editing) {
+//            [cell setHidden:YES];
+//        }else{
+//            [cell setHidden:NO];
+//        }
+        
+        
+    }else if ([cell.reuseIdentifier isEqualToString:@"coreDataPlaylistsCell"]) {
+        
+        cell = [self configureCell:cell cellTitle:@"Playlists"];
+        
+//        if ([vc isKindOfClass:[IBSongsFromCoreDataViewController class]] && editing) {
+//             [cell setHidden:NO];
+//        }else{
+//            [cell setHidden:YES];
+//        }
+
+        
+       
+        
     }
     
-    NSString *category = [self.categories objectAtIndex:indexPath.row];
 
-    
-    NSDictionary *attributes = [IBFontAttributes attributesOfMainTitle];
-    
-    
-    NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:category];
-    
-    NSMutableAttributedString *mainTitle = [[NSMutableAttributedString alloc] initWithAttributedString:attributedText];
-    
-    [mainTitle setAttributes:attributes range:NSMakeRange(0, [mainTitle length])];
-    
-    
-    cell.categoryName.attributedText = mainTitle;
-    
-    IBPlayerItem *accessoryButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-    [accessoryButton setImage: [UIImage imageNamed:@"skip-track.png"]forState:UIControlStateNormal];
-    
-    cell.accessoryView = accessoryButton;
-    
-    if ([category isEqualToString:@"Songs"]) {
-        
-        cell.categoryImage.image = [UIImage imageNamed:@"music-playlist(4).png"];
-        
-    }else if ([category isEqualToString:@"Artists"]) {
-        
-        cell.categoryImage.image = [UIImage imageNamed:@"artists 64 x 64.png"];
-     
-    }else if ([category isEqualToString:@"Albums"]) {
-        
-        cell.categoryImage.image = [UIImage imageNamed:@"vinyl-music-player.png"];
-        
-    }else if ([category isEqualToString:@"Playlists"]) {
-        
-        cell.categoryImage.image = [UIImage imageNamed:@"songs-list.png"];
-        
-    }else if ([category isEqualToString:@"Audio Books"]) {
-        
-        cell.categoryImage.image = [UIImage imageNamed:@"cassette-tape(4).png"];
-        
-    }
-
-   
        return cell;
 }
 
 
 #pragma mark - UITableViewDelegate
+
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    
+    
+    if (indexPath.row == 5) {
+        
+        
+        BOOL editing = [[IBCurrentParametersManager sharedManager]isEditing];
+        
+        IBContentViewController *vc = [[IBCurrentParametersManager sharedManager] returnSongsViewController];
+        
+        if ([vc isKindOfClass:[IBSongsFromCoreDataViewController class]] && editing){
+             return [super tableView:tableView heightForRowAtIndexPath:indexPath];
+        }
+        
+        IBAllMediaCell *cell = (IBAllMediaCell*)[super tableView:tableView cellForRowAtIndexPath:indexPath];
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.accessoryView = nil;
+        return 0;
+    }
+    
+    if (indexPath.row == 4) {
+        
+        
+        BOOL editing = [[IBCurrentParametersManager sharedManager]isEditing];
+        
+        IBContentViewController *vc = [[IBCurrentParametersManager sharedManager] returnSongsViewController];
+        
+        if ([vc isKindOfClass:[IBSongsFromCoreDataViewController class]] && editing){
+            IBAllMediaCell *cell = (IBAllMediaCell*)[super tableView:tableView cellForRowAtIndexPath:indexPath];
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.accessoryView = nil;
+            return 0;
+
+        }
+        return [super tableView:tableView heightForRowAtIndexPath:indexPath];
+        
+            }
+
+    
+    
+    
+    
+    return [super tableView:tableView heightForRowAtIndexPath:indexPath];
+}
+
+
+
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -151,7 +180,7 @@
         IBSongsViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBSongsViewController"];
         [self.navigationController pushViewController:vc animated:YES];
         
-    }else if ([cell.categoryName.text isEqualToString:@"Playlists"]) {
+    }else if ([cell.categoryName.text isEqualToString:@"ITunes Playlists"]) {
         [IBCurrentParametersManager sharedManager].songsViewType = playlist;
         IBPlaylistlistViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBPlaylistlistViewController"];
         [self.navigationController pushViewController:vc animated:YES];
@@ -165,9 +194,12 @@
         IBAlbumsViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBAlbumsViewController"];
         [self.navigationController pushViewController:vc animated:YES];
         
-    }
+    }else if ([cell.categoryName.text isEqualToString:@"Playlists"]) {
+        [IBCurrentParametersManager sharedManager].songsViewType = playlist;
+        IBPlaylistlistViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBPlaylistsFromCoreDataViewController"];
+        [self.navigationController pushViewController:vc animated:YES];
 
-    
+    }
 }
 
 
@@ -208,10 +240,62 @@
             NSLog(@"Default");
             break;
     }
+  
+    
+}
+
+#pragma mark - Configure IBAllMediaCell
+
+- (IBAllMediaCell*) configureCell:(IBAllMediaCell*) cell cellTitle:(NSString*)title {
+    
+    NSDictionary *attributes = [IBFontAttributes attributesOfMainTitle];
+    
+    NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:title];
+    NSMutableAttributedString *mainTitle = [[NSMutableAttributedString alloc] initWithAttributedString:attributedText];
+    
+    [mainTitle setAttributes:attributes range:NSMakeRange(0, [mainTitle length])];
+    
+    cell.categoryName.attributedText = mainTitle;
     
     
+    IBPlayerItem *accessoryButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
+    [accessoryButton setImage: [UIImage imageNamed:@"skip-track.png"]forState:UIControlStateNormal];
+
+    cell.accessoryView = accessoryButton;
+    
+    if ([title isEqualToString:@"Songs"]) {
+        
+        cell.categoryImage.image = [UIImage imageNamed:@"music-playlist(4).png"];
+        
+    }else if ([title isEqualToString:@"Artists"]) {
+        
+        cell.categoryImage.image = [UIImage imageNamed:@"artists 64 x 64.png"];
+        
+    }else if ([title isEqualToString:@"Albums"]) {
+        
+        cell.categoryImage.image = [UIImage imageNamed:@"vinyl-music-player.png"];
+        
+    }else if ([title isEqualToString:@"Playlists"]) {
+        
+        cell.categoryImage.image = [UIImage imageNamed:@"songs-list.png"];
+        
+    }else if ([title isEqualToString:@"ITunes Playlists"]) {
+        
+        cell.categoryImage.image = [UIImage imageNamed:@"songs-list.png"];
+        
+    }else if ([title isEqualToString:@"Audio Books"]) {
+        
+        cell.categoryImage.image = [UIImage imageNamed:@"cassette-tape(4).png"];
+        
+    }
+
+    
+    
+    return cell;
     
     
 }
+
+
 
 @end

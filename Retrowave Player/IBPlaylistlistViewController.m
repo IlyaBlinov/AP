@@ -7,6 +7,12 @@
 //
 
 #import "IBPlaylistlistViewController.h"
+#import "IBTransitionViewController.h"
+#import "IBTransitionDismissViewController.h"
+#import "IBSongsAddViewController.h"
+#import "IBAllMediaViewController.h"
+#import "IBAddPlaylistViewController.h"
+#import "IBPlaylistCell.h"
 
 
 
@@ -129,7 +135,7 @@
     
     NSAttributedString *playlistTitle = [[NSAttributedString alloc] initWithString:playlistName];
     
-    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d",[playlist.items count]]];
+    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%lu",(unsigned long)[playlist.items count]]];
     
         
         cell.playlistTitle.attributedText    = playlistTitle;
@@ -172,7 +178,7 @@
     
     NSString *identifier = @"IBSongsAddViewController";
     
-    IBSongsViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
+    IBSongsAddViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
     
     [[IBCurrentParametersManager sharedManager] setPlaylist:currentPlaylist];
 
@@ -211,7 +217,7 @@
     }
     
     
-    NSLog(@"added songs = %u",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+    NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
 
     
     
