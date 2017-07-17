@@ -113,7 +113,9 @@
         IBPlaylist *changingPlaylist = [[IBCurrentParametersManager sharedManager] coreDataChangingPlaylist];
         
         
-        NSSet *setOfSongsItems = [[NSSet alloc] initWithArray:addedSongs];
+        NSArray *persistentIDArray = [[IBFileManager sharedManager]getPersistentIDFromSongs:addedSongs];
+        
+        NSSet *setOfSongsItems = [[NSSet alloc] initWithArray:persistentIDArray];
         
         [changingPlaylist addSongItems:setOfSongsItems];
         

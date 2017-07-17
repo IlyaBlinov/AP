@@ -351,6 +351,28 @@
 
 
 
+- (MPMediaItem*) getSongByPersistentID:(NSNumber*) persistentID{
+
+    
+    MPMediaPropertyPredicate *persisitentIDPredicate =
+    [MPMediaPropertyPredicate predicateWithValue: persistentID
+                                     forProperty: MPMediaItemPropertyPersistentID];
+    
+    MPMediaQuery *songsByPersistenID = [[MPMediaQuery alloc] init];
+    [songsByPersistenID addFilterPredicate:persisitentIDPredicate];
+    
+    if ([songsByPersistenID.items count] > 0) {
+        return [songsByPersistenID.items firstObject];
+    }else{
+        return nil;
+    }
+    
+    
+}
+
+
+
+
 #pragma mark - sortingItems
 
 - (NSArray*) sortingItems:(NSArray*) items ByProperty:(NSString*) property{

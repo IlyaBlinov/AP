@@ -72,7 +72,10 @@
     NSArray *songs  = [titleAndSongsDictionary valueForKey:@"songs"];
     self.songs = [NSArray arrayWithArray:songs];
 
-    NSLog(@"%@",[[IBFileManager sharedManager] getPersistentIDFromSongs:songs]);
+    
+   // NSArray *array = [[IBFileManager sharedManager] getPersistentIDFromSongs:songs];
+    
+   // NSLog(@"%@",[[IBFileManager sharedManager] getPersistentIDFromSongs:songs]);
     
     UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
     [self.navigationItem setLeftBarButtonItem:backItem];
@@ -141,7 +144,7 @@
     NSAttributedString *songName     = [[NSAttributedString alloc] initWithString:songTitle];
     NSAttributedString *artistName   = [[NSAttributedString alloc] initWithString:artistTitle];
     NSAttributedString *timeDuration = [[NSAttributedString alloc] initWithString:songDurationTitle];
-    NSAttributedString *songCount    = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%ld", indexPath.row + 1]];
+    NSAttributedString *songCount    = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", indexPath.row + 1]];
     
     
     cell.songTitle.attributedText    = songName;
@@ -181,12 +184,28 @@
        MPMediaItem *song = [self.songs objectAtIndex:indexPath.row];
     
     
-    IBPlayerController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBPlayerController"];
     
-    [vc setSong:song];
-    [vc.playPauseButton setSelected: YES];
-
-    [self.navigationController pushViewController:vc animated:YES];
+    
+    NSArray *persistentIDs = [[IBFileManager sharedManager] getPersistentIDFromSongs:[NSArray arrayWithObject:song]];
+    
+    NSLog(@"persistentIDs = %@", persistentIDs);
+    
+    MPMediaItem *item = [[IBFileManager sharedManager] getSongByPersistentID:[persistentIDs firstObject]];
+    
+    
+    NSString *itemTitle = [item valueForProperty:MPMediaItemPropertyTitle];
+    
+    NSLog(@"title = %@",itemTitle);
+    
+    
+    
+    
+//    IBPlayerController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBPlayerController"];
+//    
+//    [vc setSong:song];
+//    [vc.playPauseButton setSelected: YES];
+//
+//    [self.navigationController pushViewController:vc animated:YES];
     
     
     
