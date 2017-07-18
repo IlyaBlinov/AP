@@ -7,6 +7,7 @@
 //
 
 #import "IBCoreDataManager.h"
+#import "IBCurrentParametersManager.h"
 
 @implementation IBCoreDataManager
 
@@ -75,17 +76,23 @@
 #pragma mark - Core Data Actions
 
 
-- (NSArray*) allObjects {
+- (NSArray*) allObjectsFromCoreDataPlaylist:(IBPlaylist*) playlist {
     
     NSManagedObjectContext *context = self.persistentContainer.viewContext;
     
     NSFetchRequest* request = [[NSFetchRequest alloc] init];
     
     NSEntityDescription* description =
-    [NSEntityDescription entityForName:@"IBItem"
+    [NSEntityDescription entityForName:@"IBParentItem"
                 inManagedObjectContext:context];
     
     [request setEntity:description];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"playlist contains %@", playlist];
+    
+    [request setPredicate:predicate];
+
+    
+   
     
     NSError* requestError = nil;
     NSArray* resultArray = [context executeFetchRequest:request error:&requestError];
@@ -121,35 +128,35 @@
 
 
 
-
-- (void) printArray:(NSArray*) array {
-    
-    for (id object in array) {
-        
-        
-    }
-    
-    NSLog(@"COUNT = %d", [array count]);
-}
-
-- (void) printAllObjects {
-    
-    NSArray* allObjects = [self allObjects];
-    
-    [self printArray:allObjects];
-}
-
-- (void) deleteAllObjects {
-    
-    NSArray* allObjects = [self allObjects];
-    NSManagedObjectContext *context = self.persistentContainer.viewContext;
-    
-    
-    for (id object in allObjects) {
-        [context deleteObject:object];
-    }
-    [context save:nil];
-}
+//
+//- (void) printArray:(NSArray*) array {
+//    
+//    for (id object in array) {
+//        
+//        
+//    }
+//    
+//    NSLog(@"COUNT = %d", [array count]);
+//}
+//
+//- (void) printAllObjects {
+//    
+//    NSArray* allObjects = [self allObjects];
+//    
+//    [self printArray:allObjects];
+//}
+//
+//- (void) deleteAllObjects {
+//    
+//    NSArray* allObjects = [self allObjects];
+//    NSManagedObjectContext *context = self.persistentContainer.viewContext;
+//    
+//    
+//    for (id object in allObjects) {
+//        [context deleteObject:object];
+//    }
+//    [context save:nil];
+//}
 
 
 

@@ -43,7 +43,7 @@
     
    
     
-    MPMediaItem *artist = [[IBCurrentParametersManager sharedManager] artist];
+    IBMediaItem *artist = [[IBCurrentParametersManager sharedManager] artist];
     
     NSDictionary       *artistParameters = [[IBFileManager sharedManager] getArtistParams:artist];
     NSString *artistParameterSongs = [artistParameters objectForKey:@"numberOfSongs"];
@@ -185,7 +185,7 @@
     
     NSString *artistRequestParamater = currentCell.textLabel.text;
     
-    MPMediaItem     *currentArtist = [[IBCurrentParametersManager sharedManager] artist];
+    IBMediaItem     *currentArtist = [[IBCurrentParametersManager sharedManager] artist];
    
     NSArray *songs = [[IBFileManager sharedManager] getSongsOfArtist:currentArtist withParameter:artistRequestParamater];
     

@@ -9,12 +9,23 @@
 #import <Foundation/Foundation.h>
 #import "IBCurrentParametersManager.h"
 
+//typedef enum{
+//    playlists,
+//    artists,
+//    albums,
+//    songs
+//}MediaItemsType;
+
+
+
+@class IBPlaylist;
+
 @interface IBFileManager : NSObject
 
 
 + (IBFileManager*) sharedManager;
 
-
+- (NSArray*) checkMediaItems:(NSArray*) itemsArray;
 
 
 - (NSDictionary*) getSongsAndTitleFor: (IBSongsViewType) type;//Songs, Title
@@ -28,25 +39,25 @@
 
 
 
-- (NSDictionary*) getArtistParams:(MPMediaItem*) artist;//artistName, number of Albums, number of Songs
+- (NSDictionary*) getArtistParams:(IBMediaItem*) artist;//artistName, number of Albums, number of Songs
 - (NSArray*) getArtists;
-- (NSArray*) getSongsOfArtist:(MPMediaItem*) artist withParameter:(NSString*) parameter;//parameter:Songs, Albums
-- (NSArray*) getAllSongsOfArtist:(MPMediaItem*) artist;
-- (NSArray*) getSongsFromAllAlbumsOfArtist:(MPMediaItem*) artist;
-- (NSArray*) getAllAlbumsOfArtist:(MPMediaItem*) artist;
+- (NSArray*) getSongsOfArtist:(IBMediaItem*) artist withParameter:(NSString*) parameter;//parameter:Songs, Albums
+- (NSArray*) getAllSongsOfArtist:(IBMediaItem*) artist;
+- (NSArray*) getSongsFromAllAlbumsOfArtist:(IBMediaItem*) artist;
+- (NSArray*) getAllAlbumsOfArtist:(IBMediaItem*) artist;
 
 
-- (NSArray*) getAllSongsOfAlbum:(MPMediaItem*) album;
+- (NSArray*) getAllSongsOfAlbum:(IBMediaItem*) album;
 
 
 
 - (NSArray*) getPersistentIDsFromSongs:(NSArray*)songs;
-- (MPMediaItem*) getSongByPersistentID:(NSNumber*) persistentID;
+- (IBMediaItem*) getSongByPersistentID:(NSNumber*) persistentID;
 - (NSArray*) getSongsByPersistentIDs:(NSArray*) persistentIDs;
 
 
 - (NSArray*) getPersistentIDsFromAlbums:(NSArray*)albums;
-- (MPMediaItem*) getAlbumByPersistentID:(NSNumber*) persistentID;
+- (IBMediaItem*) getAlbumByPersistentID:(NSNumber*) persistentID;
 - (NSArray*) getAlbumsByPersistentIDs:(NSArray*) persistentIDs;
 - (NSArray*) getSongsPersistentIDsByAlbumPersistentID:(NSNumber*) persistentID;
 
@@ -60,7 +71,7 @@
 - (NSArray*) getAlbumsPersistentIDsByArtistPersistentID:(NSNumber*) persistentID;
 - (NSArray*) getSongsPersistentIDsByArtistPersistentID:(NSNumber*) persistentID;
 
-
+- (NSArray*) getPersistentIDsFromCoreDataPlaylist:(IBPlaylist*)playlist;
 
 
 

@@ -100,7 +100,7 @@
                                               reuseIdentifier:identifier];
     }
     
-    MPMediaItem *album = [self.albums objectAtIndex:indexPath.row];
+    IBMediaItem *album = [self.albums objectAtIndex:indexPath.row];
     
     NSString *albumTitle =       [album valueForProperty:MPMediaItemPropertyAlbumTitle];
     NSString *albumArtistTitle = [album valueForProperty:MPMediaItemPropertyAlbumArtist];
@@ -152,7 +152,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    MPMediaItem *currentAlbum = [self.albums objectAtIndex:indexPath.row];
+    IBMediaItem *currentAlbum = [self.albums objectAtIndex:indexPath.row];
     
     [IBCurrentParametersManager sharedManager].songsViewType = album;
     [[IBCurrentParametersManager sharedManager] setAlbum:currentAlbum];
@@ -181,7 +181,7 @@
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
     
     
-    MPMediaItem *album = [self.albums objectAtIndex:indexPath.row];
+    IBMediaItem *album = [self.albums objectAtIndex:indexPath.row];
     NSArray *songs = [[IBFileManager sharedManager] getAllSongsOfAlbum:album];
     
     

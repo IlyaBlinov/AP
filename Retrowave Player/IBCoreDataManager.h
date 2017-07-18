@@ -8,7 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-
+#import "IBPlaylist+CoreDataClass.h"
+#import "IBArtistItem+CoreDataClass.h"
+#import "IBAlbumItem+CoreDataClass.h"
+#import "IBSongItem+CoreDataClass.h"
 
 @interface IBCoreDataManager : NSObject
 
@@ -22,7 +25,7 @@
 
 
 
-- (NSArray*) allObjects;
+- (NSArray*) allObjectsFromCoreDataPlaylist:(IBPlaylist*) playlist;
 - (NSArray*) playlists;
 
 

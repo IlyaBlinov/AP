@@ -15,6 +15,7 @@
 		230B69DE1F13841500476F44 /* IBBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B69D61F13841500476F44 /* IBBarButtonItem.m */; };
 		236727F21ED30C0A0054678D /* IBSongsAddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 236727F11ED30C0A0054678D /* IBSongsAddViewController.m */; };
 		239AD1801F1C9B570095F577 /* IBSongsFromCoreDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD17F1F1C9B570095F577 /* IBSongsFromCoreDataViewController.m */; };
+		239AD1831F1E13C30095F577 /* IBMediaItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD1821F1E13C30095F577 /* IBMediaItem.m */; };
 		23D81FBB1F14F7250044148D /* IBAlbumItem+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D81FA81F14F7250044148D /* IBAlbumItem+CoreDataClass.m */; };
 		23D81FBC1F14F7250044148D /* IBAlbumItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D81FAA1F14F7250044148D /* IBAlbumItem+CoreDataProperties.m */; };
 		23D81FBD1F14F7250044148D /* IBArtistItem+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D81FAC1F14F7250044148D /* IBArtistItem+CoreDataClass.m */; };
@@ -294,6 +295,8 @@
 		236727F11ED30C0A0054678D /* IBSongsAddViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBSongsAddViewController.m; sourceTree = "<group>"; };
 		239AD17E1F1C9B570095F577 /* IBSongsFromCoreDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBSongsFromCoreDataViewController.h; sourceTree = "<group>"; };
 		239AD17F1F1C9B570095F577 /* IBSongsFromCoreDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBSongsFromCoreDataViewController.m; sourceTree = "<group>"; };
+		239AD1811F1E13C30095F577 /* IBMediaItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBMediaItem.h; sourceTree = "<group>"; };
+		239AD1821F1E13C30095F577 /* IBMediaItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBMediaItem.m; sourceTree = "<group>"; };
 		23D81FA71F14F7250044148D /* IBAlbumItem+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBAlbumItem+CoreDataClass.h"; sourceTree = "<group>"; };
 		23D81FA81F14F7250044148D /* IBAlbumItem+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBAlbumItem+CoreDataClass.m"; sourceTree = "<group>"; };
 		23D81FA91F14F7250044148D /* IBAlbumItem+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBAlbumItem+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -675,6 +678,15 @@
 				23D81FBA1F14F7250044148D /* IBSongItem+CoreDataProperties.m */,
 			);
 			name = CoreDataModels;
+			sourceTree = "<group>";
+		};
+		239AD1841F1E14540095F577 /* IBMediaItem */ = {
+			isa = PBXGroup;
+			children = (
+				239AD1811F1E13C30095F577 /* IBMediaItem.h */,
+				239AD1821F1E13C30095F577 /* IBMediaItem.m */,
+			);
+			name = IBMediaItem;
 			sourceTree = "<group>";
 		};
 		6F004B981EACCEFC007755C3 /* icons */ = {
@@ -1137,6 +1149,7 @@
 				6F004D601EACD238007755C3 /* Labels */,
 				6F004D611EACD272007755C3 /* Buttons */,
 				6F004D5F1EACD1A2007755C3 /* Cells */,
+				239AD1841F1E14540095F577 /* IBMediaItem */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1610,6 +1623,7 @@
 				23D81FC31F14F7250044148D /* IBSongItem+CoreDataClass.m in Sources */,
 				23D81FBB1F14F7250044148D /* IBAlbumItem+CoreDataClass.m in Sources */,
 				6FA46FAF1E1BF4B3008B9F33 /* main.m in Sources */,
+				239AD1831F1E13C30095F577 /* IBMediaItem.m in Sources */,
 				6FCDBDDA1EBE1C6600B326D7 /* IBTransitionDismissViewController.m in Sources */,
 				6F004C951EACCEFC007755C3 /* IBTimeDurationTitle.m in Sources */,
 				6F004C8E1EACCEFC007755C3 /* IBMainTitle.m in Sources */,

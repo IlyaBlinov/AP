@@ -318,6 +318,8 @@
         
         IBPlaylist *newPlaylist = [NSEntityDescription insertNewObjectForEntityForName:@"IBPlaylist" inManagedObjectContext:managedObjectContext];
         newPlaylist.playlistName = newPlaylistName;
+        
+        
     
         [self.tableView reloadData];
     

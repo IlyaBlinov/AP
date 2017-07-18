@@ -89,7 +89,7 @@
                                               reuseIdentifier:identifier];
     }
     
-    MPMediaItem *artist = [self.artists objectAtIndex:indexPath.row];
+    IBMediaItem *artist = [self.artists objectAtIndex:indexPath.row];
     
     
     NSDictionary       *artistParameters = [[IBFileManager sharedManager] getArtistParams:artist];
@@ -138,7 +138,7 @@
     
     IBArtistInfoViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBArtistInfoViewController"];
    
-    MPMediaItem *artist = [self.artists objectAtIndex:indexPath.row];
+    IBMediaItem *artist = [self.artists objectAtIndex:indexPath.row];
     
     
     
@@ -170,7 +170,7 @@
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
     
    
-    MPMediaItem     *currentArtist   = [self.artists objectAtIndex:indexPath.row];
+    IBMediaItem     *currentArtist   = [self.artists objectAtIndex:indexPath.row];
     NSArray *songs = [[IBFileManager sharedManager] getAllSongsOfArtist:currentArtist];
     
     if (button.isSelected == NO) {

@@ -123,7 +123,7 @@
         
     
     
-    MPMediaItem *song = [self.songs objectAtIndex:indexPath.row];
+    IBMediaItem *song = [self.songs objectAtIndex:indexPath.row];
     
     NSString *songTitle        = [song valueForProperty:MPMediaItemPropertyTitle];
     NSString *artistTitle      = [song valueForProperty:MPMediaItemPropertyArtist];
@@ -181,7 +181,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-       MPMediaItem *song = [self.songs objectAtIndex:indexPath.row];
+       IBMediaItem *song = [self.songs objectAtIndex:indexPath.row];
    
     
 //    IBPlayerController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBPlayerController"];
@@ -225,7 +225,7 @@
     CGPoint point = [button convertPoint:CGPointZero toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
     
-    MPMediaItem *song = [self.songs objectAtIndex:indexPath.row];
+    IBMediaItem *song = [self.songs objectAtIndex:indexPath.row];
     
     if (button.isSelected == NO) {
         [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];
