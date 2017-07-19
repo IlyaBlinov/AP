@@ -15,10 +15,14 @@ typedef enum{
     default_state
 }ItemState;
 
+
+
+
+
 @interface IBMediaItem : MPMediaItem
 
 
-@property (assign, nonatomic) ItemState state;
+@property (assign, nonatomic) ItemState  state;
 
 
 

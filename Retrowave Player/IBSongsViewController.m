@@ -40,6 +40,8 @@
         
         [self.navigationController setNavigationBarHidden:NO];
         [self.tableView setEditing:YES];
+        self.songs = [[IBFileManager sharedManager] checkMediaItems:self.songs];
+        
         [self.tableView reloadData];
         
     }

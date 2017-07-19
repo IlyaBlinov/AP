@@ -355,7 +355,7 @@
 - (NSArray*) getPersistentIDsFromSongs:(NSArray*)songs{
     
     
-    NSArray *persistentIDsArray = [songs valueForKeyPath:@"@distinctUnionOfObjects.persistentID"];
+    NSArray *persistentIDsArray = [songs valueForKeyPath:@"@unionOfObjects.persistentID"];
     
     return persistentIDsArray;
     
@@ -365,7 +365,7 @@
 - (NSArray*) getPersistentIDsFromAlbums:(NSArray*)albums{
     
     
-    NSArray *persistentIDsArray = [albums valueForKeyPath:@"@distinctUnionOfObjects.albumPersistentID"];
+    NSArray *persistentIDsArray = [albums valueForKeyPath:@"@unionOfObjects.albumPersistentID"];
     
     return persistentIDsArray;
     
@@ -393,7 +393,7 @@
 - (NSArray*) getPersistentIDsFromArtists:(NSArray*)artists{
     
     
-    NSArray *persistentIDsArray = [artists valueForKeyPath:@"@distinctUnionOfObjects.artistPersistentID"];
+    NSArray *persistentIDsArray = [artists valueForKeyPath:@"@unionOfObjects.artistPersistentID"];
     
     return persistentIDsArray;
  
@@ -607,19 +607,42 @@
 
 - (NSArray*) checkMediaItems:(NSArray*) itemsArray{
     
-    IBPlaylist *playlist = [[IBCurrentParametersManager sharedManager]coreDataChangingPlaylist];
+    NSArray *persistentIDsArrayOfChangingPlaylist;
     
-    NSArray *persistentIDsArrayOfChangingPlaylist = [self getPersistentIDsFromCoreDataPlaylist:playlist];
-    
-    if ([persistentIDsArrayOfChangingPlaylist count] > 0) {
-    
-    for (IBMediaItem *item in itemsArray) {
-        
-       if ([persistentIDsArrayOfChangingPlaylist containsObject:[NSNumber numberWithUnsignedLongLong: item.persistentID]]) {
-                item.state = inPlaylist;
-            }
-   
+    if ([[IBCurrentParametersManager sharedManager]coreDataChangingPlaylist]) {
+        IBPlaylist *playlist = [[IBCurrentParametersManager sharedManager]coreDataChangingPlaylist];
+        persistentIDsArrayOfChangingPlaylist = [self getPersistentIDsFromCoreDataPlaylist:playlist];
+    }else{
+        MPMediaPlaylist *playlist = [[IBCurrentParametersManager sharedManager]changingPlaylist];
+        NSArray *items = [playlist items];
+        persistentIDsArrayOfChangingPlaylist = [self getPersistentIDsFromSongs:items];
     }
+    
+   
+    
+    
+    NSArray *addedMediItemsArray = [[IBCurrentParametersManager sharedManager]addedSongs];
+    NSArray *persistentIDAddedItemsArray = [addedMediItemsArray valueForKeyPath:@"@unionOfObjects.persistentID"];
+    
+     
+    for (IBMediaItem *item in itemsArray) {
+       
+        NSLog(@"%lld", item.persistentID);
+        
+       if ([persistentIDsArrayOfChangingPlaylist count] > 0) {
+           
+           NSNumber *persistentID = [NSNumber numberWithLongLong: item.persistentID];
+       if ([persistentIDsArrayOfChangingPlaylist containsObject:persistentID]) {
+                item.state = inPlaylist;
+       }
+       }
+        
+       if ([addedMediItemsArray count] > 0) {
+       if ([persistentIDAddedItemsArray containsObject:[NSNumber numberWithUnsignedLongLong: item.persistentID]]) {
+           item.state = added;
+       }
+   
+       }
     }
     
     return  itemsArray;
