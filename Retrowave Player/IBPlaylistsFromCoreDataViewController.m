@@ -127,7 +127,9 @@
         
         IBPlaylist *exceptionPlaylist = [[IBCurrentParametersManager sharedManager] coreDataChangingPlaylist];
         
-        NSPredicate* predicate = [NSPredicate predicateWithFormat:@"playlistName != %@", exceptionPlaylist.playlistName];
+        
+        NSLog(@"%llu",exceptionPlaylist.persistentID);
+        NSPredicate* predicate = [NSPredicate predicateWithFormat:@"persistentID != %llu", exceptionPlaylist.persistentID];
         
         [fetchRequest setPredicate:predicate];
     }
@@ -137,7 +139,7 @@
     
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
-    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:managedObjectContext sectionNameKeyPath:nil cacheName:@"Master"];
+    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:managedObjectContext sectionNameKeyPath:nil cacheName:nil];
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
     
@@ -265,7 +267,8 @@
             
             NSManagedObjectContext *context = [weakSelf.persistentContainer viewContext];
             [context deleteObject:removingPlaylist];
-            
+            [weakSelf.tableView endUpdates];
+
             
             NSError *error = nil;
             if ([context hasChanges] && ![context save:&error]) {
@@ -314,17 +317,24 @@
     if (![vc.playlistName.text isEqualToString: @""]) {
         NSString *newPlaylistName = [[vc playlistName]text];
         
-       NSManagedObjectContext *managedObjectContext = self.persistentContainer.viewContext;
+        NSArray *playlistsArray = [self.fetchedResultsController fetchedObjects];
+        
+        NSManagedObjectContext *managedObjectContext = self.persistentContainer.viewContext;
         
         IBPlaylist *newPlaylist = [NSEntityDescription insertNewObjectForEntityForName:@"IBPlaylist" inManagedObjectContext:managedObjectContext];
         newPlaylist.playlistName = newPlaylistName;
         
+        NSArray *playlistsPersistentIDs = [playlistsArray valueForKeyPath:@"@distinctUnionOfObjects.persistentID"];
+      
+        uint64_t persistentID = arc4random() % 500000000 + 10000000;
+        while ([playlistsPersistentIDs containsObject:[NSNumber numberWithUnsignedLongLong:persistentID]]) {
+            persistentID = arc4random() % 500000000 + 10000000;
+        }
         
+        newPlaylist.persistentID = persistentID;
     
         [self.tableView reloadData];
-    
         [[IBCoreDataManager sharedManager]saveContext];
-        
     }
     
     return self.dismissAnimator;

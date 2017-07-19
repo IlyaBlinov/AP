@@ -101,7 +101,7 @@
     
     [[IBCurrentParametersManager sharedManager] setIsEditing:YES];//playlist was saved to IBCurrentParametersManager in IBPlaylistsController
     
-    [[IBCurrentParametersManager sharedManager] setCoreDataPlaylist:self.currentPlaylist];
+    [[IBCurrentParametersManager sharedManager] setCoreDataChangingPlaylist:self.currentPlaylist];
     [[IBCurrentParametersManager sharedManager] setReturnSongsViewController:self];
     
     UINavigationController *nav = [self.storyboard instantiateViewControllerWithIdentifier:@"IBAllMediaNavigationViewController"];

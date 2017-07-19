@@ -547,6 +547,8 @@
     
     NSMutableArray *persistentIDArray = [NSMutableArray array];
     
+    if ([allItemsInPlaylist count] > 0) {
+     
     for (IBParentItem *item in allItemsInPlaylist) {
         
         if ([item isKindOfClass:[IBPlaylist class]]) {
@@ -562,7 +564,7 @@
             IBSongItem *tempSong = (IBSongItem*) item;
             [persistentIDArray addObject:[NSNumber numberWithUnsignedLongLong: tempSong.persistentID]];
         }
-
+    }
         
 }
     return persistentIDArray;
@@ -609,6 +611,7 @@
     
     NSArray *persistentIDsArrayOfChangingPlaylist = [self getPersistentIDsFromCoreDataPlaylist:playlist];
     
+    if ([persistentIDsArrayOfChangingPlaylist count] > 0) {
     
     for (IBMediaItem *item in itemsArray) {
         
@@ -617,9 +620,11 @@
             }
    
     }
-        
-    return  itemsArray;
     }
+    
+    return  itemsArray;
+    
+}
     
  
     
