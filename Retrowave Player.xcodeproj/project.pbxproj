@@ -16,16 +16,16 @@
 		236727F21ED30C0A0054678D /* IBSongsAddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 236727F11ED30C0A0054678D /* IBSongsAddViewController.m */; };
 		239AD1801F1C9B570095F577 /* IBSongsFromCoreDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD17F1F1C9B570095F577 /* IBSongsFromCoreDataViewController.m */; };
 		239AD1831F1E13C30095F577 /* IBMediaItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD1821F1E13C30095F577 /* IBMediaItem.m */; };
-		23D81FBB1F14F7250044148D /* IBAlbumItem+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D81FA81F14F7250044148D /* IBAlbumItem+CoreDataClass.m */; };
-		23D81FBC1F14F7250044148D /* IBAlbumItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D81FAA1F14F7250044148D /* IBAlbumItem+CoreDataProperties.m */; };
-		23D81FBD1F14F7250044148D /* IBArtistItem+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D81FAC1F14F7250044148D /* IBArtistItem+CoreDataClass.m */; };
-		23D81FBE1F14F7250044148D /* IBArtistItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D81FAE1F14F7250044148D /* IBArtistItem+CoreDataProperties.m */; };
-		23D81FBF1F14F7250044148D /* IBPlaylist+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D81FB01F14F7250044148D /* IBPlaylist+CoreDataClass.m */; };
-		23D81FC01F14F7250044148D /* IBPlaylist+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D81FB21F14F7250044148D /* IBPlaylist+CoreDataProperties.m */; };
-		23D81FC11F14F7250044148D /* IBParentItem+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D81FB41F14F7250044148D /* IBParentItem+CoreDataClass.m */; };
-		23D81FC21F14F7250044148D /* IBParentItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D81FB61F14F7250044148D /* IBParentItem+CoreDataProperties.m */; };
-		23D81FC31F14F7250044148D /* IBSongItem+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D81FB81F14F7250044148D /* IBSongItem+CoreDataClass.m */; };
-		23D81FC41F14F7250044148D /* IBSongItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D81FBA1F14F7250044148D /* IBSongItem+CoreDataProperties.m */; };
+		239AD1991F20C6E20095F577 /* IBParentItem+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD1861F20C6E10095F577 /* IBParentItem+CoreDataClass.m */; };
+		239AD19A1F20C6E20095F577 /* IBParentItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD1881F20C6E10095F577 /* IBParentItem+CoreDataProperties.m */; };
+		239AD19B1F20C6E20095F577 /* IBPlaylist+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD18A1F20C6E10095F577 /* IBPlaylist+CoreDataClass.m */; };
+		239AD19C1F20C6E20095F577 /* IBPlaylist+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD18C1F20C6E10095F577 /* IBPlaylist+CoreDataProperties.m */; };
+		239AD19D1F20C6E20095F577 /* IBSongItem+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD18E1F20C6E10095F577 /* IBSongItem+CoreDataClass.m */; };
+		239AD19E1F20C6E20095F577 /* IBSongItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD1901F20C6E10095F577 /* IBSongItem+CoreDataProperties.m */; };
+		239AD19F1F20C6E20095F577 /* IBAlbumItem+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD1921F20C6E10095F577 /* IBAlbumItem+CoreDataClass.m */; };
+		239AD1A01F20C6E20095F577 /* IBAlbumItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD1941F20C6E10095F577 /* IBAlbumItem+CoreDataProperties.m */; };
+		239AD1A11F20C6E20095F577 /* IBArtistItem+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD1961F20C6E10095F577 /* IBArtistItem+CoreDataClass.m */; };
+		239AD1A21F20C6E20095F577 /* IBArtistItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD1981F20C6E20095F577 /* IBArtistItem+CoreDataProperties.m */; };
 		6F004C751EACCEFC007755C3 /* Automani.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B561EACCEFC007755C3 /* Automani.ttf */; };
 		6F004C761EACCEFC007755C3 /* Codystar.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B571EACCEFC007755C3 /* Codystar.ttf */; };
 		6F004C771EACCEFC007755C3 /* Codystart.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B581EACCEFC007755C3 /* Codystart.ttf */; };
@@ -297,26 +297,26 @@
 		239AD17F1F1C9B570095F577 /* IBSongsFromCoreDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBSongsFromCoreDataViewController.m; sourceTree = "<group>"; };
 		239AD1811F1E13C30095F577 /* IBMediaItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBMediaItem.h; sourceTree = "<group>"; };
 		239AD1821F1E13C30095F577 /* IBMediaItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBMediaItem.m; sourceTree = "<group>"; };
-		23D81FA71F14F7250044148D /* IBAlbumItem+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBAlbumItem+CoreDataClass.h"; sourceTree = "<group>"; };
-		23D81FA81F14F7250044148D /* IBAlbumItem+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBAlbumItem+CoreDataClass.m"; sourceTree = "<group>"; };
-		23D81FA91F14F7250044148D /* IBAlbumItem+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBAlbumItem+CoreDataProperties.h"; sourceTree = "<group>"; };
-		23D81FAA1F14F7250044148D /* IBAlbumItem+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBAlbumItem+CoreDataProperties.m"; sourceTree = "<group>"; };
-		23D81FAB1F14F7250044148D /* IBArtistItem+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBArtistItem+CoreDataClass.h"; sourceTree = "<group>"; };
-		23D81FAC1F14F7250044148D /* IBArtistItem+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBArtistItem+CoreDataClass.m"; sourceTree = "<group>"; };
-		23D81FAD1F14F7250044148D /* IBArtistItem+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBArtistItem+CoreDataProperties.h"; sourceTree = "<group>"; };
-		23D81FAE1F14F7250044148D /* IBArtistItem+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBArtistItem+CoreDataProperties.m"; sourceTree = "<group>"; };
-		23D81FAF1F14F7250044148D /* IBPlaylist+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBPlaylist+CoreDataClass.h"; sourceTree = "<group>"; };
-		23D81FB01F14F7250044148D /* IBPlaylist+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBPlaylist+CoreDataClass.m"; sourceTree = "<group>"; };
-		23D81FB11F14F7250044148D /* IBPlaylist+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBPlaylist+CoreDataProperties.h"; sourceTree = "<group>"; };
-		23D81FB21F14F7250044148D /* IBPlaylist+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBPlaylist+CoreDataProperties.m"; sourceTree = "<group>"; };
-		23D81FB31F14F7250044148D /* IBParentItem+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBParentItem+CoreDataClass.h"; sourceTree = "<group>"; };
-		23D81FB41F14F7250044148D /* IBParentItem+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBParentItem+CoreDataClass.m"; sourceTree = "<group>"; };
-		23D81FB51F14F7250044148D /* IBParentItem+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBParentItem+CoreDataProperties.h"; sourceTree = "<group>"; };
-		23D81FB61F14F7250044148D /* IBParentItem+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBParentItem+CoreDataProperties.m"; sourceTree = "<group>"; };
-		23D81FB71F14F7250044148D /* IBSongItem+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBSongItem+CoreDataClass.h"; sourceTree = "<group>"; };
-		23D81FB81F14F7250044148D /* IBSongItem+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBSongItem+CoreDataClass.m"; sourceTree = "<group>"; };
-		23D81FB91F14F7250044148D /* IBSongItem+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBSongItem+CoreDataProperties.h"; sourceTree = "<group>"; };
-		23D81FBA1F14F7250044148D /* IBSongItem+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBSongItem+CoreDataProperties.m"; sourceTree = "<group>"; };
+		239AD1851F20C6E10095F577 /* IBParentItem+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBParentItem+CoreDataClass.h"; sourceTree = "<group>"; };
+		239AD1861F20C6E10095F577 /* IBParentItem+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBParentItem+CoreDataClass.m"; sourceTree = "<group>"; };
+		239AD1871F20C6E10095F577 /* IBParentItem+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBParentItem+CoreDataProperties.h"; sourceTree = "<group>"; };
+		239AD1881F20C6E10095F577 /* IBParentItem+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBParentItem+CoreDataProperties.m"; sourceTree = "<group>"; };
+		239AD1891F20C6E10095F577 /* IBPlaylist+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBPlaylist+CoreDataClass.h"; sourceTree = "<group>"; };
+		239AD18A1F20C6E10095F577 /* IBPlaylist+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBPlaylist+CoreDataClass.m"; sourceTree = "<group>"; };
+		239AD18B1F20C6E10095F577 /* IBPlaylist+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBPlaylist+CoreDataProperties.h"; sourceTree = "<group>"; };
+		239AD18C1F20C6E10095F577 /* IBPlaylist+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBPlaylist+CoreDataProperties.m"; sourceTree = "<group>"; };
+		239AD18D1F20C6E10095F577 /* IBSongItem+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBSongItem+CoreDataClass.h"; sourceTree = "<group>"; };
+		239AD18E1F20C6E10095F577 /* IBSongItem+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBSongItem+CoreDataClass.m"; sourceTree = "<group>"; };
+		239AD18F1F20C6E10095F577 /* IBSongItem+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBSongItem+CoreDataProperties.h"; sourceTree = "<group>"; };
+		239AD1901F20C6E10095F577 /* IBSongItem+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBSongItem+CoreDataProperties.m"; sourceTree = "<group>"; };
+		239AD1911F20C6E10095F577 /* IBAlbumItem+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBAlbumItem+CoreDataClass.h"; sourceTree = "<group>"; };
+		239AD1921F20C6E10095F577 /* IBAlbumItem+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBAlbumItem+CoreDataClass.m"; sourceTree = "<group>"; };
+		239AD1931F20C6E10095F577 /* IBAlbumItem+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBAlbumItem+CoreDataProperties.h"; sourceTree = "<group>"; };
+		239AD1941F20C6E10095F577 /* IBAlbumItem+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBAlbumItem+CoreDataProperties.m"; sourceTree = "<group>"; };
+		239AD1951F20C6E10095F577 /* IBArtistItem+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBArtistItem+CoreDataClass.h"; sourceTree = "<group>"; };
+		239AD1961F20C6E10095F577 /* IBArtistItem+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBArtistItem+CoreDataClass.m"; sourceTree = "<group>"; };
+		239AD1971F20C6E20095F577 /* IBArtistItem+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBArtistItem+CoreDataProperties.h"; sourceTree = "<group>"; };
+		239AD1981F20C6E20095F577 /* IBArtistItem+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBArtistItem+CoreDataProperties.m"; sourceTree = "<group>"; };
 		6F004B561EACCEFC007755C3 /* Automani.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Automani.ttf; sourceTree = "<group>"; };
 		6F004B571EACCEFC007755C3 /* Codystar.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Codystar.ttf; sourceTree = "<group>"; };
 		6F004B581EACCEFC007755C3 /* Codystart.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Codystart.ttf; sourceTree = "<group>"; };
@@ -656,26 +656,26 @@
 		230B69441F0F932D00476F44 /* CoreDataModels */ = {
 			isa = PBXGroup;
 			children = (
-				23D81FA71F14F7250044148D /* IBAlbumItem+CoreDataClass.h */,
-				23D81FA81F14F7250044148D /* IBAlbumItem+CoreDataClass.m */,
-				23D81FA91F14F7250044148D /* IBAlbumItem+CoreDataProperties.h */,
-				23D81FAA1F14F7250044148D /* IBAlbumItem+CoreDataProperties.m */,
-				23D81FAB1F14F7250044148D /* IBArtistItem+CoreDataClass.h */,
-				23D81FAC1F14F7250044148D /* IBArtistItem+CoreDataClass.m */,
-				23D81FAD1F14F7250044148D /* IBArtistItem+CoreDataProperties.h */,
-				23D81FAE1F14F7250044148D /* IBArtistItem+CoreDataProperties.m */,
-				23D81FAF1F14F7250044148D /* IBPlaylist+CoreDataClass.h */,
-				23D81FB01F14F7250044148D /* IBPlaylist+CoreDataClass.m */,
-				23D81FB11F14F7250044148D /* IBPlaylist+CoreDataProperties.h */,
-				23D81FB21F14F7250044148D /* IBPlaylist+CoreDataProperties.m */,
-				23D81FB31F14F7250044148D /* IBParentItem+CoreDataClass.h */,
-				23D81FB41F14F7250044148D /* IBParentItem+CoreDataClass.m */,
-				23D81FB51F14F7250044148D /* IBParentItem+CoreDataProperties.h */,
-				23D81FB61F14F7250044148D /* IBParentItem+CoreDataProperties.m */,
-				23D81FB71F14F7250044148D /* IBSongItem+CoreDataClass.h */,
-				23D81FB81F14F7250044148D /* IBSongItem+CoreDataClass.m */,
-				23D81FB91F14F7250044148D /* IBSongItem+CoreDataProperties.h */,
-				23D81FBA1F14F7250044148D /* IBSongItem+CoreDataProperties.m */,
+				239AD1851F20C6E10095F577 /* IBParentItem+CoreDataClass.h */,
+				239AD1861F20C6E10095F577 /* IBParentItem+CoreDataClass.m */,
+				239AD1871F20C6E10095F577 /* IBParentItem+CoreDataProperties.h */,
+				239AD1881F20C6E10095F577 /* IBParentItem+CoreDataProperties.m */,
+				239AD1891F20C6E10095F577 /* IBPlaylist+CoreDataClass.h */,
+				239AD18A1F20C6E10095F577 /* IBPlaylist+CoreDataClass.m */,
+				239AD18B1F20C6E10095F577 /* IBPlaylist+CoreDataProperties.h */,
+				239AD18C1F20C6E10095F577 /* IBPlaylist+CoreDataProperties.m */,
+				239AD18D1F20C6E10095F577 /* IBSongItem+CoreDataClass.h */,
+				239AD18E1F20C6E10095F577 /* IBSongItem+CoreDataClass.m */,
+				239AD18F1F20C6E10095F577 /* IBSongItem+CoreDataProperties.h */,
+				239AD1901F20C6E10095F577 /* IBSongItem+CoreDataProperties.m */,
+				239AD1911F20C6E10095F577 /* IBAlbumItem+CoreDataClass.h */,
+				239AD1921F20C6E10095F577 /* IBAlbumItem+CoreDataClass.m */,
+				239AD1931F20C6E10095F577 /* IBAlbumItem+CoreDataProperties.h */,
+				239AD1941F20C6E10095F577 /* IBAlbumItem+CoreDataProperties.m */,
+				239AD1951F20C6E10095F577 /* IBArtistItem+CoreDataClass.h */,
+				239AD1961F20C6E10095F577 /* IBArtistItem+CoreDataClass.m */,
+				239AD1971F20C6E20095F577 /* IBArtistItem+CoreDataProperties.h */,
+				239AD1981F20C6E20095F577 /* IBArtistItem+CoreDataProperties.m */,
 			);
 			name = CoreDataModels;
 			sourceTree = "<group>";
@@ -1589,12 +1589,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				239AD1A01F20C6E20095F577 /* IBAlbumItem+CoreDataProperties.m in Sources */,
 				6F004C7A1EACCEFC007755C3 /* IBAlbumsViewController.m in Sources */,
 				6F004C8F1EACCEFC007755C3 /* IBPlayerController.m in Sources */,
 				6F004C921EACCEFC007755C3 /* IBSongCellTableViewCell.m in Sources */,
 				230B69DE1F13841500476F44 /* IBBarButtonItem.m in Sources */,
-				23D81FBD1F14F7250044148D /* IBArtistItem+CoreDataClass.m in Sources */,
+				239AD19D1F20C6E20095F577 /* IBSongItem+CoreDataClass.m in Sources */,
+				239AD19F1F20C6E20095F577 /* IBAlbumItem+CoreDataClass.m in Sources */,
 				6F004C7C1EACCEFC007755C3 /* IBAllMediaViewController.m in Sources */,
+				239AD19E1F20C6E20095F577 /* IBSongItem+CoreDataProperties.m in Sources */,
 				239AD1801F1C9B570095F577 /* IBSongsFromCoreDataViewController.m in Sources */,
 				230B68A11F06848700476F44 /* IBFileManager.m in Sources */,
 				6FD252E11EB261A900EB3721 /* IBAllMediaCell.m in Sources */,
@@ -1604,7 +1607,7 @@
 				6F004C8C1EACCEFC007755C3 /* IBLabel.m in Sources */,
 				6FCDBDD41EB920DC00B326D7 /* IBTransitionViewController.m in Sources */,
 				6FCDBDDF1EC2018600B326D7 /* IBCurrentParametersManager.m in Sources */,
-				23D81FBF1F14F7250044148D /* IBPlaylist+CoreDataClass.m in Sources */,
+				239AD19B1F20C6E20095F577 /* IBPlaylist+CoreDataClass.m in Sources */,
 				6F004C811EACCEFC007755C3 /* IBArtistNameTitle.m in Sources */,
 				6FCDBDD11EB9148C00B326D7 /* IBAddPlaylistViewController.m in Sources */,
 				6FA46FBB1E1BF4B3008B9F33 /* Retrowave_Player.xcdatamodeld in Sources */,
@@ -1615,34 +1618,31 @@
 				6FCDBDD71EBDFC8A00B326D7 /* IBButton.m in Sources */,
 				6F004C861EACCEFC007755C3 /* IBArtistTableViewCell.m in Sources */,
 				6F004C821EACCEFC007755C3 /* IBArtistNumberAlbumsTitle.m in Sources */,
-				23D81FBE1F14F7250044148D /* IBArtistItem+CoreDataProperties.m in Sources */,
 				6F05DD091EACD5E1009C77BD /* IBSongsViewController.m in Sources */,
+				239AD1991F20C6E20095F577 /* IBParentItem+CoreDataClass.m in Sources */,
 				6F004C841EACCEFC007755C3 /* IBArtistParameter.m in Sources */,
-				23D81FC11F14F7250044148D /* IBParentItem+CoreDataClass.m in Sources */,
 				6F004C8B1EACCEFC007755C3 /* IBFontAttributes.m in Sources */,
-				23D81FC31F14F7250044148D /* IBSongItem+CoreDataClass.m in Sources */,
-				23D81FBB1F14F7250044148D /* IBAlbumItem+CoreDataClass.m in Sources */,
 				6FA46FAF1E1BF4B3008B9F33 /* main.m in Sources */,
 				239AD1831F1E13C30095F577 /* IBMediaItem.m in Sources */,
 				6FCDBDDA1EBE1C6600B326D7 /* IBTransitionDismissViewController.m in Sources */,
 				6F004C951EACCEFC007755C3 /* IBTimeDurationTitle.m in Sources */,
 				6F004C8E1EACCEFC007755C3 /* IBMainTitle.m in Sources */,
+				239AD19A1F20C6E20095F577 /* IBParentItem+CoreDataProperties.m in Sources */,
 				6F004C941EACCEFC007755C3 /* IBTabBarPlayerItem.m in Sources */,
 				6F004C871EACCEFC007755C3 /* IBContentViewController.m in Sources */,
-				23D81FC41F14F7250044148D /* IBSongItem+CoreDataProperties.m in Sources */,
 				6F004C7B1EACCEFC007755C3 /* IBAlbumViewCell.m in Sources */,
+				239AD1A11F20C6E20095F577 /* IBArtistItem+CoreDataClass.m in Sources */,
 				236727F21ED30C0A0054678D /* IBSongsAddViewController.m in Sources */,
 				6F004C971EACCEFC007755C3 /* IBVisualizerMusic.m in Sources */,
-				23D81FBC1F14F7250044148D /* IBAlbumItem+CoreDataProperties.m in Sources */,
 				230B692A1F0E509000476F44 /* IBCoreDataViewController.m in Sources */,
 				6F004C7D1EACCEFC007755C3 /* IBAnimationManager.m in Sources */,
 				230B69261F0E444400476F44 /* IBCoreDataManager.m in Sources */,
+				239AD1A21F20C6E20095F577 /* IBArtistItem+CoreDataProperties.m in Sources */,
 				6F004C901EACCEFC007755C3 /* IBPlayerItem.m in Sources */,
 				6F004C931EACCEFC007755C3 /* IBSongCount.m in Sources */,
 				6F004C851EACCEFC007755C3 /* IBArtistsViewController.m in Sources */,
-				23D81FC01F14F7250044148D /* IBPlaylist+CoreDataProperties.m in Sources */,
+				239AD19C1F20C6E20095F577 /* IBPlaylist+CoreDataProperties.m in Sources */,
 				6F004C801EACCEFC007755C3 /* IBArtistInfoViewController.m in Sources */,
-				23D81FC21F14F7250044148D /* IBParentItem+CoreDataProperties.m in Sources */,
 				6FCDBDC81EB498D700B326D7 /* IBPlaylistlistViewController.m in Sources */,
 				230B692D1F0E67B300476F44 /* IBPlaylistsFromCoreDataViewController.m in Sources */,
 			);

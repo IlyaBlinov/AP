@@ -2,7 +2,7 @@
 //  IBSongItem+CoreDataProperties.h
 //  Retrowave Player
 //
-//  Created by eastwood on 11/07/2017.
+//  Created by eastwood on 20/07/2017.
 //  Copyright © 2017 Илья Блинов. All rights reserved.
 //
 
@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSFetchRequest<IBSongItem *> *)fetchRequest;
 
 @property (nonatomic) int64_t persistentID;
+@property (nonatomic) int64_t position;
 @property (nullable, nonatomic, retain) NSSet<IBAlbumItem *> *albums;
 @property (nullable, nonatomic, retain) IBArtistItem *artist;
 @property (nullable, nonatomic, retain) NSSet<IBPlaylist *> *playlists;

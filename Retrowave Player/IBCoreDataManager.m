@@ -80,25 +80,75 @@
     
     NSManagedObjectContext *context = self.persistentContainer.viewContext;
     
-    NSFetchRequest* request = [[NSFetchRequest alloc] init];
+    NSFetchRequest* songRequest = [[NSFetchRequest alloc] init];
+    NSFetchRequest* albumRequest = [[NSFetchRequest alloc] init];
+    NSFetchRequest* artistRequest = [[NSFetchRequest alloc] init];
     
-    NSEntityDescription* description =
-    [NSEntityDescription entityForName:@"IBParentItem"
+    
+    NSEntityDescription* songDescription =
+    [NSEntityDescription entityForName:@"IBSongItem"
                 inManagedObjectContext:context];
     
-    [request setEntity:description];
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"playlist contains %@", playlist];
     
-    [request setPredicate:predicate];
+    NSEntityDescription* albumDescription =
+    [NSEntityDescription entityForName:@"IBAlbumItem"
+                inManagedObjectContext:context];
+    
+    
+    NSEntityDescription* artistDescription =
+    [NSEntityDescription entityForName:@"IBArtistItem"
+                inManagedObjectContext:context];
+    
+    
+    
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"playlists contains %@", playlist];
+    
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"position" ascending:NO];
+    NSArray *sortDescriptors = @[sortDescriptor];
+    
+    
+    [songRequest   setPredicate:predicate];
+    [albumRequest  setPredicate:predicate];
+    [artistRequest setPredicate:predicate];
+    
+    [songRequest   setEntity:songDescription];
+    [albumRequest  setEntity:albumDescription];
+    [artistRequest setEntity:artistDescription];
 
     
-   
+    [songRequest   setSortDescriptors:sortDescriptors];
+    [albumRequest  setSortDescriptors:sortDescriptors];
+    [artistRequest setSortDescriptors:sortDescriptors];
     
-    NSError* requestError = nil;
-    NSArray* resultArray = [context executeFetchRequest:request error:&requestError];
-    if (requestError) {
-        NSLog(@"%@", [requestError localizedDescription]);
+    NSError* songRequestError = nil;
+    NSArray* songsResultArray = [context executeFetchRequest:songRequest error:&songRequestError];
+    if (songRequestError) {
+        NSLog(@"%@", [songRequestError localizedDescription]);
     }
+    
+    NSError* albumRequestError = nil;
+    NSArray* albumsResultArray = [context executeFetchRequest:songRequest error:&albumRequestError];
+    if (albumRequestError) {
+        NSLog(@"%@", [albumRequestError localizedDescription]);
+    }
+
+    NSError* artistRequestError = nil;
+    NSArray* artistResultArray = [context executeFetchRequest:songRequest error:&artistRequestError];
+    if (artistRequestError) {
+        NSLog(@"%@", [artistRequestError localizedDescription]);
+    }
+
+    
+    NSMutableArray *tempResultArray = [NSMutableArray arrayWithArray:songsResultArray];
+    [tempResultArray addObjectsFromArray:albumsResultArray];
+    [tempResultArray addObjectsFromArray:artistResultArray];
+    
+    [tempResultArray sortUsingDescriptors:sortDescriptors];
+    
+    NSArray *resultArray = [NSArray arrayWithArray:tempResultArray];
+    
+    
+    
     
     return resultArray;
 }

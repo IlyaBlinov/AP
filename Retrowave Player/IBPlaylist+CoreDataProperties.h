@@ -2,7 +2,7 @@
 //  IBPlaylist+CoreDataProperties.h
 //  Retrowave Player
 //
-//  Created by eastwood on 11/07/2017.
+//  Created by eastwood on 20/07/2017.
 //  Copyright © 2017 Илья Блинов. All rights reserved.
 //
 
@@ -17,28 +17,29 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) int64_t persistentID;
 @property (nullable, nonatomic, copy) NSString *playlistName;
-@property (nullable, nonatomic, retain) NSSet<IBSongItem *> *songItems;
-@property (nullable, nonatomic, retain) NSSet<IBArtistItem *> *artistItems;
+@property (nonatomic) int64_t position;
 @property (nullable, nonatomic, retain) NSSet<IBAlbumItem *> *albumItems;
+@property (nullable, nonatomic, retain) NSSet<IBArtistItem *> *artistItems;
+@property (nullable, nonatomic, retain) NSSet<IBSongItem *> *songItems;
 
 @end
 
 @interface IBPlaylist (CoreDataGeneratedAccessors)
 
-- (void)addSongItemsObject:(IBSongItem *)value;
-- (void)removeSongItemsObject:(IBSongItem *)value;
-- (void)addSongItems:(NSSet<IBSongItem *> *)values;
-- (void)removeSongItems:(NSSet<IBSongItem *> *)values;
+- (void)addAlbumItemsObject:(IBAlbumItem *)value;
+- (void)removeAlbumItemsObject:(IBAlbumItem *)value;
+- (void)addAlbumItems:(NSSet<IBAlbumItem *> *)values;
+- (void)removeAlbumItems:(NSSet<IBAlbumItem *> *)values;
 
 - (void)addArtistItemsObject:(IBArtistItem *)value;
 - (void)removeArtistItemsObject:(IBArtistItem *)value;
 - (void)addArtistItems:(NSSet<IBArtistItem *> *)values;
 - (void)removeArtistItems:(NSSet<IBArtistItem *> *)values;
 
-- (void)addAlbumItemsObject:(IBAlbumItem *)value;
-- (void)removeAlbumItemsObject:(IBAlbumItem *)value;
-- (void)addAlbumItems:(NSSet<IBAlbumItem *> *)values;
-- (void)removeAlbumItems:(NSSet<IBAlbumItem *> *)values;
+- (void)addSongItemsObject:(IBSongItem *)value;
+- (void)removeSongItemsObject:(IBSongItem *)value;
+- (void)addSongItems:(NSSet<IBSongItem *> *)values;
+- (void)removeSongItems:(NSSet<IBSongItem *> *)values;
 
 @end
 
