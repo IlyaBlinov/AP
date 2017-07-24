@@ -8,13 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "IBCurrentParametersManager.h"
-
-//typedef enum{
-//    playlists,
-//    artists,
-//    albums,
-//    songs
-//}MediaItemsType;
+#import "IBMediaItem.h"
 
 
 
@@ -34,7 +28,7 @@
 - (NSDictionary*) getAlbumsAndTitleFor:(IBSongsViewType) type;//Albums, Title
 
 
-- (NSDictionary*) getPlaylistParams:(MPMediaPlaylist*) playlist;//Songs, Title
+- (NSDictionary*) getPlaylistParams:(IBMediaItem*) playlist;//Songs, Title
 - (NSArray*) getPlaylists;
 
 
@@ -52,7 +46,7 @@
 
 
 - (NSArray*) getPersistentIDsFromSongs:(NSArray*)songs;
-- (IBMediaItem*) getSongByPersistentID:(NSNumber*) persistentID;
+- (MPMediaItem*) getSongByPersistentID:(NSNumber*) persistentID;
 - (NSArray*) getSongsByPersistentIDs:(NSArray*) persistentIDs;
 
 
@@ -66,7 +60,7 @@
 
 
 - (NSArray*) getPersistentIDsFromArtists:(NSArray*)artists;
-- (MPMediaItem*) getArtistByPersistentID:(NSNumber*) persistentID;
+- (IBMediaItem*) getArtistByPersistentID:(NSNumber*) persistentID;
 - (NSArray*) getArtistsByPersistentIDs:(NSArray*) persistentIDs;
 - (NSArray*) getAlbumsPersistentIDsByArtistPersistentID:(NSNumber*) persistentID;
 - (NSArray*) getSongsPersistentIDsByArtistPersistentID:(NSNumber*) persistentID;

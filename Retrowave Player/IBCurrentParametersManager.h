@@ -28,14 +28,14 @@ typedef enum {
 
 @property (strong, nonatomic) IBMediaItem     *artist;
 @property (strong, nonatomic) IBMediaItem     *album;
-@property (strong, nonatomic) MPMediaPlaylist *playlist;
+@property (strong, nonatomic) IBMediaItem     *playlist;
 @property (assign, nonatomic) IBSongsViewType songsViewType;
 
 
 @property (assign, nonatomic) BOOL isEditing;
 @property (assign, nonatomic) BOOL isUpdating;
 
-@property (strong, nonatomic) MPMediaPlaylist *changingPlaylist;
+@property (strong, nonatomic) IBMediaItem *changingPlaylist;
 @property (strong, nonatomic) NSMutableArray  *addedSongs;
 @property (strong, nonatomic) NSMutableArray  *removedSongs;
 

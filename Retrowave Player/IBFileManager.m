@@ -46,7 +46,8 @@
         
     }else if (type == album){
         IBMediaItem     *currentAlbum    = [[IBCurrentParametersManager sharedManager] album];
-        title = [currentAlbum valueForProperty:MPMediaItemPropertyAlbumTitle];
+        MPMediaItem *albumItem = (MPMediaItem*)currentAlbum.mediaEntity;
+        title = [albumItem valueForProperty:MPMediaItemPropertyAlbumTitle];
         
         MPMediaPropertyPredicate *albumNamePredicate =
         [MPMediaPropertyPredicate predicateWithValue: title
@@ -61,7 +62,8 @@
         
     }else if (type == artist){
         IBMediaItem     *currentArtist   = [[IBCurrentParametersManager sharedManager] artist];
-        NSString *artistName = [currentArtist valueForProperty:MPMediaItemPropertyArtist];
+        MPMediaItem *artistItem = (MPMediaItem*)currentArtist.mediaEntity;
+        NSString *artistName = [artistItem valueForProperty:MPMediaItemPropertyArtist];
         title = artistName;
         
         MPMediaPropertyPredicate *artistNamePredicate =
@@ -76,12 +78,18 @@
         
         
     }else if (type == playlist){
-        MPMediaPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] playlist];
-        title =  [currentPlaylist valueForProperty:MPMediaPlaylistPropertyName];
-        songs = [currentPlaylist items];
+        IBMediaItem *currentPlaylist = [[IBCurrentParametersManager sharedManager] playlist];
+        MPMediaPlaylist *playlistItem = (MPMediaPlaylist*)currentPlaylist.mediaEntity;
+        
+        title =  [playlistItem valueForProperty:MPMediaPlaylistPropertyName];
+        songs = [playlistItem items];
     }
     
-    NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:songs, @"songs",title, @"title", nil];
+    
+    
+    NSArray *newSongsArray = [self convertToIBMediaItemsMPMediaItems:songs];
+    
+    NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:newSongsArray, @"songs",title, @"title", nil];
     
     return parameters;
     
@@ -99,7 +107,9 @@
     if (type == artist) {
         
         IBMediaItem *artist = [[IBCurrentParametersManager sharedManager] artist];
-        NSString *artistName = [artist valueForProperty:MPMediaItemPropertyArtist];
+        MPMediaItem *artistItem = (MPMediaItem*)artist.mediaEntity;
+        
+        NSString *artistName = [artistItem valueForProperty:MPMediaItemPropertyArtist];
         
         albums = [self getAllAlbumsOfArtist:artist];
         
@@ -115,7 +125,10 @@
     
    albums = [NSArray arrayWithArray:[self sortingItems:albums ByProperty:MPMediaItemPropertyAlbumTitle]];
     
-    NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:albums, @"albums",title, @"title", nil];
+    
+    NSArray *newAlbumsArray = [self convertToIBMediaItemsMPMediaItems:albums];
+    
+    NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:newAlbumsArray, @"albums",title, @"title", nil];
     
     return parameters;
 
@@ -127,7 +140,9 @@
 
 - (NSArray*) getAllAlbumsOfArtist:(IBMediaItem*) artist{
     
-    NSString *artistName = [artist valueForProperty:MPMediaItemPropertyArtist];
+    MPMediaItem *artistItem = (MPMediaItem*) artist.mediaEntity;
+    
+    NSString *artistName = [artistItem valueForProperty:MPMediaItemPropertyArtist];
     
     
     MPMediaPropertyPredicate *artistNamePredicate =
@@ -146,7 +161,10 @@
         [albumsItemsArray addObject:albumItem];
         
     }
-    NSArray *albums = [[NSArray alloc] initWithArray:albumsItemsArray];
+   
+    NSArray *albums = [self convertToIBMediaItemsMPMediaItems:albumsItemsArray];
+    
+
     
     return albums;
   
@@ -155,16 +173,21 @@
 
 - (NSArray*) getAllSongsOfAlbum:(IBMediaItem*) album{
     
-    NSString *title = [album valueForProperty:MPMediaItemPropertyAlbumTitle];
+    MPMediaItem *albumItem = (MPMediaItem*) album.mediaEntity;
+    
+    NSString *title = [albumItem valueForProperty:MPMediaItemPropertyAlbumTitle];
     
     MPMediaPropertyPredicate *albumNamePredicate =
     [MPMediaPropertyPredicate predicateWithValue: title
                                      forProperty: MPMediaItemPropertyAlbumTitle];
     
-    MPMediaQuery *songsOfAlbum = [[MPMediaQuery alloc] init];
-    [songsOfAlbum addFilterPredicate:albumNamePredicate];
+    MPMediaQuery *songsOfAlbumQuery = [[MPMediaQuery alloc] init];
+    [songsOfAlbumQuery addFilterPredicate:albumNamePredicate];
     
-    return  [songsOfAlbum items];
+   
+    NSArray *songsOfAlbumArray = [self convertToIBMediaItemsMPMediaItems:[songsOfAlbumQuery items]];
+    
+    return  songsOfAlbumArray;
     
 }
 
@@ -182,7 +205,8 @@
 ;
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
-        MPMediaPlaylist *playlist = [[IBCurrentParametersManager sharedManager]changingPlaylist];
+        
+        MPMediaPlaylist *playlist = (MPMediaPlaylist*)[[[IBCurrentParametersManager sharedManager]changingPlaylist]mediaEntity];
         NSInteger indexOfChangingPlaylist = [playliststTempArray indexOfObject:playlist];
         
         NSMutableArray *arrayPlaylistsBehindChangingPlaylist = [NSMutableArray array];
@@ -223,12 +247,18 @@
 
 }
 
-- (NSDictionary*) getPlaylistParams:(MPMediaPlaylist*) playlist{
+- (NSDictionary*) getPlaylistParams:(IBMediaItem*) playlist{
     
-    NSArray   *songs = [playlist items];
-    NSString  *title = [playlist valueForProperty:MPMediaPlaylistPropertyName];
     
-    NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:songs, @"songs",title, @"title", nil];
+    MPMediaPlaylist *playlistItem = (MPMediaPlaylist*)[playlist mediaEntity];
+    
+    NSArray   *songs = [playlistItem items];
+    NSString  *title = [playlistItem valueForProperty:MPMediaPlaylistPropertyName];
+    
+    
+    NSArray *newSongsArray = [self convertToIBMediaItemsMPMediaItems:songs];
+    
+    NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:newSongsArray, @"songs",title, @"title", nil];
     
     return parameters;
     
@@ -243,15 +273,17 @@
     
     NSArray *artistsArray = [artistsQuery items];
     
-    return  [self sortingItems:artistsArray ByProperty:MPMediaItemPropertyArtist] ;
+    NSArray *sortedArtists = [self sortingItems:artistsArray ByProperty:MPMediaItemPropertyArtist] ;
     
-    
+    return [self convertToIBMediaItemsMPMediaItems:sortedArtists];
 }
 
 
 - (NSDictionary*) getArtistParams:(IBMediaItem*) artist{
     
-    NSString *artistTitle = [artist valueForProperty:MPMediaItemPropertyArtist];
+    MPMediaItem *artistItem = (MPMediaItem*)[artist mediaEntity];
+    
+    NSString *artistTitle = [artistItem valueForProperty:MPMediaItemPropertyArtist];
     NSAttributedString *artistName = [[NSAttributedString alloc] initWithString:artistTitle];
     
     MPMediaPropertyPredicate *artistNamePredicate =
@@ -296,24 +328,29 @@
 
 - (NSArray*) getAllSongsOfArtist:(IBMediaItem*) artist{
     
-    NSString *artistName = [artist valueForProperty:MPMediaItemPropertyArtist];
+    MPMediaItem *artistItem = (MPMediaItem*)[artist mediaEntity];
+    
+    NSString *artistName = [artistItem valueForProperty:MPMediaItemPropertyArtist];
     
     MPMediaPropertyPredicate *artistNamePredicate =
     [MPMediaPropertyPredicate predicateWithValue: artistName
                                      forProperty: MPMediaItemPropertyArtist];
     
-    MPMediaQuery *songsOfArtist = [[MPMediaQuery alloc] init];
-    [songsOfArtist addFilterPredicate:artistNamePredicate];
+    MPMediaQuery *songsOfArtistQuery = [[MPMediaQuery alloc] init];
+    [songsOfArtistQuery addFilterPredicate:artistNamePredicate];
     
-    return [songsOfArtist items];
+    NSArray *songsOfArtist = [self convertToIBMediaItemsMPMediaItems:[songsOfArtistQuery items]];
     
+    return songsOfArtist;
 }
 
 
 
 - (NSArray*) getSongsFromAllAlbumsOfArtist:(IBMediaItem*) artist{
     
-    NSString *artistName = [artist valueForProperty:MPMediaItemPropertyArtist];
+      MPMediaItem *artistItem = (MPMediaItem*)[artist mediaEntity];
+    
+    NSString *artistName = [artistItem valueForProperty:MPMediaItemPropertyArtist];
    
     MPMediaPropertyPredicate *artistNamePredicate =
     [MPMediaPropertyPredicate predicateWithValue: artistName
@@ -327,7 +364,7 @@
     NSMutableArray *tempSongsArray = [NSMutableArray array];
     
     for (MPMediaItemCollection *album in [albumsOfArtist collections]) {
-        IBMediaItem *albumItem = (IBMediaItem*)[album representativeItem];
+        MPMediaItem *albumItem = [album representativeItem];
         
         NSString *title = [albumItem valueForProperty:MPMediaItemPropertyAlbumTitle];
         
@@ -343,7 +380,10 @@
         
     }
     
-    return  tempSongsArray;
+    
+    NSArray *songsFromAllAlbums = [self convertToIBMediaItemsMPMediaItems:tempSongsArray];
+    
+    return  songsFromAllAlbums;
 
     
 }
@@ -354,29 +394,45 @@
 
 - (NSArray*) getPersistentIDsFromSongs:(NSArray*)songs{
     
+    if ([[songs firstObject] isKindOfClass:[IBMediaItem class]]) {
+       
+        NSArray *mediaItems = [songs valueForKeyPath:@"@unionOfObjects.mediaEntity"];
+        NSArray *persistentIDsArray = [mediaItems valueForKeyPath:@"@unionOfObjects.persistentID"];
+        return persistentIDsArray;
+        
+    }else{
     
     NSArray *persistentIDsArray = [songs valueForKeyPath:@"@unionOfObjects.persistentID"];
     
     return persistentIDsArray;
     
-    
+    }
 }
 
 - (NSArray*) getPersistentIDsFromAlbums:(NSArray*)albums{
-    
-    
-    NSArray *persistentIDsArray = [albums valueForKeyPath:@"@unionOfObjects.albumPersistentID"];
-    
-    return persistentIDsArray;
-    
-    
+
+    if ([[albums firstObject] isKindOfClass:[IBMediaItem class]]) {
+        
+        NSArray *mediaItems = [albums valueForKeyPath:@"@unionOfObjects.mediaEntity"];
+        
+        NSArray *persistentIDsArray = [mediaItems valueForKeyPath:@"@unionOfObjects.persistentID"];
+        return persistentIDsArray;
+        
+    }else{
+        
+         NSArray *persistentIDsArray = [albums valueForKeyPath:@"@unionOfObjects.albumPersistentID"];
+        
+        return persistentIDsArray;
+        
+    }
+
 }
 
 
 
 - (NSArray*) getSongsPersistentIDsByAlbumPersistentID:(NSNumber*) persistentID{
     
-    IBMediaItem *album = [self getAlbumByPersistentID:persistentID];
+    MPMediaItem *album = [self getAlbumByPersistentID:persistentID];
     
     NSArray *itemsArray = [self getAllSongsOfAlbum:album];
     
@@ -402,7 +458,7 @@
 
 - (NSArray*) getAlbumsPersistentIDsByArtistPersistentID:(NSNumber*) persistentID{
     
-    IBMediaItem *artist = (IBMediaItem*)[self getArtistByPersistentID:persistentID];
+    MPMediaItem *artist = [self getArtistByPersistentID:persistentID];
     
     NSArray *albumsOfArtist = [self getAllAlbumsOfArtist:artist];
     
@@ -430,7 +486,7 @@
 
 #pragma mark - return MPMediaItems By PersistentID
 
-- (IBMediaItem*) getSongByPersistentID:(NSNumber*) persistentID{
+- (MPMediaItem*) getSongByPersistentID:(NSNumber*) persistentID{
 
     
     MPMediaPropertyPredicate *persisitentIDPredicate =
@@ -441,7 +497,7 @@
     [songsByPersistenID addFilterPredicate:persisitentIDPredicate];
     
     if ([songsByPersistenID.items count] > 0) {
-        return (IBMediaItem*)[songsByPersistenID.items firstObject];
+        return [songsByPersistenID.items firstObject];
     }else{
         return nil;
     }
@@ -456,7 +512,7 @@
     
     for (NSNumber *persistentID in persistentIDs) {
        
-       IBMediaItem *item = [self getSongByPersistentID:persistentID];
+       MPMediaItem *item = [self getSongByPersistentID:persistentID];
         
         [mediaItemsArray addObject:item];
     }
@@ -478,7 +534,9 @@
     [albumPersistentID addFilterPredicate:persisitentIDPredicate];
     
     if ([albumPersistentID.items count] > 0) {
-        return (IBMediaItem*)[albumPersistentID.items firstObject];
+        IBMediaItem *albumItem = [[IBMediaItem alloc] init];
+        albumItem.mediaEntity = [albumPersistentID.items firstObject];
+        return albumItem;
     }else{
         return nil;
     }
@@ -516,7 +574,9 @@
     [artistPersistentID addFilterPredicate:persisitentIDPredicate];
     
     if ([artistPersistentID.items count] > 0) {
-        return (IBMediaItem*)[artistPersistentID.items firstObject];
+        IBMediaItem *item = [[IBMediaItem alloc] init];
+        item.mediaEntity = [artistPersistentID.items firstObject];
+        return item;
     }else{
         return nil;
     }
@@ -531,7 +591,7 @@
     
     for (NSNumber *persistentID in persistentIDs) {
         
-        IBMediaItem *item = (IBMediaItem*)[self getArtistByPersistentID:persistentID];
+        IBMediaItem *item = [self getArtistByPersistentID:persistentID];
         
         [mediaItemsArray addObject:item];
     }
@@ -573,14 +633,33 @@
 
 #pragma mark - sortingItems
 
+- (NSArray*) convertToIBMediaItemsMPMediaItems:(NSArray*) mediaItemsArray{
+    
+    
+    NSMutableArray *itemsSongsArray = [NSMutableArray array];
+    
+    for (MPMediaItem *item in mediaItemsArray) {
+        IBMediaItem *newItem = [[IBMediaItem alloc] init];
+        newItem.mediaEntity = item;
+        [itemsSongsArray addObject:newItem];
+    }
+    
+    
+    return [NSArray arrayWithArray:itemsSongsArray];
+    
+    
+}
+
+
+
 - (NSArray*) sortingItems:(NSArray*) items ByProperty:(NSString*) property{
     
     NSMutableArray *array = [NSMutableArray arrayWithArray:items];
     
     for (int i = 0; i < [items count] - 1; i++) {
         
-        IBMediaItem *item1 = [items objectAtIndex:i];
-        IBMediaItem *item2 = [items objectAtIndex:i + 1];
+        MPMediaItem *item1 = [items objectAtIndex:i];
+        MPMediaItem *item2 = [items objectAtIndex:i + 1];
         
         NSString *itemTitle1 = [item1 valueForProperty:property];
         NSString *itemTitle2 = [item2 valueForProperty:property];
@@ -613,8 +692,9 @@
         IBPlaylist *playlist = [[IBCurrentParametersManager sharedManager]coreDataChangingPlaylist];
         persistentIDsArrayOfChangingPlaylist = [self getPersistentIDsFromCoreDataPlaylist:playlist];
     }else{
-        MPMediaPlaylist *playlist = [[IBCurrentParametersManager sharedManager]changingPlaylist];
-        NSArray *items = [playlist items];
+        IBMediaItem *playlist = [[IBCurrentParametersManager sharedManager]changingPlaylist];
+        MPMediaPlaylist *changingPlaylist = (MPMediaPlaylist*)[playlist mediaEntity];
+        NSArray *items = [changingPlaylist items];
         persistentIDsArrayOfChangingPlaylist = [self getPersistentIDsFromSongs:items];
     }
     
@@ -625,21 +705,21 @@
     NSArray *persistentIDAddedItemsArray = [addedMediItemsArray valueForKeyPath:@"@unionOfObjects.persistentID"];
     
      
-    for (IBMediaItem *item in itemsArray) {
+    for (IBMediaItem *mediaItem in itemsArray) {
        
-        NSLog(@"%lld", item.persistentID);
+        MPMediaItem *item = (MPMediaItem*)[mediaItem mediaEntity];
         
        if ([persistentIDsArrayOfChangingPlaylist count] > 0) {
            
            NSNumber *persistentID = [NSNumber numberWithLongLong: item.persistentID];
        if ([persistentIDsArrayOfChangingPlaylist containsObject:persistentID]) {
-                item.state = inPlaylist;
+                mediaItem.state = inPlaylist;
        }
        }
         
        if ([addedMediItemsArray count] > 0) {
        if ([persistentIDAddedItemsArray containsObject:[NSNumber numberWithUnsignedLongLong: item.persistentID]]) {
-           item.state = added;
+           mediaItem.state = added;
        }
    
        }

@@ -15,7 +15,6 @@
 		230B69DE1F13841500476F44 /* IBBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B69D61F13841500476F44 /* IBBarButtonItem.m */; };
 		236727F21ED30C0A0054678D /* IBSongsAddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 236727F11ED30C0A0054678D /* IBSongsAddViewController.m */; };
 		239AD1801F1C9B570095F577 /* IBSongsFromCoreDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD17F1F1C9B570095F577 /* IBSongsFromCoreDataViewController.m */; };
-		239AD1831F1E13C30095F577 /* IBMediaItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD1821F1E13C30095F577 /* IBMediaItem.m */; };
 		239AD1991F20C6E20095F577 /* IBParentItem+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD1861F20C6E10095F577 /* IBParentItem+CoreDataClass.m */; };
 		239AD19A1F20C6E20095F577 /* IBParentItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD1881F20C6E10095F577 /* IBParentItem+CoreDataProperties.m */; };
 		239AD19B1F20C6E20095F577 /* IBPlaylist+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD18A1F20C6E10095F577 /* IBPlaylist+CoreDataClass.m */; };
@@ -26,6 +25,7 @@
 		239AD1A01F20C6E20095F577 /* IBAlbumItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD1941F20C6E10095F577 /* IBAlbumItem+CoreDataProperties.m */; };
 		239AD1A11F20C6E20095F577 /* IBArtistItem+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD1961F20C6E10095F577 /* IBArtistItem+CoreDataClass.m */; };
 		239AD1A21F20C6E20095F577 /* IBArtistItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD1981F20C6E20095F577 /* IBArtistItem+CoreDataProperties.m */; };
+		239AD1A51F26216A0095F577 /* IBMediaItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD1A41F26216A0095F577 /* IBMediaItem.m */; };
 		6F004C751EACCEFC007755C3 /* Automani.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B561EACCEFC007755C3 /* Automani.ttf */; };
 		6F004C761EACCEFC007755C3 /* Codystar.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B571EACCEFC007755C3 /* Codystar.ttf */; };
 		6F004C771EACCEFC007755C3 /* Codystart.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B581EACCEFC007755C3 /* Codystart.ttf */; };
@@ -295,8 +295,6 @@
 		236727F11ED30C0A0054678D /* IBSongsAddViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBSongsAddViewController.m; sourceTree = "<group>"; };
 		239AD17E1F1C9B570095F577 /* IBSongsFromCoreDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBSongsFromCoreDataViewController.h; sourceTree = "<group>"; };
 		239AD17F1F1C9B570095F577 /* IBSongsFromCoreDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBSongsFromCoreDataViewController.m; sourceTree = "<group>"; };
-		239AD1811F1E13C30095F577 /* IBMediaItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBMediaItem.h; sourceTree = "<group>"; };
-		239AD1821F1E13C30095F577 /* IBMediaItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBMediaItem.m; sourceTree = "<group>"; };
 		239AD1851F20C6E10095F577 /* IBParentItem+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBParentItem+CoreDataClass.h"; sourceTree = "<group>"; };
 		239AD1861F20C6E10095F577 /* IBParentItem+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBParentItem+CoreDataClass.m"; sourceTree = "<group>"; };
 		239AD1871F20C6E10095F577 /* IBParentItem+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBParentItem+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -317,6 +315,8 @@
 		239AD1961F20C6E10095F577 /* IBArtistItem+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBArtistItem+CoreDataClass.m"; sourceTree = "<group>"; };
 		239AD1971F20C6E20095F577 /* IBArtistItem+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IBArtistItem+CoreDataProperties.h"; sourceTree = "<group>"; };
 		239AD1981F20C6E20095F577 /* IBArtistItem+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBArtistItem+CoreDataProperties.m"; sourceTree = "<group>"; };
+		239AD1A31F26216A0095F577 /* IBMediaItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBMediaItem.h; sourceTree = "<group>"; };
+		239AD1A41F26216A0095F577 /* IBMediaItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBMediaItem.m; sourceTree = "<group>"; };
 		6F004B561EACCEFC007755C3 /* Automani.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Automani.ttf; sourceTree = "<group>"; };
 		6F004B571EACCEFC007755C3 /* Codystar.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Codystar.ttf; sourceTree = "<group>"; };
 		6F004B581EACCEFC007755C3 /* Codystart.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Codystart.ttf; sourceTree = "<group>"; };
@@ -683,8 +683,8 @@
 		239AD1841F1E14540095F577 /* IBMediaItem */ = {
 			isa = PBXGroup;
 			children = (
-				239AD1811F1E13C30095F577 /* IBMediaItem.h */,
-				239AD1821F1E13C30095F577 /* IBMediaItem.m */,
+				239AD1A31F26216A0095F577 /* IBMediaItem.h */,
+				239AD1A41F26216A0095F577 /* IBMediaItem.m */,
 			);
 			name = IBMediaItem;
 			sourceTree = "<group>";
@@ -1623,7 +1623,7 @@
 				6F004C841EACCEFC007755C3 /* IBArtistParameter.m in Sources */,
 				6F004C8B1EACCEFC007755C3 /* IBFontAttributes.m in Sources */,
 				6FA46FAF1E1BF4B3008B9F33 /* main.m in Sources */,
-				239AD1831F1E13C30095F577 /* IBMediaItem.m in Sources */,
+				239AD1A51F26216A0095F577 /* IBMediaItem.m in Sources */,
 				6FCDBDDA1EBE1C6600B326D7 /* IBTransitionDismissViewController.m in Sources */,
 				6F004C951EACCEFC007755C3 /* IBTimeDurationTitle.m in Sources */,
 				6F004C8E1EACCEFC007755C3 /* IBMainTitle.m in Sources */,
