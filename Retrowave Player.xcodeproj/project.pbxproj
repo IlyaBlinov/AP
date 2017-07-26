@@ -26,6 +26,7 @@
 		239AD1A11F20C6E20095F577 /* IBArtistItem+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD1961F20C6E10095F577 /* IBArtistItem+CoreDataClass.m */; };
 		239AD1A21F20C6E20095F577 /* IBArtistItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD1981F20C6E20095F577 /* IBArtistItem+CoreDataProperties.m */; };
 		239AD1A51F26216A0095F577 /* IBMediaItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD1A41F26216A0095F577 /* IBMediaItem.m */; };
+		239AD1A71F276C4D0095F577 /* inPlaylist.png in Resources */ = {isa = PBXBuildFile; fileRef = 239AD1A61F276C4D0095F577 /* inPlaylist.png */; };
 		6F004C751EACCEFC007755C3 /* Automani.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B561EACCEFC007755C3 /* Automani.ttf */; };
 		6F004C761EACCEFC007755C3 /* Codystar.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B571EACCEFC007755C3 /* Codystar.ttf */; };
 		6F004C771EACCEFC007755C3 /* Codystart.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F004B581EACCEFC007755C3 /* Codystart.ttf */; };
@@ -317,6 +318,7 @@
 		239AD1981F20C6E20095F577 /* IBArtistItem+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IBArtistItem+CoreDataProperties.m"; sourceTree = "<group>"; };
 		239AD1A31F26216A0095F577 /* IBMediaItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBMediaItem.h; sourceTree = "<group>"; };
 		239AD1A41F26216A0095F577 /* IBMediaItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBMediaItem.m; sourceTree = "<group>"; };
+		239AD1A61F276C4D0095F577 /* inPlaylist.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = inPlaylist.png; sourceTree = "<group>"; };
 		6F004B561EACCEFC007755C3 /* Automani.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Automani.ttf; sourceTree = "<group>"; };
 		6F004B571EACCEFC007755C3 /* Codystar.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Codystar.ttf; sourceTree = "<group>"; };
 		6F004B581EACCEFC007755C3 /* Codystart.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Codystart.ttf; sourceTree = "<group>"; };
@@ -805,6 +807,7 @@
 			isa = PBXGroup;
 			children = (
 				6FCDBDDB1EC1D64D00B326D7 /* Added.png */,
+				239AD1A61F276C4D0095F577 /* inPlaylist.png */,
 				6F004BC81EACCEFC007755C3 /* skip-track(1).png */,
 				6F004BC91EACCEFC007755C3 /* skip-track(2).png */,
 				6F004BCA1EACCEFC007755C3 /* skip-track(3).png */,
@@ -1416,6 +1419,7 @@
 				6F004CE31EACCEFD007755C3 /* cancel-music(4).png in Resources */,
 				6F004CBB1EACCEFD007755C3 /* last-track-left-arrow(4).png in Resources */,
 				6F004CEE1EACCEFD007755C3 /* downloading-down-arrow(7).png in Resources */,
+				239AD1A71F276C4D0095F577 /* inPlaylist.png in Resources */,
 				6F004D011EACCEFD007755C3 /* lines-menu(2).png in Resources */,
 				6F004CE21EACCEFD007755C3 /* cancel-music(3).png in Resources */,
 				6F004CCB1EACCEFD007755C3 /* artists 64 x 64.png in Resources */,

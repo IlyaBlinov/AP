@@ -90,7 +90,7 @@
     }
     
     IBMediaItem *artist = [self.artists objectAtIndex:indexPath.row];
-    
+     //MPMediaItem *artistItem = (MPMediaItem*)[artist mediaEntity];
     
     NSDictionary       *artistParameters = [[IBFileManager sharedManager] getArtistParams:artist];
     

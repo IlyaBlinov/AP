@@ -57,9 +57,7 @@
         self.navigationItem.leftBarButtonItem = removePlaylistItem;
 
     }
-    
-    
-    
+ 
     [self.tableView reloadData];
     
 }
@@ -86,8 +84,7 @@
         }
         
     }
-    
-    
+
     self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Playlists"];
     
 }
@@ -286,8 +283,6 @@
     UIImage *patternImage = [self imageForTableViewRowActionWithTitle:title textAttributes:newAttributes backgroundColor:[UIColor purpleColor] cellHeight:CGRectGetHeight(cell.bounds)];
     
     rowAction.backgroundColor = [UIColor colorWithPatternImage:patternImage];
-    
-
     
     return [NSArray arrayWithObject:rowAction];
     

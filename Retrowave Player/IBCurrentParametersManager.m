@@ -23,6 +23,7 @@
     dispatch_once(&onceToken, ^{
         manager = [[IBCurrentParametersManager alloc] init];
         manager.addedSongs = [NSMutableArray array];
+        manager.removedSongs = [NSMutableArray array];
     });
     
     return manager;

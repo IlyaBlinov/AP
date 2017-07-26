@@ -12,7 +12,7 @@
 @interface IBSongsAddViewController : IBContentViewController
 
 
-
+- (void) reloadSongs;
 
 
 

@@ -17,7 +17,7 @@
 
 @property (strong, nonatomic) NSArray *songs;
 
-@property (strong, nonatomic) NSMutableArray *oldPlaylistSongs;
+
 
 
 

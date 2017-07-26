@@ -46,7 +46,7 @@
 
 
 - (NSArray*) getPersistentIDsFromSongs:(NSArray*)songs;
-- (MPMediaItem*) getSongByPersistentID:(NSNumber*) persistentID;
+- (IBMediaItem*) getSongByPersistentID:(NSNumber*) persistentID;
 - (NSArray*) getSongsByPersistentIDs:(NSArray*) persistentIDs;
 
 

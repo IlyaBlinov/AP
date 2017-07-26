@@ -81,26 +81,27 @@
     [IBCurrentParametersManager sharedManager].songsViewType = playlist;
     
     
-    NSArray *addedSongs              = [NSArray arrayWithArray:[[IBCurrentParametersManager sharedManager] addedSongs]];
+    NSArray *addedMediaItems = [NSArray arrayWithArray:[[IBCurrentParametersManager sharedManager] addedSongs]];
+    NSArray *addedSongs = [addedMediaItems valueForKeyPath:@"@unionOfObjects.mediaEntity"];
     
     IBContentViewController *returnedVC = [[IBCurrentParametersManager sharedManager]returnSongsViewController];
     
     [[IBCurrentParametersManager sharedManager] setIsEditing:NO];
-    
+   
     if ([returnedVC isKindOfClass:[IBSongsAddViewController class]]) {
  
-    MPMediaPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
+    IBMediaItem *currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
+        MPMediaPlaylist *playlistItem = (MPMediaPlaylist*)[currentPlaylist mediaEntity];
     
+    __weak IBSongsAddViewController       *weakSongsVC = (IBSongsAddViewController*)returnedVC;
     
-    __weak IBContentViewController       *weakSongsVC = self;
-    
-    [currentPlaylist addMediaItems:addedSongs completionHandler:^(NSError * _Nullable error) {
+        [weakSongsVC dismissViewControllerAnimated:YES completion:nil];
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-           
-            [weakSongsVC dismissViewControllerAnimated:YES completion:nil];
+    [playlistItem addMediaItems:addedSongs completionHandler:^(NSError * _Nullable error) {
         
-        });
+        if ([addedSongs count] > 0) {
+            [weakSongsVC reloadSongs];
+        }
         
     }];
     
@@ -109,6 +110,8 @@
         IBSongsFromCoreDataViewController *coreDataSongsVC = (IBSongsFromCoreDataViewController*)returnedVC;
         
         
+        NSArray *removedMediaItems = [NSArray arrayWithArray:[[IBCurrentParametersManager sharedManager] removedSongs]];
+        NSArray *removedSongs = [removedMediaItems valueForKeyPath:@"@unionOfObjects.mediaEntity"];
         
         IBPlaylist *changingPlaylist = [[IBCurrentParametersManager sharedManager] coreDataChangingPlaylist];
         
@@ -139,7 +142,7 @@
         if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
             [[IBCurrentParametersManager sharedManager] setSongsViewType:playlist];
-            MPMediaPlaylist *changingPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
+            IBMediaItem *changingPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
             [[IBCurrentParametersManager sharedManager] setPlaylist:changingPlaylist];
             
         }else{

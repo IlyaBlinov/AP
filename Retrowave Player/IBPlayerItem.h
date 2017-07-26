@@ -10,6 +10,7 @@
 
 typedef enum{
     choose,
+    chooseInPlaylist,
     add,
     del,
     move_next,

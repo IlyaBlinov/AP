@@ -9,11 +9,11 @@
 #import <UIKit/UIKit.h>
 
 
-@class IBPlayerItem, IBVisualizerMusic, MPMediaItem;
+@class IBPlayerItem, IBVisualizerMusic, MPMediaItem, IBMediaItem;
 
 @interface IBPlayerController : UIViewController
 
-@property (strong, nonatomic) MPMediaItem *song;
+@property (strong, nonatomic) IBMediaItem *song;
 @property (strong, nonatomic) IBVisualizerMusic *visualizer;
 
 @property (weak, nonatomic) IBOutlet IBPlayerItem *playPauseButton;

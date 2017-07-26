@@ -125,9 +125,11 @@
     }
     
     
-    MPMediaPlaylist *playlist = [self.playlists objectAtIndex:indexPath.row];
+    IBMediaItem *playlist = [self.playlists objectAtIndex:indexPath.row];
     
-    NSString *playlistName = [playlist valueForProperty:MPMediaPlaylistPropertyName];
+    MPMediaPlaylist *playlistItem = (MPMediaPlaylist*)[playlist mediaEntity];
+    
+    NSString *playlistName = [playlistItem valueForProperty:MPMediaPlaylistPropertyName];
     
     if ((playlist != nil) && (playlistName != nil) && (![playlistName isEqualToString:@""])){
         
@@ -135,7 +137,7 @@
     
     NSAttributedString *playlistTitle = [[NSAttributedString alloc] initWithString:playlistName];
     
-    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%lu",(unsigned long)[playlist.items count]]];
+    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%lu",(unsigned long)[playlistItem.items count]]];
     
         
         cell.playlistTitle.attributedText    = playlistTitle;
@@ -172,7 +174,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     
-    MPMediaPlaylist *currentPlaylist = [self.playlists objectAtIndex:indexPath.row];
+    IBMediaItem *currentPlaylist = [self.playlists objectAtIndex:indexPath.row];
     
     [IBCurrentParametersManager sharedManager].songsViewType = playlist;
     
@@ -198,7 +200,7 @@
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
     
     
-    MPMediaPlaylist   *currentPlaylist = [self.playlists objectAtIndex:indexPath.row];;
+    IBMediaItem   *currentPlaylist = [self.playlists objectAtIndex:indexPath.row];;
     
     
    NSDictionary *parameters = [[IBFileManager sharedManager] getPlaylistParams:currentPlaylist];

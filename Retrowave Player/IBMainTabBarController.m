@@ -74,14 +74,6 @@
     
     
     
-    self.delegate = self;
-  
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
     
     NSDictionary *attributesOfSelectedItem = [IBFontAttributes attributesOfTabBarTitlesWithState:selected];
     
@@ -90,8 +82,8 @@
     self.attributesofSelectedItem = attributesOfSelectedItem;
     self.attributesofNotSelectedItem = attributesOfNotSelectedItem;
     
- 
-   
+    
+    
     
     
     for (UITabBarItem *item in self.tabBar.items) {
@@ -102,10 +94,25 @@
             
             self.currentItem = item;
         }
-  
+        
         
     }
     self.selectedIndex = 0;
+
+    
+    
+    
+    
+    
+    self.delegate = self;
+  
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    
     
 }
 

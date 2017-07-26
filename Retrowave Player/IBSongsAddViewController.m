@@ -19,7 +19,7 @@
 
 @interface IBSongsAddViewController ()
 
-@property (strong, nonatomic) MPMediaPlaylist *currentPlaylist;
+@property (strong, nonatomic) IBMediaItem *currentPlaylist;
 @property (strong, nonatomic) NSArray *songs;
 
 @end
@@ -27,16 +27,40 @@
 @implementation IBSongsAddViewController
 
 
+- (void) loadView{
+    [super loadView];
+    
+    
+    IBMediaItem *currentPlaylist = [[IBCurrentParametersManager sharedManager] playlist];
+    self.currentPlaylist = currentPlaylist;
+    
+    NSDictionary *parameters = [[IBFileManager sharedManager] getPlaylistParams:currentPlaylist];
+    self.songs      = [parameters objectForKey:@"songs"];
+    NSString *title = [parameters objectForKey:@"title"];
+    
+    
+    UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
+    [self.navigationItem setLeftBarButtonItem:backItem];
+    
+    self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Songs"];
+    
+    
+}
+
+
+
 - (void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
 
+    
     [ self.tableView setEditing: [[IBCurrentParametersManager sharedManager] isEditing]];
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
        self.navigationItem.rightBarButtonItem =  [self createChooseSongsItem];
-        
+       self.songs = [[IBFileManager sharedManager] checkMediaItems:self.songs];
+      [self.tableView reloadData];
     }else{
         
         IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithButtonStyle:add];
@@ -53,40 +77,23 @@
     
     if ([self isEqual:[[IBCurrentParametersManager sharedManager]returnSongsViewController]]) {
         
-    self.currentPlaylist = nil;
-    MPMediaPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
-    NSDictionary *parameters = [[IBFileManager sharedManager] getPlaylistParams:currentPlaylist];
-    self.songs      = [parameters objectForKey:@"songs"];
-
-    self.currentPlaylist = currentPlaylist;
+        self.currentPlaylist = nil;
+  
         
-    NSLog(@"songsCount = %lu", (unsigned long)[[self.currentPlaylist items]count]);
-    
-    [[IBCurrentParametersManager sharedManager].addedSongs removeAllObjects];
-    [[IBCurrentParametersManager sharedManager] setChangingPlaylist:nil];
-    [[IBCurrentParametersManager sharedManager] setReturnSongsViewController:nil];
-    [self.tableView reloadData];
+        [[IBCurrentParametersManager sharedManager].addedSongs removeAllObjects];
+        [[IBCurrentParametersManager sharedManager].removedSongs removeAllObjects];
+        [[IBCurrentParametersManager sharedManager] setChangingPlaylist:nil];
+        [[IBCurrentParametersManager sharedManager] setReturnSongsViewController:nil];
+
 
 }
-}
+    }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     
-    MPMediaPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] playlist];
-    self.currentPlaylist = currentPlaylist;
-    
-    NSDictionary *parameters = [[IBFileManager sharedManager] getPlaylistParams:currentPlaylist];
-    self.songs      = [parameters objectForKey:@"songs"];
-    NSString *title = [parameters objectForKey:@"title"];
-    
-    
-    UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
-    [self.navigationItem setLeftBarButtonItem:backItem];
-    
-    self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Songs"];
     
     
 }
@@ -97,7 +104,10 @@
     // Dispose of any resources that can be recreated.
 }
 
-
+- (void)dealloc
+{
+    self.songs = nil;
+}
 
 
 #pragma mark - UITableViewDataSource
@@ -126,10 +136,11 @@
     }
     
     IBMediaItem *song = [self.songs objectAtIndex:indexPath.row];
+    MPMediaItem *songItem = (MPMediaItem*)song.mediaEntity;
     
-    NSString *songTitle = [song valueForProperty:MPMediaItemPropertyTitle];
-    NSString *artistTitle = [song valueForProperty:MPMediaItemPropertyArtist];
-    NSNumber *playBackDuration = [song valueForProperty:MPMediaItemPropertyPlaybackDuration];
+    NSString *songTitle = [songItem valueForProperty:MPMediaItemPropertyTitle];
+    NSString *artistTitle = [songItem valueForProperty:MPMediaItemPropertyArtist];
+    NSNumber *playBackDuration = [songItem valueForProperty:MPMediaItemPropertyPlaybackDuration];
     
     double songDuration = [playBackDuration doubleValue] / 60;
     NSString *songDurationTitle = [NSString stringWithFormat:@"%5.2f",songDuration];
@@ -146,7 +157,7 @@
     NSAttributedString *songName = [[NSAttributedString alloc] initWithString:songTitle];
     NSAttributedString *artistName = [[NSAttributedString alloc] initWithString:artistTitle];
     NSAttributedString *timeDuration = [[NSAttributedString alloc] initWithString:songDurationTitle];
-    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%ld", indexPath.row + 1]];
+    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", indexPath.row + 1]];
     
     
     cell.songTitle.attributedText    = songName;
@@ -157,9 +168,31 @@
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-      IBPlayerItem *addButton = [[IBPlayerItem alloc]initWithButtonStyle:add];
-        [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
-    
+        IBPlayerItem *addButton;
+        
+        if (song.state == added) {
+            
+            addButton = [[IBPlayerItem alloc]initWithButtonStyle:choose];
+            [addButton setIsSelected:YES];
+            [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+            
+        }else if (song.state == inPlaylist){
+            
+            addButton = [[IBPlayerItem alloc]initWithButtonStyle:chooseInPlaylist];
+            
+            if ([[IBCurrentParametersManager sharedManager] coreDataChangingPlaylist]) {
+                [addButton setIsSelected:YES];
+                [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+            }
+            
+            
+        }else if (song.state == default_state){
+            
+            addButton = [[IBPlayerItem alloc]initWithButtonStyle:add];
+            [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+            
+        }
+        
         cell.editingAccessoryView = addButton;
         
     }else{
@@ -225,22 +258,52 @@
     
     IBMediaItem *song = [self.songs objectAtIndex:indexPath.row];
     
-    if (button.isSelected == NO) {
+    if (song.state == default_state) {
+        
         [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];
         [button setIsSelected:YES];
+        song.state = added;
         [[IBCurrentParametersManager sharedManager].addedSongs addObject:song];
-    }else{
+        
+    }else if (song.state == added){
+        
         [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
         [button setIsSelected:NO];
         [[IBCurrentParametersManager sharedManager].addedSongs removeObject:song];
+        song.state = default_state;
+        
+    }else if (song.state == inPlaylist){
+        
+        [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+        [button setIsSelected:NO];
+        [[IBCurrentParametersManager sharedManager].removedSongs addObject:song];
+        song.state = default_state;
+        
+        NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+        
+        
     }
-    
-    
-    NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
-    
     
 }
 
+- (void) reloadSongs{
+    
+    IBMediaItem *currentPlaylist = [[IBCurrentParametersManager sharedManager] playlist];
+
+   
+    NSDictionary *parameters = [[IBFileManager sharedManager] getPlaylistParams:currentPlaylist];
+    self.songs      = [parameters objectForKey:@"songs"];
+    
+    [self.tableView beginUpdates];
+    
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[self.songs count] - 1 inSection:0];
+    
+    self.currentPlaylist = currentPlaylist;
+    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath ] withRowAnimation:UITableViewRowAnimationBottom];
+    [self.tableView endUpdates];
+    
+}
 
 
 

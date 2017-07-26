@@ -73,6 +73,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+
+- (void)dealloc
+{
+    self.albums = nil;
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -101,10 +108,12 @@
     }
     
     IBMediaItem *album = [self.albums objectAtIndex:indexPath.row];
+    MPMediaItem *albumItem = (MPMediaItem*)[album mediaEntity];
     
-    NSString *albumTitle =       [album valueForProperty:MPMediaItemPropertyAlbumTitle];
-    NSString *albumArtistTitle = [album valueForProperty:MPMediaItemPropertyAlbumArtist];
-    MPMediaItemArtwork *albumImageItem = [album valueForProperty:MPMediaItemPropertyArtwork];
+    
+    NSString *albumTitle =       [albumItem valueForProperty:MPMediaItemPropertyAlbumTitle];
+    NSString *albumArtistTitle = [albumItem valueForProperty:MPMediaItemPropertyAlbumArtist];
+    MPMediaItemArtwork *albumImageItem = [albumItem valueForProperty:MPMediaItemPropertyArtwork];
     
     CGRect imageRect = cell.albumImage.bounds;
     CGSize sizeOfAlbumImageItem = CGSizeMake(CGRectGetWidth(imageRect), CGRectGetHeight(imageRect));
