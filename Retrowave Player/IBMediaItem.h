@@ -12,9 +12,10 @@
 
 
 typedef enum{
-    inPlaylist,
-    added,
-    default_state
+    inPlaylist_state,
+    added_state,
+    default_state,
+    delete_state
 }ItemState;
 
 

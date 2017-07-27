@@ -29,38 +29,7 @@
 
 
 
-- (void)viewWillAppear:(BOOL)animated{
-    
-    [super viewWillAppear:animated];
-    
-    
-    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
-        
-        self.navigationItem.rightBarButtonItem = [self createChooseSongsItem];
-        
-        [self.navigationController setNavigationBarHidden:NO];
-        [self.tableView setEditing:YES];
-        self.songs = [[IBFileManager sharedManager] checkMediaItems:self.songs];
-        
-        [self.tableView reloadData];
-        
-    }
-    
-    if ([self.navigationController.tabBarItem.title isEqualToString:@"Songs"] && [[IBCurrentParametersManager sharedManager] isEditing]) {
-        [self.navigationItem setLeftBarButtonItem:nil];
-        [self.navigationController setNavigationBarHidden:NO];
-        [self.navigationItem setHidesBackButton:YES animated:NO];
-       
-    }else if ([self.navigationController.tabBarItem.title isEqualToString:@"Songs"] && ![[IBCurrentParametersManager sharedManager] isEditing]){
-        
-        [self.navigationItem setLeftBarButtonItem:nil];
-        [self.navigationController setNavigationBarHidden:YES];
-        [self.navigationItem setHidesBackButton:YES animated:NO];
-        
-        
-    }
 
-}
 - (void)viewDidLoad
 {
     
@@ -72,17 +41,39 @@
     
     NSString *title = [titleAndSongsDictionary valueForKey:@"title"];
     NSArray *songs  = [titleAndSongsDictionary valueForKey:@"songs"];
-    self.songs = [NSArray arrayWithArray:songs];
+    
 
     
-   // NSArray *array = [[IBFileManager sharedManager] getPersistentIDFromSongs:songs];
+    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
+        
+        self.navigationItem.rightBarButtonItem = [self createChooseSongsItem];
+        
+        [self.navigationController setNavigationBarHidden:NO];
+        [self.tableView setEditing:YES];
+        self.songs = [[IBFileManager sharedManager] checkSongMediaItems:songs];
+        
+      
+        
+    }else{
+        self.songs = [NSArray arrayWithArray:songs];
+    }
     
-   // NSLog(@"%@",[[IBFileManager sharedManager] getPersistentIDFromSongs:songs]);
+
     
+    
+        if ([self.navigationController.tabBarItem.title isEqualToString:@"Songs"]){
+        
+        [self.navigationItem setLeftBarButtonItem:nil];
+        [self.navigationController setNavigationBarHidden:YES];
+        [self.navigationItem setHidesBackButton:YES animated:NO];
+        
+        
+        }else{
+
     UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
     [self.navigationItem setLeftBarButtonItem:backItem];
     self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Songs"];
-    
+        }
 }
 
 - (void)didReceiveMemoryWarning
@@ -163,13 +154,13 @@
         
         IBPlayerItem *addButton;
         
-        if (song.state == added) {
+        if (song.state == added_state) {
             
             addButton = [[IBPlayerItem alloc]initWithButtonStyle:choose];
             [addButton setIsSelected:YES];
             [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
             
-        }else if (song.state == inPlaylist){
+        }else if (song.state == inPlaylist_state){
             
             addButton = [[IBPlayerItem alloc]initWithButtonStyle:chooseInPlaylist];
             
@@ -184,7 +175,13 @@
         addButton = [[IBPlayerItem alloc]initWithButtonStyle:add];
             [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
        
+        }else if (song.state == delete_state){
+            
+            addButton = [[IBPlayerItem alloc]initWithButtonStyle:del];
+            [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+            
         }
+
         
         
         cell.editingAccessoryView = addButton;
@@ -260,27 +257,33 @@
       
         [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];
         [button setIsSelected:YES];
-        song.state = added;
+        song.state = added_state;
         [[IBCurrentParametersManager sharedManager].addedSongs addObject:song];
         
-    }else if (song.state == added){
+    }else if (song.state == added_state){
         
         [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
                [button setIsSelected:NO];
                [[IBCurrentParametersManager sharedManager].addedSongs removeObject:song];
                song.state = default_state;
 
-    }else if (song.state == inPlaylist){
+    }else if (song.state == inPlaylist_state){
        
-        [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+        [button setImage: [UIImage imageNamed:@"cancel-music(4).png"]forState:UIControlStateNormal];
         [button setIsSelected:NO];
         [[IBCurrentParametersManager sharedManager].removedSongs addObject:song];
-        song.state = default_state;
+        song.state = delete_state;
   
     NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
     
     
-}
+    }else if (song.state == delete_state){
+        
+        [button setImage: [UIImage imageNamed:@"cancel-music(4).png"]forState:UIControlStateNormal];
+        [button setIsSelected:NO];
+        [[IBCurrentParametersManager sharedManager].removedSongs removeObject:song];
+        song.state = default_state;
+    }
 
 }
 

@@ -19,8 +19,8 @@
 
 + (IBFileManager*) sharedManager;
 
-- (NSArray*) checkMediaItems:(NSArray*) itemsArray;
-
+- (NSArray*) checkSongMediaItems:(NSArray*) itemsArray;
+- (NSArray*) checkAlbumMediaItems:(NSArray*) albumsArray;
 
 - (NSDictionary*) getSongsAndTitleFor: (IBSongsViewType) type;//Songs, Title
 

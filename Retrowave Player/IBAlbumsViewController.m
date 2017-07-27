@@ -37,13 +37,6 @@
    [ self.tableView setEditing: [[IBCurrentParametersManager sharedManager] isEditing]];
     
     
-    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
-        
-       self.navigationItem.rightBarButtonItem =  [self createChooseSongsItem];
-        
-        self.tableView.allowsSelectionDuringEditing = YES;
-        
-    }
     
     
     [self.navigationItem setHidesBackButton:NO animated:NO];
@@ -55,7 +48,18 @@
     
     NSString *title = [titleAndAlbumsDictionary valueForKey:@"title"];
     NSArray  *albums  = [titleAndAlbumsDictionary valueForKey:@"albums"];
-    self.albums = [NSArray arrayWithArray:albums];
+   
+    
+    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
+        
+        self.navigationItem.rightBarButtonItem =  [self createChooseSongsItem];
+        
+        self.tableView.allowsSelectionDuringEditing = YES;
+        self.albums = [[IBFileManager sharedManager] checkAlbumMediaItems:albums];
+        
+    }else{
+         self.albums = [NSArray arrayWithArray:albums];
+    }
 
     
     UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
@@ -194,20 +198,44 @@
     NSArray *songs = [[IBFileManager sharedManager] getAllSongsOfAlbum:album];
     
     
-    if (button.isSelected == NO) {
+    
+    if (album.state == default_state) {
+        
         [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];
         [button setIsSelected:YES];
+        album.state = added_state;
+        
         [[IBCurrentParametersManager sharedManager].addedSongs addObjectsFromArray:songs];
-    }else{
+        
+    }else if (album.state == added_state){
+        
         [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
         [button setIsSelected:NO];
-        NSUInteger location = [[IBCurrentParametersManager sharedManager].addedSongs count] - [songs count] ;
         
+        NSUInteger location = [[IBCurrentParametersManager sharedManager].addedSongs count] - [songs count] ;
         [[IBCurrentParametersManager sharedManager].addedSongs removeObjectsInRange:NSMakeRange(location, [songs count])];
+        album.state = default_state;
+        
+    }else if (album.state == inPlaylist_state){
+        
+        [button setImage: [UIImage imageNamed:@"cancel-music(4).png"]forState:UIControlStateNormal];
+        [button setIsSelected:NO];
+       [[IBCurrentParametersManager sharedManager].addedSongs addObjectsFromArray:songs];
+        album.state = delete_state;
+        
+        NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+        
+        
+    }else if (album.state == delete_state){
+        
+        [button setImage: [UIImage imageNamed:@"cancel-music(4).png"]forState:UIControlStateNormal];
+        [button setIsSelected:NO];
+        NSUInteger location = [[IBCurrentParametersManager sharedManager].addedSongs count] - [songs count] ;
+        [[IBCurrentParametersManager sharedManager].addedSongs removeObjectsInRange:NSMakeRange(location, [songs count])];
+        album.state = default_state;
     }
+
     
-    
-    NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
     
     
 }

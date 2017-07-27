@@ -59,7 +59,7 @@
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
        self.navigationItem.rightBarButtonItem =  [self createChooseSongsItem];
-       self.songs = [[IBFileManager sharedManager] checkMediaItems:self.songs];
+       self.songs = [[IBFileManager sharedManager] checkSongMediaItems:self.songs];
       [self.tableView reloadData];
     }else{
         
@@ -170,13 +170,13 @@
         
         IBPlayerItem *addButton;
         
-        if (song.state == added) {
+        if (song.state == added_state) {
             
             addButton = [[IBPlayerItem alloc]initWithButtonStyle:choose];
             [addButton setIsSelected:YES];
             [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
             
-        }else if (song.state == inPlaylist){
+        }else if (song.state == inPlaylist_state){
             
             addButton = [[IBPlayerItem alloc]initWithButtonStyle:chooseInPlaylist];
             
@@ -262,17 +262,17 @@
         
         [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];
         [button setIsSelected:YES];
-        song.state = added;
+        song.state = added_state;
         [[IBCurrentParametersManager sharedManager].addedSongs addObject:song];
         
-    }else if (song.state == added){
+    }else if (song.state == added_state){
         
         [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
         [button setIsSelected:NO];
         [[IBCurrentParametersManager sharedManager].addedSongs removeObject:song];
         song.state = default_state;
         
-    }else if (song.state == inPlaylist){
+    }else if (song.state == inPlaylist_state){
         
         [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
         [button setIsSelected:NO];
@@ -294,14 +294,11 @@
     NSDictionary *parameters = [[IBFileManager sharedManager] getPlaylistParams:currentPlaylist];
     self.songs      = [parameters objectForKey:@"songs"];
     
-    [self.tableView beginUpdates];
+
+     self.currentPlaylist = currentPlaylist;
+    [self.tableView reloadData];
     
-    
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[self.songs count] - 1 inSection:0];
-    
-    self.currentPlaylist = currentPlaylist;
-    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath ] withRowAnimation:UITableViewRowAnimationBottom];
-    [self.tableView endUpdates];
+   
     
 }
 
@@ -316,7 +313,6 @@
     
     UINavigationController *nav = [self.storyboard instantiateViewControllerWithIdentifier:@"IBAllMediaNavigationViewController"];
     
-        
         [self.navigationController presentViewController:nav animated:YES completion:nil];
      
 }

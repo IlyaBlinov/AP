@@ -184,7 +184,7 @@
         
         NSAttributedString *playlistTitle = [[NSAttributedString alloc] initWithString:playlistName];
         
-        NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%lu",[playlist.songItems count]]];
+        NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%u",[playlist.songItems count]]];
         
         
         cell.playlistTitle.attributedText    = playlistTitle;
