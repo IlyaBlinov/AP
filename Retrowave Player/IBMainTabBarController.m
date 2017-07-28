@@ -32,7 +32,7 @@
     
     [super loadView];
     
-    [IBCurrentParametersManager sharedManager].songsViewType = allSongs;
+    [IBCurrentParametersManager sharedManager].songsViewType = allSongs_type;
     
     [self.tabBar layoutSubviews];
     
@@ -144,9 +144,9 @@
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item{
     
   if([item.title isEqualToString:@"Playlists"]){
-      [IBCurrentParametersManager sharedManager].songsViewType = playlist;
+      [IBCurrentParametersManager sharedManager].songsViewType = playlist_type;
     }else if([item.title isEqualToString:@"Songs"] | [item.title isEqualToString:@"Books"]){
-      [IBCurrentParametersManager sharedManager].songsViewType = allSongs;
+      [IBCurrentParametersManager sharedManager].songsViewType = allSongs_type;
     }else if ([item.title isEqualToString:@"  All Media"] && [[IBCurrentParametersManager sharedManager]isEditing]){
        
         

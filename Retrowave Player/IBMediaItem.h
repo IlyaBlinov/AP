@@ -19,12 +19,21 @@ typedef enum{
 }ItemState;
 
 
+typedef enum{
+    song,
+    album,
+    artist,
+    playlist
+}ItemType;
+
+
+
 @interface IBMediaItem : NSObject
 
 
 @property (assign, nonatomic) ItemState state;
 @property (strong, nonatomic) MPMediaEntity *mediaEntity;
-
+@property (assign, nonatomic) ItemType type;
 
 
 

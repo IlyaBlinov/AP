@@ -176,7 +176,7 @@
     
     IBMediaItem *currentPlaylist = [self.playlists objectAtIndex:indexPath.row];
     
-    [IBCurrentParametersManager sharedManager].songsViewType = playlist;
+    [IBCurrentParametersManager sharedManager].songsViewType = playlist_type;
     
     NSString *identifier = @"IBSongsAddViewController";
     

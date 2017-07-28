@@ -13,10 +13,10 @@
 
 @class IBMediaItem, IBSongsAddViewController,MPMediaPlaylist, IBContentViewController;
 typedef enum {
-    artist,
-    album,
-    playlist,
-    allSongs
+    artist_type,
+    album_type,
+    playlist_type,
+    allSongs_type
 }IBSongsViewType;
 
 @interface IBCurrentParametersManager : NSObject

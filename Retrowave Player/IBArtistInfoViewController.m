@@ -142,7 +142,7 @@
     
     if ([cell.textLabel.text isEqualToString:@"Songs"]) {
         
-        [IBCurrentParametersManager sharedManager].songsViewType = artist;
+        [IBCurrentParametersManager sharedManager].songsViewType = artist_type;
         
         NSString *identifier = @"IBSongsViewController";
         IBSongsViewController *vcSongs = [self.storyboard instantiateViewControllerWithIdentifier:identifier];

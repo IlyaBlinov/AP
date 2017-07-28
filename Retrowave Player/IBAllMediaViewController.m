@@ -44,7 +44,7 @@
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     
     
-    if (([IBCurrentParametersManager sharedManager].songsViewType == playlist) && [[IBCurrentParametersManager sharedManager] isEditing]) {
+    if (([IBCurrentParametersManager sharedManager].songsViewType == playlist_type) && [[IBCurrentParametersManager sharedManager] isEditing]) {
        
       self.navigationItem.rightBarButtonItem = [self createChooseSongsItem];
         
@@ -211,26 +211,26 @@
     
     if ([cell.categoryName.text isEqualToString:@"Songs"] | [cell.categoryName.text isEqualToString:@"Audio Books"]) {
         
-        [IBCurrentParametersManager sharedManager].songsViewType = allSongs;
+        [IBCurrentParametersManager sharedManager].songsViewType = allSongs_type;
         IBSongsViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBSongsViewController"];
         [self.navigationController pushViewController:vc animated:YES];
         
     }else if ([cell.categoryName.text isEqualToString:@"ITunes Playlists"]) {
-        [IBCurrentParametersManager sharedManager].songsViewType = playlist;
+        [IBCurrentParametersManager sharedManager].songsViewType = playlist_type;
         IBPlaylistlistViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBPlaylistlistViewController"];
         [self.navigationController pushViewController:vc animated:YES];
     }else if ([cell.categoryName.text isEqualToString:@"Artists"]) {
-        [IBCurrentParametersManager sharedManager].songsViewType = artist;
+        [IBCurrentParametersManager sharedManager].songsViewType = artist_type;
         IBArtistsViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBArtistsViewController"];
         [self.navigationController pushViewController:vc animated:YES];
 
     }else if ([cell.categoryName.text isEqualToString:@"Albums"]) {
-        [IBCurrentParametersManager sharedManager].songsViewType = album;
+        [IBCurrentParametersManager sharedManager].songsViewType = album_type;
         IBAlbumsViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBAlbumsViewController"];
         [self.navigationController pushViewController:vc animated:YES];
         
     }else if ([cell.categoryName.text isEqualToString:@"Playlists"]) {
-        [IBCurrentParametersManager sharedManager].songsViewType = playlist;
+        [IBCurrentParametersManager sharedManager].songsViewType = playlist_type;
         IBPlaylistlistViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBPlaylistsFromCoreDataViewController"];
         [self.navigationController pushViewController:vc animated:YES];
 

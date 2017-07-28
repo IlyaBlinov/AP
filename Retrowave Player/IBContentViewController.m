@@ -78,7 +78,7 @@
 
 - (void)chooseSongs{
     
-    [IBCurrentParametersManager sharedManager].songsViewType = playlist;
+    [IBCurrentParametersManager sharedManager].songsViewType = playlist_type;
     
     
     NSArray *addedMediaItems = [NSArray arrayWithArray:[[IBCurrentParametersManager sharedManager] addedSongs]];
@@ -141,13 +141,13 @@
         
         if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-            [[IBCurrentParametersManager sharedManager] setSongsViewType:playlist];
+            [[IBCurrentParametersManager sharedManager] setSongsViewType:playlist_type];
             IBMediaItem *changingPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
             [[IBCurrentParametersManager sharedManager] setPlaylist:changingPlaylist];
             
         }else{
         
-            [[IBCurrentParametersManager sharedManager] setSongsViewType:allSongs];
+            [[IBCurrentParametersManager sharedManager] setSongsViewType:allSongs_type];
         }
         
     }

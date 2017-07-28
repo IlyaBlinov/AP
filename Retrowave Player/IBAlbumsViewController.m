@@ -167,7 +167,7 @@
     
     IBMediaItem *currentAlbum = [self.albums objectAtIndex:indexPath.row];
     
-    [IBCurrentParametersManager sharedManager].songsViewType = album;
+    [IBCurrentParametersManager sharedManager].songsViewType = album_type;
     [[IBCurrentParametersManager sharedManager] setAlbum:currentAlbum];
     
     NSString *identifier = @"IBSongsViewController";
@@ -234,9 +234,6 @@
         [[IBCurrentParametersManager sharedManager].addedSongs removeObjectsInRange:NSMakeRange(location, [songs count])];
         album.state = default_state;
     }
-
-    
-    
     
 }
 

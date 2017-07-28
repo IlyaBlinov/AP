@@ -37,14 +37,14 @@
     NSString *title;
     NSArray *songs;
     
-    if (type == allSongs ) {
+    if (type == allSongs_type ) {
         title = @"All Media";
         
         MPMediaQuery *songsQuery = [MPMediaQuery songsQuery];
         songs = [songsQuery items];
         
         
-    }else if (type == album){
+    }else if (type == album_type){
         IBMediaItem     *currentAlbum    = [[IBCurrentParametersManager sharedManager] album];
         MPMediaItem *albumItem = (MPMediaItem*)currentAlbum.mediaEntity;
         title = [albumItem valueForProperty:MPMediaItemPropertyAlbumTitle];
@@ -60,7 +60,7 @@
         songs = [songsOfAlbum items];
         
         
-    }else if (type == artist){
+    }else if (type == artist_type){
         IBMediaItem     *currentArtist   = [[IBCurrentParametersManager sharedManager] artist];
         MPMediaItem *artistItem = (MPMediaItem*)currentArtist.mediaEntity;
         NSString *artistName = [artistItem valueForProperty:MPMediaItemPropertyArtist];
@@ -77,7 +77,7 @@
         songs = [songsOfArtist items];
         
         
-    }else if (type == playlist){
+    }else if (type == playlist_type){
         IBMediaItem *currentPlaylist = [[IBCurrentParametersManager sharedManager] playlist];
         MPMediaPlaylist *playlistItem = (MPMediaPlaylist*)currentPlaylist.mediaEntity;
         
@@ -87,8 +87,9 @@
     
     
     
-    NSArray *newSongsArray = [self convertToIBMediaItemsMPMediaItems:songs];
+    NSMutableArray *newSongsArray =[NSMutableArray arrayWithArray: [self convertToIBMediaItemsMPMediaItems:songs]];
     
+    [newSongsArray setValue: songforKey:<#(nonnull NSString *)#>: forKey:@"type"];
     NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:newSongsArray, @"songs",title, @"title", nil];
     
     return parameters;
@@ -104,7 +105,7 @@
     NSString *title;
     NSArray *albums;
     
-    if (type == artist) {
+    if (type == artist_type) {
         
         IBMediaItem *artist = [[IBCurrentParametersManager sharedManager] artist];
         MPMediaItem *artistItem = (MPMediaItem*)artist.mediaEntity;
