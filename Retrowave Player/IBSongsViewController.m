@@ -40,7 +40,7 @@
     NSDictionary *titleAndSongsDictionary = [[IBFileManager sharedManager] getSongsAndTitleFor:songsType];
     
     NSString *title = [titleAndSongsDictionary valueForKey:@"title"];
-    NSArray *songs  = [titleAndSongsDictionary valueForKey:@"songs"];
+    NSArray  *songs  = [titleAndSongsDictionary valueForKey:@"songs"];
     
 
     
@@ -57,9 +57,6 @@
     }else{
         self.songs = [NSArray arrayWithArray:songs];
     }
-    
-
-    
     
         if ([self.navigationController.tabBarItem.title isEqualToString:@"Songs"]){
         

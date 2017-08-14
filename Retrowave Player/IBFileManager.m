@@ -82,14 +82,16 @@
         MPMediaPlaylist *playlistItem = (MPMediaPlaylist*)currentPlaylist.mediaEntity;
         
         title =  [playlistItem valueForProperty:MPMediaPlaylistPropertyName];
-        songs = [playlistItem items];
+        songs =  [playlistItem items];
     }
     
     
     
-    NSMutableArray *newSongsArray =[NSMutableArray arrayWithArray: [self convertToIBMediaItemsMPMediaItems:songs]];
+    NSMutableArray *newSongsArray = [NSMutableArray arrayWithArray: [self convertToIBMediaItemsMPMediaItems:songs withItemType:song byItemState:default_state]];
     
-    [newSongsArray setValue: songforKey:<#(nonnull NSString *)#>: forKey:@"type"];
+    
+    [newSongsArray setValue:@0 forKey:@"type"];
+    
     NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:newSongsArray, @"songs",title, @"title", nil];
     
     return parameters;
@@ -127,7 +129,7 @@
    albums = [NSArray arrayWithArray:[self sortingItems:albums ByProperty:MPMediaItemPropertyAlbumTitle]];
     
     
-    NSArray *newAlbumsArray = [self convertToIBMediaItemsMPMediaItems:albums];
+    NSArray *newAlbumsArray = [self convertToIBMediaItemsMPMediaItems:albums withItemType:album byItemState:default_state];
     
     NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:newAlbumsArray, @"albums",title, @"title", nil];
     
@@ -184,7 +186,7 @@
     [songsOfAlbumQuery addFilterPredicate:albumNamePredicate];
     
    
-    NSArray *songsOfAlbumArray = [self convertToIBMediaItemsMPMediaItems:[songsOfAlbumQuery items]];
+    NSArray *songsOfAlbumArray = [self convertToIBMediaItemsMPMediaItems:[songsOfAlbumQuery items] withItemType:song byItemState:album.state];
     
     return  songsOfAlbumArray;
     
@@ -240,7 +242,7 @@
     playlists = [NSArray arrayWithArray:playliststTempArray];
     }
     
-    NSArray *playlistsItemsArray = [self convertToIBMediaItemsMPMediaItems:playlists];
+    NSArray *playlistsItemsArray = [self convertToIBMediaItemsMPMediaItems:playlists withItemType:song byItemState:default_state];
     
     return playlistsItemsArray;
 
@@ -255,7 +257,7 @@
     NSString  *title = [playlistItem valueForProperty:MPMediaPlaylistPropertyName];
     
     
-    NSArray *newSongsArray = [self convertToIBMediaItemsMPMediaItems:songs];
+    NSArray *newSongsArray = [self convertToIBMediaItemsMPMediaItems:songs withItemType:song byItemState:inPlaylist_state];
     
     NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:newSongsArray, @"songs",title, @"title", nil];
     
@@ -274,7 +276,7 @@
     
     NSArray *sortedArtists = [self sortingItems:artistsArray ByProperty:MPMediaItemPropertyArtist] ;
     
-    return [self convertToIBMediaItemsMPMediaItems:sortedArtists];
+    return [self convertToIBMediaItemsMPMediaItems:sortedArtists withItemType:artist byItemState:default_state];
 }
 
 
@@ -338,7 +340,7 @@
     MPMediaQuery *songsOfArtistQuery = [[MPMediaQuery alloc] init];
     [songsOfArtistQuery addFilterPredicate:artistNamePredicate];
     
-    NSArray *songsOfArtist = [self convertToIBMediaItemsMPMediaItems:[songsOfArtistQuery items]];
+    NSArray *songsOfArtist = [self convertToIBMediaItemsMPMediaItems:[songsOfArtistQuery items] withItemType:song byItemState:artist.state];
     
     return songsOfArtist;
 }
@@ -380,7 +382,7 @@
     }
     
     
-    NSArray *songsFromAllAlbums = [self convertToIBMediaItemsMPMediaItems:tempSongsArray];
+    NSArray *songsFromAllAlbums = [self convertToIBMediaItemsMPMediaItems:tempSongsArray withItemType:song byItemState:artist.state];
     
     return  songsFromAllAlbums;
 
@@ -634,7 +636,7 @@
 
 #pragma mark - sortingItems
 
-- (NSArray*) convertToIBMediaItemsMPMediaItems:(NSArray*) mediaItemsArray{
+- (NSArray*) convertToIBMediaItemsMPMediaItems:(NSArray*) mediaItemsArray withItemType:(ItemType)type byItemState:(ItemState) state{
     
     
     NSMutableArray *itemsSongsArray = [NSMutableArray array];
@@ -642,6 +644,8 @@
     for (MPMediaItem *item in mediaItemsArray) {
         IBMediaItem *newItem = [[IBMediaItem alloc] init];
         newItem.mediaEntity = item;
+        newItem.type = type;
+        newItem.state = state;
         [itemsSongsArray addObject:newItem];
     }
     
