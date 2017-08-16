@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		23027B721F42E0B800259CE7 /* IBParentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 23027B711F42E0B800259CE7 /* IBParentCell.m */; };
 		230B68A11F06848700476F44 /* IBFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B68A01F06848700476F44 /* IBFileManager.m */; };
 		230B68A61F0D12CA00476F44 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 230B68A51F0D12CA00476F44 /* CoreData.framework */; };
 		230B69261F0E444400476F44 /* IBCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B69251F0E444400476F44 /* IBCoreDataManager.m */; };
@@ -281,6 +282,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		23027B701F42E0B800259CE7 /* IBParentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBParentCell.h; sourceTree = "<group>"; };
+		23027B711F42E0B800259CE7 /* IBParentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBParentCell.m; sourceTree = "<group>"; };
 		230B689F1F06848700476F44 /* IBFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBFileManager.h; sourceTree = "<group>"; };
 		230B68A01F06848700476F44 /* IBFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBFileManager.m; sourceTree = "<group>"; };
 		230B68A51F0D12CA00476F44 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -1160,6 +1163,8 @@
 		6F004D5F1EACD1A2007755C3 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				23027B701F42E0B800259CE7 /* IBParentCell.h */,
+				23027B711F42E0B800259CE7 /* IBParentCell.m */,
 				6FD252DF1EB261A900EB3721 /* IBAllMediaCell.h */,
 				6FD252E01EB261A900EB3721 /* IBAllMediaCell.m */,
 				6FCDBDCC1EB4A30E00B326D7 /* IBPlaylistCell.h */,
@@ -1633,6 +1638,7 @@
 				6F004C8E1EACCEFC007755C3 /* IBMainTitle.m in Sources */,
 				239AD19A1F20C6E20095F577 /* IBParentItem+CoreDataProperties.m in Sources */,
 				6F004C941EACCEFC007755C3 /* IBTabBarPlayerItem.m in Sources */,
+				23027B721F42E0B800259CE7 /* IBParentCell.m in Sources */,
 				6F004C871EACCEFC007755C3 /* IBContentViewController.m in Sources */,
 				6F004C7B1EACCEFC007755C3 /* IBAlbumViewCell.m in Sources */,
 				239AD1A11F20C6E20095F577 /* IBArtistItem+CoreDataClass.m in Sources */,

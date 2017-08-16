@@ -276,14 +276,15 @@
       
         
         [[MPMediaLibrary defaultMediaLibrary] getPlaylistWithUUID:[NSUUID UUID]
-    creationMetadata:[[MPMediaPlaylistCreationMetadata alloc] initWithName:newPlaylistName ]completionHandler:^(MPMediaPlaylist * _Nullable playlist, NSError * _Nullable error) {
-        [tempPlaylistArray addObject:playlist];
+    creationMetadata:[[MPMediaPlaylistCreationMetadata alloc] initWithName:newPlaylistName ]completionHandler:^(MPMediaPlaylist * _Nullable playlistMediaItem, NSError * _Nullable error) {
+        IBMediaItem *newPlaylist = [[IBMediaItem alloc]init];
+        newPlaylist.mediaEntity = playlistMediaItem;
+        [newPlaylist setType:playlist];
+        [tempPlaylistArray addObject:newPlaylist];
         
         weakSelf.playlists = tempPlaylistArray;
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-             [weakSelf.tableView reloadData];
-        });
+       [weakSelf.tableView reloadData];
+    
        
     }];
         

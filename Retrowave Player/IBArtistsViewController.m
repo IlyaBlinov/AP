@@ -34,11 +34,14 @@
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
         self.navigationItem.rightBarButtonItem = [self createChooseSongsItem];
-        
         self.tableView.allowsSelectionDuringEditing = YES;
         
+        NSArray *artistsArray = [[IBFileManager sharedManager] getArtists];
+        self.artists = [[IBFileManager sharedManager]checkArtistsMediaItems:artistsArray];
+        
+    }else{
+    self.artists = [[IBFileManager sharedManager] getArtists] ;
     }
-    
     
     [self.navigationItem setHidesBackButton:NO animated:NO];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
@@ -52,9 +55,6 @@
     
     self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Artists"];
     
-    
-    self.artists = [[IBFileManager sharedManager] getArtists] ;
-
 }
 
 - (void)didReceiveMemoryWarning
@@ -90,7 +90,7 @@
     }
     
     IBMediaItem *artist = [self.artists objectAtIndex:indexPath.row];
-     //MPMediaItem *artistItem = (MPMediaItem*)[artist mediaEntity];
+     
     
     NSDictionary       *artistParameters = [[IBFileManager sharedManager] getArtistParams:artist];
     
@@ -105,7 +105,7 @@
     NSAttributedString *artistName = [artistParameters objectForKey:@"artistName"];
     
     NSAttributedString *artistCount = [[NSAttributedString alloc] initWithString:
-                                                [NSString stringWithFormat:@"%ld", indexPath.row + 1]];
+                                                [NSString stringWithFormat:@"%d", indexPath.row + 1]];
     
     cell.artistName.attributedText = artistName;
     cell.artistSongParameter.attributedText = artistParameterSongs;
@@ -113,17 +113,10 @@
     cell.artistCount.attributedText = artistCount;
     
   
-    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
-        
-        IBPlayerItem *addButton = [[IBPlayerItem alloc]initWithButtonStyle:add];
-        [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
-        
-        cell.editingAccessoryView = addButton;
-        
-    }else{
-        
-        cell.editingAccessoryView = nil;
-    }
+    IBPlayerItem  *addButton = [[IBPlayerItem alloc]initWithItemState:artist.state];
+    [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [cell setEditingView:addButton];
 
     
     

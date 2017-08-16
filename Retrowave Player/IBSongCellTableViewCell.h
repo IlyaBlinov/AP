@@ -12,7 +12,8 @@
 #import "IBDetailedTitle.h"
 #import "IBTimeDurationTitle.h"
 #import "IBSongCount.h"
-@interface IBSongCellTableViewCell : UITableViewCell
+#import "IBParentCell.h"
+@interface IBSongCellTableViewCell : IBParentCell
 
 @property (strong, nonatomic) IBOutlet IBMainTitle *songTitle;
 @property (strong, nonatomic) IBOutlet IBDetailedTitle *artistTitle;

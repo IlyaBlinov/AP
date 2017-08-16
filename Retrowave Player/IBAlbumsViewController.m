@@ -141,19 +141,14 @@
     cell.albumImage.image            = albumImage;
     cell.albumTitle.attributedText   = albumName;
     cell.artistTitle.attributedText  = artistName;
+
     
-    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
-        
-        IBPlayerItem *addButton = [[IBPlayerItem alloc]initWithButtonStyle:add];
-        [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
-        
-        cell.editingAccessoryView = addButton;
-        
-    }else{
-        
-        cell.editingAccessoryView = nil;
-    }
+    IBPlayerItem  *addButton = [[IBPlayerItem alloc]initWithItemState:album.state];
+    [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
     
+    [cell setEditingView:addButton];
+
+
     return cell;
     
 }
@@ -216,7 +211,7 @@
         [[IBCurrentParametersManager sharedManager].addedSongs removeObjectsInRange:NSMakeRange(location, [songs count])];
         album.state = default_state;
         
-    }else if (album.state == inPlaylist_state){
+    }else if ( (album.state == inPlaylist_state) && ([[IBCurrentParametersManager sharedManager]coreDataChangingPlaylist])){
         
         [button setImage: [UIImage imageNamed:@"cancel-music(4).png"]forState:UIControlStateNormal];
         [button setIsSelected:NO];

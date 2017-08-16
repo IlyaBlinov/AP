@@ -11,8 +11,8 @@
 #import "IBDetailedTitle.h"
 #import "IBTimeDurationTitle.h"
 #import "IBSongCount.h"
-
-@interface IBAlbumViewCell : UITableViewCell
+#import "IBParentCell.h"
+@interface IBAlbumViewCell : IBParentCell
 
 
 

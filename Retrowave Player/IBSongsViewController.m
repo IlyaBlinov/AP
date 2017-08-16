@@ -138,7 +138,7 @@
     NSAttributedString *songName     = [[NSAttributedString alloc] initWithString:songTitle];
     NSAttributedString *artistName   = [[NSAttributedString alloc] initWithString:artistTitle];
     NSAttributedString *timeDuration = [[NSAttributedString alloc] initWithString:songDurationTitle];
-    NSAttributedString *songCount    = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", indexPath.row + 1]];
+    NSAttributedString *songCount    = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%ld", indexPath.row + 1]];
     
     
     cell.songTitle.attributedText    = songName;
@@ -146,53 +146,12 @@
     cell.timeDuration.attributedText = timeDuration;
     cell.songCount.attributedText    = songCount;
         
-        
-    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
-        
-        IBPlayerItem *addButton;
-        
-        if (song.state == added_state) {
-            
-            addButton = [[IBPlayerItem alloc]initWithButtonStyle:choose];
-            [addButton setIsSelected:YES];
-            [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
-            
-        }else if (song.state == inPlaylist_state){
-            
-            addButton = [[IBPlayerItem alloc]initWithButtonStyle:chooseInPlaylist];
-            
-            if ([[IBCurrentParametersManager sharedManager] coreDataChangingPlaylist]) {
-                [addButton setIsSelected:YES];
-                [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
-            }
-            
-            
-        }else if (song.state == default_state){
-        
-        addButton = [[IBPlayerItem alloc]initWithButtonStyle:add];
-            [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
-       
-        }else if (song.state == delete_state){
-            
-            addButton = [[IBPlayerItem alloc]initWithButtonStyle:del];
-            [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
-            
-        }
+      IBPlayerItem  *addButton = [[IBPlayerItem alloc]initWithItemState:song.state];
+       [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
 
+        [cell setEditingView:addButton];
         
-        
-        cell.editingAccessoryView = addButton;
-            
-    }else{
-            
-            cell.editingAccessoryView = nil;
-        }
-    
-
     }
-    
-    
-    
     return cell;
 
 }
@@ -241,9 +200,7 @@
 
 #pragma mark - Actions
 
-
 - (void) addToPlaylistAction:(IBPlayerItem*) button{
-    
     
     CGPoint point = [button convertPoint:CGPointZero toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
@@ -264,7 +221,7 @@
                [[IBCurrentParametersManager sharedManager].addedSongs removeObject:song];
                song.state = default_state;
 
-    }else if (song.state == inPlaylist_state){
+    }else if ( (song.state == inPlaylist_state) && ([[IBCurrentParametersManager sharedManager] coreDataChangingPlaylist])){
        
         [button setImage: [UIImage imageNamed:@"cancel-music(4).png"]forState:UIControlStateNormal];
         [button setIsSelected:NO];

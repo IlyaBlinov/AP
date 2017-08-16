@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "IBMediaItem.h"
 
 typedef enum{
     choose,
@@ -27,7 +28,6 @@ typedef enum{
 
 
 - (instancetype)initWithButtonStyle:(ButtonStyle) style;
-
-
+- (instancetype)initWithItemState:(ItemState) state;
 
 @end

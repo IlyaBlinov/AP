@@ -7,7 +7,7 @@
 //
 
 #import "IBPlayerItem.h"
-
+#import "IBCurrentParametersManager.h"
 @implementation IBPlayerItem
 
 
@@ -51,6 +51,51 @@
     }
     return self;
 }
+
+
+
+
+- (instancetype)initWithItemState:(ItemState) state
+{
+    self = [super initWithFrame:CGRectMake(0,0, 20, 20)];
+    if (self) {
+        
+        NSString *imageName;
+        
+        switch (state) {
+            case default_state:
+                imageName = @"add 64 x 64.png";
+                break;
+                
+                
+            case added_state:
+                imageName = @"Added.png";
+                break;
+                
+            case inPlaylist_state:
+                imageName = @"inPlaylist.png";
+                break;
+                
+            case delete_state:
+                imageName = @"cancel-music(4).png";
+                break;
+                
+                
+            default:
+                imageName = @"skip-track.png";
+                break;
+        }
+        
+        
+        [self setImage: [UIImage imageNamed:imageName]forState:UIControlStateNormal];
+        
+    }
+    return self;
+}
+
+
+
+
 
 
 

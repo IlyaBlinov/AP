@@ -21,6 +21,7 @@
 
 - (NSArray*) checkSongMediaItems:(NSArray*) itemsArray;
 - (NSArray*) checkAlbumMediaItems:(NSArray*) albumsArray;
+- (NSArray*) checkArtistsMediaItems:(NSArray*) artistsArray;
 
 - (NSDictionary*) getSongsAndTitleFor: (IBSongsViewType) type;//Songs, Title
 

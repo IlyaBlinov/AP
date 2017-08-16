@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface IBAllMediaCell : UITableViewCell
+#import "IBParentCell.h"
+@interface IBAllMediaCell : IBParentCell
 
 
 @property (strong, nonatomic) IBOutlet UIImageView *categoryImage;

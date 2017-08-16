@@ -694,13 +694,11 @@
     NSArray *persistentIDsArrayOfChangingPlaylist = [self getPersistentIDsArrayFromChangingPlaylist];
     
     NSArray *addedMediItemsArray = [[IBCurrentParametersManager sharedManager]addedSongs];
-//    NSArray *addedMediaItems = [addedMediItemsArray valueForKeyPath:@"@unionOfObjects.mediaEntity"];
     NSArray *persistentIDAddedItemsArray = [addedMediItemsArray valueForKeyPath:@"@unionOfObjects.mediaEntity.persistentID"];
     
     
     NSArray *removedMediItemsArray = [[IBCurrentParametersManager sharedManager]removedSongs];
-    NSArray *removedMediaItems = [removedMediItemsArray valueForKeyPath:@"@unionOfObjects.mediaEntity"];
-    NSArray *persistentIDRemovedItemsArray = [removedMediaItems valueForKeyPath:@"@unionOfObjects.persistentID"];
+    NSArray *persistentIDRemovedItemsArray = [removedMediItemsArray valueForKeyPath:@"@unionOfObjects.mediaEntity.persistentID"];
     
     
     
@@ -743,15 +741,12 @@
     NSArray *persistentIDsArrayOfChangingPlaylist = [self getPersistentIDsArrayFromChangingPlaylist];
     
     
-    
     NSArray *addedMediItemsArray = [[IBCurrentParametersManager sharedManager]addedSongs];
-    NSArray *addedMediaItems = [addedMediItemsArray valueForKeyPath:@"@unionOfObjects.mediaEntity"];
-    NSArray *persistentIDAddedItemsArray = [addedMediaItems valueForKeyPath:@"@unionOfObjects.persistentID"];
+    NSArray *persistentIDAddedItemsArray = [addedMediItemsArray valueForKeyPath:@"@unionOfObjects.mediaEntity.persistentID"];
     
     
     NSArray *removedMediItemsArray = [[IBCurrentParametersManager sharedManager]removedSongs];
-    NSArray *removedMediaItems = [removedMediItemsArray valueForKeyPath:@"@unionOfObjects.mediaEntity"];
-    NSArray *persistentIDRemovedItemsArray = [removedMediaItems valueForKeyPath:@"@unionOfObjects.persistentID"];
+    NSArray *persistentIDRemovedItemsArray = [removedMediItemsArray valueForKeyPath:@"@unionOfObjects.mediaEntity.persistentID"];
     
     
     
@@ -759,8 +754,9 @@
         
         album.state = default_state;
         
-        NSArray *allSongsOfAlbum = [[IBFileManager sharedManager] getAllSongsOfAlbum:album];
+        NSArray *allSongsOfAlbum = [self getAllSongsOfAlbum:album];
         NSArray *songsOfAlbumPersistentIDs = [allSongsOfAlbum valueForKeyPath:@"@unionOfObjects.mediaEntity.persistentID"];
+    
         
         if ([songsOfAlbumPersistentIDs count] > 0) {
             
@@ -793,6 +789,64 @@
 
 
 
+
+- (NSArray*) checkArtistsMediaItems:(NSArray*) artistsArray{
+    
+    NSArray *persistentIDsArrayOfChangingPlaylist = [self getPersistentIDsArrayFromChangingPlaylist];
+    
+    
+    NSArray *addedMediItemsArray = [[IBCurrentParametersManager sharedManager]addedSongs];
+    NSArray *persistentIDAddedItemsArray = [addedMediItemsArray valueForKeyPath:@"@unionOfObjects.mediaEntity.persistentID"];
+    
+    
+    NSArray *removedMediItemsArray = [[IBCurrentParametersManager sharedManager]removedSongs];
+    NSArray *persistentIDRemovedItemsArray = [removedMediItemsArray valueForKeyPath:@"@unionOfObjects.mediaEntity.persistentID"];
+    
+    
+    
+    for (IBMediaItem *artist in artistsArray) {
+        
+        artist.state = default_state;
+        
+        NSArray *allSongsOfArtist = [self getAllSongsOfArtist:artist];
+        NSArray *songsOfArtistsPersistentIDs = [allSongsOfArtist valueForKeyPath:@"@unionOfObjects.mediaEntity.persistentID"];
+        
+        
+        if ([songsOfArtistsPersistentIDs count] > 0) {
+            
+            if ([persistentIDsArrayOfChangingPlaylist count] > 0) {
+                
+                if ([self objects:persistentIDsArrayOfChangingPlaylist contains:songsOfArtistsPersistentIDs]) {
+                    artist.state = inPlaylist_state;
+                }
+                
+            }
+            
+            if ([addedMediItemsArray count] > 0) {
+                if ([self objects:persistentIDAddedItemsArray contains:songsOfArtistsPersistentIDs]) {
+                    artist.state = added_state;
+                }
+            }
+            
+            
+            if ([removedMediItemsArray count] > 0) {
+                if ([self objects:persistentIDRemovedItemsArray contains:songsOfArtistsPersistentIDs]) {
+                    artist.state = delete_state;
+                }
+            }
+            
+        }
+    }
+    
+    return  artistsArray;
+    
+}
+
+
+
+
+
+
 - (NSArray*) getPersistentIDsArrayFromChangingPlaylist{
     
     
@@ -817,7 +871,7 @@
 
 
 
-- (BOOL) objects:(NSArray*) newObjectsArray contains:(NSArray*) oldObjectsArray{
+- (BOOL) objects:(NSArray*) oldObjectsArray contains:(NSArray*) newObjectsArray{
     
     BOOL isContain = YES;
     
@@ -828,8 +882,7 @@
             break;
         }
 }
-    
-    
+
     return isContain;
 }
 
