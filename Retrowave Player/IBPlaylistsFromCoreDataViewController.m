@@ -319,7 +319,7 @@
         IBPlaylist *newPlaylist = [NSEntityDescription insertNewObjectForEntityForName:@"IBPlaylist" inManagedObjectContext:managedObjectContext];
         newPlaylist.playlistName = newPlaylistName;
         
-        NSArray *playlistsPersistentIDs = [playlistsArray valueForKeyPath:@"@distinctUnionOfObjects.persistentID"];
+        NSArray *playlistsPersistentIDs = [playlistsArray valueForKeyPath:@"@unionOfObjects.persistentID"];
       
         uint64_t persistentID = arc4random() % 500000000 + 10000000;
         while ([playlistsPersistentIDs containsObject:[NSNumber numberWithUnsignedLongLong:persistentID]]) {

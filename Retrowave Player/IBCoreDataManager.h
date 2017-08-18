@@ -23,7 +23,7 @@
 
 
 
-
+- (void) saveIBSongItemsByPersistentIDs:(NSArray*)persistentIDsArray;
 
 - (NSArray*) allObjectsFromCoreDataPlaylist:(IBPlaylist*) playlist;
 - (NSArray*) playlists;

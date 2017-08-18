@@ -175,6 +175,56 @@
     return resultArray;
 }
 
+- (void) deleteIBSongItemsByPersistentIDs:(NSArray*) persistentIDsArray{
+    
+    
+    NSManagedObjectContext *context = self.persistentContainer.viewContext;
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    
+    NSEntityDescription* description =
+    [NSEntityDescription entityForName:@"IBSongItem"
+                inManagedObjectContext:context];
+    
+    [request setEntity:description];
+    
+//    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"persistentID != %llu", ];
+//    
+//    [request setPredicate:predicate];
+ 
+    NSError* requestError = nil;
+    NSArray* resultArray = [context executeFetchRequest:request error:&requestError];
+    if (requestError) {
+        NSLog(@"%@", [requestError localizedDescription]);
+    }
+
+}
+
+- (void) saveIBSongItemsByPersistentIDs:(NSArray*)persistentIDsArray{
+    
+    
+    IBPlaylist *currentCoreDataPlaylist = [[IBCurrentParametersManager sharedManager] coreDataChangingPlaylist];
+    
+    NSInteger startPosition = [currentCoreDataPlaylist.songItems count];
+    
+    NSMutableSet *addedSongSet = [NSMutableSet set];
+    
+    for (NSNumber *persistentID in persistentIDsArray) {
+        
+        IBSongItem *song = [NSEntityDescription insertNewObjectForEntityForName:@"IBSongItem"
+                                                         inManagedObjectContext:self.persistentContainer.viewContext];
+        song.persistentID = [persistentID unsignedLongLongValue];
+        song.position = startPosition;
+        startPosition++;
+        [addedSongSet addObject:song];
+        
+    }
+   [currentCoreDataPlaylist addSongItems:addedSongSet];
+    
+    [self saveContext];
+    
+}
+
+
 
 
 

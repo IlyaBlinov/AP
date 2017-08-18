@@ -111,19 +111,18 @@
         
         
         NSArray *removedMediaItems = [NSArray arrayWithArray:[[IBCurrentParametersManager sharedManager] removedSongs]];
-        NSArray *removedSongs = [removedMediaItems valueForKeyPath:@"@unionOfObjects.mediaEntity"];
+        
+        NSArray *removedSongsPersistentIDs = [removedMediaItems valueForKeyPath:@"@unionOfObjects.mediaEntity.persistentID"];
         
         IBPlaylist *changingPlaylist = [[IBCurrentParametersManager sharedManager] coreDataChangingPlaylist];
         
         
-        NSArray *persistentIDArray = [[IBFileManager sharedManager]getPersistentIDsFromSongs:addedSongs];
+        NSArray *addedSongsPersistentIDArray = [addedSongs valueForKeyPath:@"@unionOfObjects.persistentID"];
         
-        NSSet *setOfSongsItems = [[NSSet alloc] initWithArray:persistentIDArray];
+        [[IBCoreDataManager sharedManager] saveIBSongItemsByPersistentIDs:addedSongsPersistentIDArray];
         
-        [changingPlaylist addSongItems:setOfSongsItems];
-        
-        [coreDataSongsVC dismissViewControllerAnimated:YES completion:nil];
-        [[IBCoreDataManager sharedManager] saveContext];
+       [coreDataSongsVC dismissViewControllerAnimated:YES completion:nil];
+      
         
     }
 }

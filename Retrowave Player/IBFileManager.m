@@ -396,9 +396,7 @@
 - (NSArray*) getPersistentIDsFromSongs:(NSArray*)songs{
     
     if ([[songs firstObject] isKindOfClass:[IBMediaItem class]]) {
-       
-        NSArray *mediaItems = [songs valueForKeyPath:@"@unionOfObjects.mediaEntity"];
-        NSArray *persistentIDsArray = [mediaItems valueForKeyPath:@"@unionOfObjects.persistentID"];
+        NSArray *persistentIDsArray = [songs valueForKeyPath:@"@unionOfObjects.mediaEntity.persistentID"];
         return persistentIDsArray;
         
     }else{

@@ -90,7 +90,7 @@
     }
     
     IBMediaItem *artist = [self.artists objectAtIndex:indexPath.row];
-     
+    
     
     NSDictionary       *artistParameters = [[IBFileManager sharedManager] getArtistParams:artist];
     
@@ -133,18 +133,6 @@
    
     IBMediaItem *artist = [self.artists objectAtIndex:indexPath.row];
     
-    
-    
-//    NSArray *persistentIDArray = [[IBFileManager sharedManager] getPersistentIDsFromArtists:[NSArray arrayWithObject:artist]];
-//    
-//    NSArray *albumsArray = [[IBFileManager sharedManager] getArtistsByPersistentIDs:persistentIDArray];
-//    
-//    for (MPMediaItem *item in albumsArray) {
-//        
-//        NSLog(@"title = %@", [item valueForProperty:MPMediaItemPropertyArtist]);
-//        
-//    }
-
     
     
     [[IBCurrentParametersManager sharedManager] setArtist:artist];
