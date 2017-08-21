@@ -191,7 +191,7 @@
     NSAttributedString *songName = [[NSAttributedString alloc] initWithString:songTitle];
     NSAttributedString *artistName = [[NSAttributedString alloc] initWithString:artistTitle];
     NSAttributedString *timeDuration = [[NSAttributedString alloc] initWithString:songDurationTitle];
-    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", indexPath.row + 1]];
+    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%lld", coreDataSong.position + 1]];
     
     
     cell.songTitle.attributedText    = songName;
@@ -260,6 +260,48 @@
 
 
 
+
+
+- (void) addToPlaylistAction:(IBPlayerItem*) button{
+    
+    CGPoint point = [button convertPoint:CGPointZero toView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
+    
+    IBMediaItem *song = [self.songs objectAtIndex:indexPath.row];
+    
+    if (song.state == default_state) {
+        
+        [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];
+        [button setIsSelected:YES];
+        song.state = added_state;
+        [[IBCurrentParametersManager sharedManager].addedSongs addObject:song];
+        
+    }else if (song.state == added_state){
+        
+        [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+        [button setIsSelected:NO];
+        [[IBCurrentParametersManager sharedManager].addedSongs removeObject:song];
+        song.state = default_state;
+        
+    }else if ( (song.state == inPlaylist_state) && ([[IBCurrentParametersManager sharedManager] coreDataChangingPlaylist])){
+        
+        [button setImage: [UIImage imageNamed:@"cancel-music(4).png"]forState:UIControlStateNormal];
+        [button setIsSelected:NO];
+        [[IBCurrentParametersManager sharedManager].removedSongs addObject:song];
+        song.state = delete_state;
+        
+        NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+        
+        
+    }else if (song.state == delete_state){
+        
+        [button setImage: [UIImage imageNamed:@"cancel-music(4).png"]forState:UIControlStateNormal];
+        [button setIsSelected:NO];
+        [[IBCurrentParametersManager sharedManager].removedSongs removeObject:song];
+        song.state = default_state;
+    }
+    
+}
 
 
 

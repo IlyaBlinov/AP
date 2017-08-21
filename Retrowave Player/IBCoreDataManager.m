@@ -187,17 +187,80 @@
     
     [request setEntity:description];
     
-//    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"persistentID != %llu", ];
-//    
-//    [request setPredicate:predicate];
- 
+    
+    for (NSNumber *persistentIDObj in persistentIDsArray) {
+        
+      NSPredicate* predicate = [NSPredicate predicateWithFormat:@"persistentID == %llu", [persistentIDObj unsignedLongLongValue]];
+        
+        [request setPredicate:predicate];
+        
+        NSError* requestError = nil;
+        NSArray* resultArray = [context executeFetchRequest:request error:&requestError];
+        
+        [self.persistentContainer.viewContext deleteObject:[resultArray firstObject]];
+        
+        
+        if (requestError) {
+            NSLog(@"%@", [requestError localizedDescription]);
+        }
+
+        
+    }
+   
+    [self saveContext];
+    
+}
+
+
+
+- (void) resortPositionsOfSongItemsInPlaylist:(IBPlaylist*) playlist{
+    
+    NSManagedObjectContext *context = self.persistentContainer.viewContext;
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    // Edit the entity name as appropriate.
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"IBSongItem" inManagedObjectContext:context];
+    [request setEntity:entity];
+    
+    // Set the batch size to a suitable number.
+  
+    
+    // Edit the sort key as appropriate.
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"position" ascending:YES];
+    NSArray *sortDescriptors = @[sortDescriptor];
+    
+    [request setSortDescriptors:sortDescriptors];
+    
+    NSLog(@"%llu",playlist.persistentID);
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"playlists contains %@", playlist];
+    
+    [request setPredicate:predicate];
+
+    
     NSError* requestError = nil;
     NSArray* resultArray = [context executeFetchRequest:request error:&requestError];
+    
     if (requestError) {
         NSLog(@"%@", [requestError localizedDescription]);
     }
 
+    int64_t startPosition = 0;
+    
+    for (IBSongItem *song in resultArray) {
+        
+        if (song.position != startPosition) {
+             song.position = startPosition;
+        }
+        startPosition++;
+    }
+    
+    
+    [self saveContext];    
+    
 }
+
+
+
 
 - (void) saveIBSongItemsByPersistentIDs:(NSArray*)persistentIDsArray{
     

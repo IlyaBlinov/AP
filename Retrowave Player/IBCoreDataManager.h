@@ -23,7 +23,11 @@
 
 
 
-- (void) saveIBSongItemsByPersistentIDs:(NSArray*)persistentIDsArray;
+- (void) saveIBSongItemsByPersistentIDs:  (NSArray*)persistentIDsArray;
+- (void) deleteIBSongItemsByPersistentIDs:(NSArray*) persistentIDsArray;
+- (void) resortPositionsOfSongItemsInPlaylist:(IBPlaylist*) playlist;
+
+
 
 - (NSArray*) allObjectsFromCoreDataPlaylist:(IBPlaylist*) playlist;
 - (NSArray*) playlists;

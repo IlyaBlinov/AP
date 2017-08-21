@@ -117,9 +117,20 @@
         IBPlaylist *changingPlaylist = [[IBCurrentParametersManager sharedManager] coreDataChangingPlaylist];
         
         
-        NSArray *addedSongsPersistentIDArray = [addedSongs valueForKeyPath:@"@unionOfObjects.persistentID"];
+        if ([removedMediaItems count] > 0) {
+            [[IBCoreDataManager sharedManager]deleteIBSongItemsByPersistentIDs:removedSongsPersistentIDs];
+            [[IBCoreDataManager sharedManager] resortPositionsOfSongItemsInPlaylist:changingPlaylist];
+
+        }
         
-        [[IBCoreDataManager sharedManager] saveIBSongItemsByPersistentIDs:addedSongsPersistentIDArray];
+        if ([addedSongs count] > 0) {
+            
+            NSArray *addedSongsPersistentIDArray = [addedSongs valueForKeyPath:@"@unionOfObjects.persistentID"];
+            
+            [[IBCoreDataManager sharedManager] saveIBSongItemsByPersistentIDs:addedSongsPersistentIDArray];
+        }
+        
+        
         
        [coreDataSongsVC dismissViewControllerAnimated:YES completion:nil];
       
