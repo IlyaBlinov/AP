@@ -7,38 +7,40 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "IBSongsViewController.h"
-#import "IBSongsAddViewController.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "IBPlaylist+CoreDataClass.h"
+#import "IBMediaItem.h"
 
+@class IBMediaItem, IBSongsAddViewController,MPMediaPlaylist, IBContentViewController;
 typedef enum {
-    artist,
-    album,
-    playlist,
-    allSongs
+    artist_type,
+    album_type,
+    playlist_type,
+    allSongs_type
 }IBSongsViewType;
 
 @interface IBCurrentParametersManager : NSObject
 
 + (IBCurrentParametersManager*) sharedManager;
 
-@property (strong, nonatomic) IBSongsAddViewController *returnSongsViewController;
+@property (strong, nonatomic) IBContentViewController *returnSongsViewController;
 
 
-@property (strong, nonatomic) MPMediaItem     *artist;
-@property (strong, nonatomic) MPMediaItem     *album;
-@property (strong, nonatomic) MPMediaPlaylist *playlist;
+@property (strong, nonatomic) IBMediaItem     *artist;
+@property (strong, nonatomic) IBMediaItem     *album;
+@property (strong, nonatomic) IBMediaItem     *playlist;
 @property (assign, nonatomic) IBSongsViewType songsViewType;
 
 
 @property (assign, nonatomic) BOOL isEditing;
 @property (assign, nonatomic) BOOL isUpdating;
 
-@property (strong, nonatomic) MPMediaPlaylist *changingPlaylist;
+@property (strong, nonatomic) IBMediaItem *changingPlaylist;
 @property (strong, nonatomic) NSMutableArray  *addedSongs;
+@property (strong, nonatomic) NSMutableArray  *removedSongs;
 
-
-
+@property (strong, nonatomic) IBPlaylist *coreDataPlaylist;
+@property (strong, nonatomic) IBPlaylist *coreDataChangingPlaylist;
 
 
 

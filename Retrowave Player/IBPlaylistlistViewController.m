@@ -7,21 +7,20 @@
 //
 
 #import "IBPlaylistlistViewController.h"
-#import "IBPlaylistCell.h"
-#import "IBPlaylist.h"
-#import "IBSong.h"
+#import "IBTransitionViewController.h"
+#import "IBTransitionDismissViewController.h"
 #import "IBSongsAddViewController.h"
 #import "IBAllMediaViewController.h"
 #import "IBAddPlaylistViewController.h"
-#import "IBTransitionViewController.h"
-#import "IBTransitionDismissViewController.h"
-#import "IBCurrentParametersManager.h"
-#import "IBFileManager.h"
+#import "IBPlaylistCell.h"
+
+
+
 
 
 
 @interface IBPlaylistlistViewController ()<UIViewControllerTransitioningDelegate>
-@property (strong, nonatomic) NSArray *playlists;
+
 @property (strong, nonatomic) NSString *backItemTitle;
 @property (strong, nonatomic) IBTransitionViewController *animator;
 @property (strong, nonatomic) IBTransitionDismissViewController *dismissAnimator;
@@ -41,7 +40,7 @@
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-        [self createChooseSongsItem];
+       self.navigationItem.rightBarButtonItem = [self createChooseSongsItem];
          self.tableView.allowsSelectionDuringEditing = YES;
         
     }else{
@@ -59,6 +58,8 @@
 
     self.playlists = [[IBFileManager sharedManager] getPlaylists];
     
+    
+  //  NSLog(@"%@", [[IBFileManager sharedManager] getPersistentIDFromSongs:self.playlists]);
     [self.tableView reloadData];
     
 }
@@ -71,6 +72,8 @@
 {
     [super viewDidLoad];
     
+
+
     NSInteger number = [self.navigationController.viewControllers count] - 2;
     
     if (number >= 0) {
@@ -82,6 +85,7 @@
         }
         
     }
+
     
     self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Playlists"];
     
@@ -121,9 +125,11 @@
     }
     
     
-    MPMediaPlaylist *playlist = [self.playlists objectAtIndex:indexPath.row];
+    IBMediaItem *playlist = [self.playlists objectAtIndex:indexPath.row];
     
-    NSString *playlistName = [playlist valueForProperty:MPMediaPlaylistPropertyName];
+    MPMediaPlaylist *playlistItem = (MPMediaPlaylist*)[playlist mediaEntity];
+    
+    NSString *playlistName = [playlistItem valueForProperty:MPMediaPlaylistPropertyName];
     
     if ((playlist != nil) && (playlistName != nil) && (![playlistName isEqualToString:@""])){
         
@@ -131,7 +137,7 @@
     
     NSAttributedString *playlistTitle = [[NSAttributedString alloc] initWithString:playlistName];
     
-    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d",[playlist.items count]]];
+    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%lu",(unsigned long)[playlistItem.items count]]];
     
         
         cell.playlistTitle.attributedText    = playlistTitle;
@@ -142,29 +148,16 @@
         
         if ([[IBCurrentParametersManager sharedManager] isEditing]) {
             
-            IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-            [addToPlaylistButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+            IBPlayerItem *addButton = [[IBPlayerItem alloc]initWithButtonStyle:add];
+            [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
             
-            
-            [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
-            cell.editingAccessoryView = addToPlaylistButton;
+            cell.editingAccessoryView = addButton;
             
         }else{
             
-            IBPlayerItem *accessoryButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-            
-            NSString *imageName;
-            
-            if ([[IBCurrentParametersManager sharedManager] isEditing]) {
-                imageName = @"add 64 x 64.png";
-            }else{
-                imageName = @"skip-track.png";
-            }
-            
-            [accessoryButton setImage: [UIImage imageNamed:imageName]forState:UIControlStateNormal];
+            IBPlayerItem *accessoryButton = [[IBPlayerItem alloc] initWithButtonStyle:move_next];
             
             cell.accessoryView = accessoryButton;
-
         }
         
         }
@@ -181,19 +174,16 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     
-    MPMediaPlaylist *currentPlaylist = [self.playlists objectAtIndex:indexPath.row];
+    IBMediaItem *currentPlaylist = [self.playlists objectAtIndex:indexPath.row];
     
-    [IBCurrentParametersManager sharedManager].songsViewType = playlist;
+    [IBCurrentParametersManager sharedManager].songsViewType = playlist_type;
     
     NSString *identifier = @"IBSongsAddViewController";
     
-    IBSongsViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
-    
+    IBSongsAddViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
     
     [[IBCurrentParametersManager sharedManager] setPlaylist:currentPlaylist];
-    
-    
-    
+
     [self.navigationController pushViewController:vc animated:YES];
     
  
@@ -204,14 +194,13 @@
 
 
 
-
 - (void) addToPlaylistAction:(IBPlayerItem*) button{
     
     CGPoint point = [button convertPoint:CGPointZero toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
     
     
-    MPMediaPlaylist   *currentPlaylist = [self.playlists objectAtIndex:indexPath.row];;
+    IBMediaItem   *currentPlaylist = [self.playlists objectAtIndex:indexPath.row];;
     
     
    NSDictionary *parameters = [[IBFileManager sharedManager] getPlaylistParams:currentPlaylist];
@@ -230,7 +219,7 @@
     }
     
     
-    NSLog(@"added songs = %u",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+    NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
 
     
     
@@ -287,14 +276,15 @@
       
         
         [[MPMediaLibrary defaultMediaLibrary] getPlaylistWithUUID:[NSUUID UUID]
-    creationMetadata:[[MPMediaPlaylistCreationMetadata alloc] initWithName:newPlaylistName ]completionHandler:^(MPMediaPlaylist * _Nullable playlist, NSError * _Nullable error) {
-        [tempPlaylistArray addObject:playlist];
+    creationMetadata:[[MPMediaPlaylistCreationMetadata alloc] initWithName:newPlaylistName ]completionHandler:^(MPMediaPlaylist * _Nullable playlistMediaItem, NSError * _Nullable error) {
+        IBMediaItem *newPlaylist = [[IBMediaItem alloc]init];
+        newPlaylist.mediaEntity = playlistMediaItem;
+        [newPlaylist setType:playlist];
+        [tempPlaylistArray addObject:newPlaylist];
         
         weakSelf.playlists = tempPlaylistArray;
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-             [weakSelf.tableView reloadData];
-        });
+       [weakSelf.tableView reloadData];
+    
        
     }];
         

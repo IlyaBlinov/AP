@@ -32,11 +32,11 @@
     
     [super loadView];
     
-    [IBCurrentParametersManager sharedManager].songsViewType = allSongs;
+    [IBCurrentParametersManager sharedManager].songsViewType = allSongs_type;
     
     [self.tabBar layoutSubviews];
     
-    NSLog(@"subviews count = %u",[[self.tabBar subviews] count]);
+    NSLog(@"subviews count = %lu",(unsigned long)[[self.tabBar subviews] count]);
     
     UIView *playerItemView = [[self.tabBar subviews] objectAtIndex:3];
     
@@ -74,14 +74,6 @@
     
     
     
-    self.delegate = self;
-  
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
     
     NSDictionary *attributesOfSelectedItem = [IBFontAttributes attributesOfTabBarTitlesWithState:selected];
     
@@ -90,8 +82,8 @@
     self.attributesofSelectedItem = attributesOfSelectedItem;
     self.attributesofNotSelectedItem = attributesOfNotSelectedItem;
     
- 
-   
+    
+    
     
     
     for (UITabBarItem *item in self.tabBar.items) {
@@ -102,10 +94,25 @@
             
             self.currentItem = item;
         }
-  
+        
         
     }
     self.selectedIndex = 0;
+
+    
+    
+    
+    
+    
+    self.delegate = self;
+  
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    
     
 }
 
@@ -137,9 +144,9 @@
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item{
     
   if([item.title isEqualToString:@"Playlists"]){
-      [IBCurrentParametersManager sharedManager].songsViewType = playlist;
+      [IBCurrentParametersManager sharedManager].songsViewType = playlist_type;
     }else if([item.title isEqualToString:@"Songs"] | [item.title isEqualToString:@"Books"]){
-      [IBCurrentParametersManager sharedManager].songsViewType = allSongs;
+      [IBCurrentParametersManager sharedManager].songsViewType = allSongs_type;
     }else if ([item.title isEqualToString:@"  All Media"] && [[IBCurrentParametersManager sharedManager]isEditing]){
        
         

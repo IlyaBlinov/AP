@@ -7,11 +7,10 @@
 //
 
 #import "IBAlbumsViewController.h"
-#import "IBAlbum.h"
 #import "IBAlbumViewCell.h"
 #import "IBArtistInfoViewController.h"
 #import "IBSongsViewController.h"
-#import "IBFileManager.h"
+
 
 
 
@@ -38,13 +37,6 @@
    [ self.tableView setEditing: [[IBCurrentParametersManager sharedManager] isEditing]];
     
     
-    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
-        
-        [self createChooseSongsItem];
-        
-        self.tableView.allowsSelectionDuringEditing = YES;
-        
-    }
     
     
     [self.navigationItem setHidesBackButton:NO animated:NO];
@@ -56,7 +48,18 @@
     
     NSString *title = [titleAndAlbumsDictionary valueForKey:@"title"];
     NSArray  *albums  = [titleAndAlbumsDictionary valueForKey:@"albums"];
-    self.albums = [NSArray arrayWithArray:albums];
+   
+    
+    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
+        
+        self.navigationItem.rightBarButtonItem =  [self createChooseSongsItem];
+        
+        self.tableView.allowsSelectionDuringEditing = YES;
+        self.albums = [[IBFileManager sharedManager] checkAlbumMediaItems:albums];
+        
+    }else{
+         self.albums = [NSArray arrayWithArray:albums];
+    }
 
     
     UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
@@ -72,6 +75,13 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+
+- (void)dealloc
+{
+    self.albums = nil;
 }
 
 #pragma mark - UITableViewDataSource
@@ -101,11 +111,13 @@
                                               reuseIdentifier:identifier];
     }
     
-    MPMediaItem *album = [self.albums objectAtIndex:indexPath.row];
+    IBMediaItem *album = [self.albums objectAtIndex:indexPath.row];
+    MPMediaItem *albumItem = (MPMediaItem*)[album mediaEntity];
     
-    NSString *albumTitle =       [album valueForProperty:MPMediaItemPropertyAlbumTitle];
-    NSString *albumArtistTitle = [album valueForProperty:MPMediaItemPropertyAlbumArtist];
-    MPMediaItemArtwork *albumImageItem = [album valueForProperty:MPMediaItemPropertyArtwork];
+    
+    NSString *albumTitle =       [albumItem valueForProperty:MPMediaItemPropertyAlbumTitle];
+    NSString *albumArtistTitle = [albumItem valueForProperty:MPMediaItemPropertyAlbumArtist];
+    MPMediaItemArtwork *albumImageItem = [albumItem valueForProperty:MPMediaItemPropertyArtwork];
     
     CGRect imageRect = cell.albumImage.bounds;
     CGSize sizeOfAlbumImageItem = CGSizeMake(CGRectGetWidth(imageRect), CGRectGetHeight(imageRect));
@@ -129,21 +141,14 @@
     cell.albumImage.image            = albumImage;
     cell.albumTitle.attributedText   = albumName;
     cell.artistTitle.attributedText  = artistName;
+
     
-    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
-        
-        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-        [addToPlaylistButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
-        
-        
-        [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
-        cell.editingAccessoryView = addToPlaylistButton;
-        
-    }else{
-        
-        cell.editingAccessoryView = nil;
-    }
+    IBPlayerItem  *addButton = [[IBPlayerItem alloc]initWithItemState:album.state];
+    [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
     
+    [cell setEditingView:addButton];
+
+
     return cell;
     
 }
@@ -155,9 +160,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    MPMediaItem *currentAlbum = [self.albums objectAtIndex:indexPath.row];
+    IBMediaItem *currentAlbum = [self.albums objectAtIndex:indexPath.row];
     
-    [IBCurrentParametersManager sharedManager].songsViewType = album;
+    [IBCurrentParametersManager sharedManager].songsViewType = album_type;
     [[IBCurrentParametersManager sharedManager] setAlbum:currentAlbum];
     
     NSString *identifier = @"IBSongsViewController";
@@ -183,37 +188,47 @@
     CGPoint point = [button convertPoint:CGPointZero toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
     
-    MPMediaItem *album = [self.albums objectAtIndex:indexPath.row];
-
-    NSString *title = [album valueForProperty:MPMediaItemPropertyAlbumTitle];
     
-    MPMediaPropertyPredicate *albumNamePredicate =
-    [MPMediaPropertyPredicate predicateWithValue: title
-                                     forProperty: MPMediaItemPropertyAlbumTitle];
-    
-    MPMediaQuery *songsOfAlbum = [[MPMediaQuery alloc] init];
-    [songsOfAlbum addFilterPredicate:albumNamePredicate];
-
+    IBMediaItem *album = [self.albums objectAtIndex:indexPath.row];
+    NSArray *songs = [[IBFileManager sharedManager] getAllSongsOfAlbum:album];
     
     
     
-    NSArray *songs = [songsOfAlbum items];
-    
-    if (button.isSelected == NO) {
+    if (album.state == default_state) {
+        
         [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];
         [button setIsSelected:YES];
+        album.state = added_state;
+        
         [[IBCurrentParametersManager sharedManager].addedSongs addObjectsFromArray:songs];
-    }else{
+        
+    }else if (album.state == added_state){
+        
         [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
         [button setIsSelected:NO];
-        NSUInteger location = [[IBCurrentParametersManager sharedManager].addedSongs count] - [songs count] ;
         
+        NSUInteger location = [[IBCurrentParametersManager sharedManager].addedSongs count] - [songs count] ;
         [[IBCurrentParametersManager sharedManager].addedSongs removeObjectsInRange:NSMakeRange(location, [songs count])];
+        album.state = default_state;
+        
+    }else if ( (album.state == inPlaylist_state) && ([[IBCurrentParametersManager sharedManager]coreDataChangingPlaylist])){
+        
+        [button setImage: [UIImage imageNamed:@"cancel-music(4).png"]forState:UIControlStateNormal];
+        [button setIsSelected:NO];
+       [[IBCurrentParametersManager sharedManager].addedSongs addObjectsFromArray:songs];
+        album.state = delete_state;
+        
+        NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+        
+        
+    }else if (album.state == delete_state){
+        
+        [button setImage: [UIImage imageNamed:@"cancel-music(4).png"]forState:UIControlStateNormal];
+        [button setIsSelected:NO];
+        NSUInteger location = [[IBCurrentParametersManager sharedManager].addedSongs count] - [songs count] ;
+        [[IBCurrentParametersManager sharedManager].addedSongs removeObjectsInRange:NSMakeRange(location, [songs count])];
+        album.state = default_state;
     }
-    
-    
-    NSLog(@"added songs = %u",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
-    
     
 }
 

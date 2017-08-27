@@ -11,7 +11,7 @@
 #import "IBMainTabBarController.h"
 #import "IBPlayerItem.h"
 #import "IBVisualizerMusic.h"
-
+#import "IBFileManager.h"
 @interface IBPlayerController ()
 
 @property (strong, nonatomic) MPMusicPlayerController *musicPlayerController;

@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "IBMainTitle.h"
 #import "IBTimeDurationTitle.h"
-@interface IBPlaylistCell : UITableViewCell
+#import "IBParentCell.h"
+@interface IBPlaylistCell : IBParentCell
 
 
 

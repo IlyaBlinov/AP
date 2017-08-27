@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "IBArtist.h"
 #import "IBContentViewController.h"
 
 @interface IBArtistInfoViewController : IBContentViewController

@@ -9,13 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "IBContentViewController.h"
 
-
 @interface IBPlaylistlistViewController : IBContentViewController
 
 
+@property (strong, nonatomic) NSArray *playlists;
 
-
-
+- (void)addNewPlaylist;
 
 
 @end

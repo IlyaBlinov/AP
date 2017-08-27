@@ -8,7 +8,10 @@
 
 #import "IBContentViewController.h"
 #import "IBAllMediaViewController.h"
-#import "IBFileManager.h"
+#import "IBFontAttributes.h"
+#import "IBSongsAddViewController.h"
+#import "IBSongsFromCoreDataViewController.h"
+#import "IBCoreDataManager.h"
 
 @interface IBContentViewController ()
 
@@ -73,29 +76,66 @@
 #pragma mark - Actions
 
 
-- (void)chooseSongs:(IBPlayerItem *) button{
+- (void)chooseSongs{
     
-    [IBCurrentParametersManager sharedManager].songsViewType = playlist;
+    [IBCurrentParametersManager sharedManager].songsViewType = playlist_type;
     
-    MPMediaPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
-    NSArray *addedSongs              = [NSArray arrayWithArray:[[IBCurrentParametersManager sharedManager] addedSongs]];
     
-  
-    __weak IBContentViewController       *weakSongsVC = self;
+    NSArray *addedMediaItems = [NSArray arrayWithArray:[[IBCurrentParametersManager sharedManager] addedSongs]];
+    NSArray *addedSongs = [addedMediaItems valueForKeyPath:@"@unionOfObjects.mediaEntity"];
+    
+    IBContentViewController *returnedVC = [[IBCurrentParametersManager sharedManager]returnSongsViewController];
     
     [[IBCurrentParametersManager sharedManager] setIsEditing:NO];
+   
+    if ([returnedVC isKindOfClass:[IBSongsAddViewController class]]) {
+ 
+    IBMediaItem *currentPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
+        MPMediaPlaylist *playlistItem = (MPMediaPlaylist*)[currentPlaylist mediaEntity];
     
+    __weak IBSongsAddViewController       *weakSongsVC = (IBSongsAddViewController*)returnedVC;
     
-    [currentPlaylist addMediaItems:addedSongs completionHandler:^(NSError * _Nullable error) {
+        [weakSongsVC dismissViewControllerAnimated:YES completion:nil];
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-           
-            [weakSongsVC dismissViewControllerAnimated:YES completion:nil];
+    [playlistItem addMediaItems:addedSongs completionHandler:^(NSError * _Nullable error) {
         
-        });
+        if ([addedSongs count] > 0) {
+            [weakSongsVC reloadSongs];
+        }
         
     }];
     
+    }else{
+        
+        IBSongsFromCoreDataViewController *coreDataSongsVC = (IBSongsFromCoreDataViewController*)returnedVC;
+        
+        
+        NSArray *removedMediaItems = [NSArray arrayWithArray:[[IBCurrentParametersManager sharedManager] removedSongs]];
+        
+        NSArray *removedSongsPersistentIDs = [removedMediaItems valueForKeyPath:@"@unionOfObjects.mediaEntity.persistentID"];
+        
+        IBPlaylist *changingPlaylist = [[IBCurrentParametersManager sharedManager] coreDataChangingPlaylist];
+        
+        
+        if ([removedMediaItems count] > 0) {
+            [[IBCoreDataManager sharedManager]deleteIBSongItemsByPersistentIDs:removedSongsPersistentIDs fromCoreDataPlaylist:changingPlaylist];
+            [[IBCoreDataManager sharedManager] resortPositionsOfSongItemsInPlaylist:changingPlaylist];
+
+        }
+        
+        if ([addedSongs count] > 0) {
+            
+            NSArray *addedSongsPersistentIDArray = [addedSongs valueForKeyPath:@"@unionOfObjects.persistentID"];
+            
+            [[IBCoreDataManager sharedManager] saveIBSongItemsByPersistentIDs:addedSongsPersistentIDArray];
+        }
+        
+        
+        
+       [coreDataSongsVC dismissViewControllerAnimated:YES completion:nil];
+      
+        
+    }
 }
 
 
@@ -111,13 +151,13 @@
         
         if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-            [[IBCurrentParametersManager sharedManager] setSongsViewType:playlist];
-            MPMediaPlaylist *changingPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
+            [[IBCurrentParametersManager sharedManager] setSongsViewType:playlist_type];
+            IBMediaItem *changingPlaylist = [[IBCurrentParametersManager sharedManager] changingPlaylist];
             [[IBCurrentParametersManager sharedManager] setPlaylist:changingPlaylist];
             
         }else{
         
-            [[IBCurrentParametersManager sharedManager] setSongsViewType:allSongs];
+            [[IBCurrentParametersManager sharedManager] setSongsViewType:allSongs_type];
         }
         
     }
@@ -135,11 +175,11 @@
     [self.navigationController popToViewController:vc animated:YES];
     NSLog(@"popToViewController %@", [vc description]);
         
-    if ([vc isKindOfClass:[IBSongsAddViewController class]]) {
+    if ([vc isKindOfClass:[IBSongsAddViewController class]] | [vc isKindOfClass:[IBSongsFromCoreDataViewController class]]) {
             [[IBCurrentParametersManager sharedManager] setReturnSongsViewController:nil];
         }
-        
-        
+
+    
    }
     
 
@@ -147,20 +187,24 @@
 #pragma mark - addSongs
 
 
-- (void) createChooseSongsItem{
+- (IBBarButtonItem*) createChooseSongsItem{
     
-    IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-    [addToPlaylistButton setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateNormal];
-    [addToPlaylistButton addTarget:self action:@selector(chooseSongs:) forControlEvents:UIControlEventTouchUpInside];
+    IBPlayerItem *chooseButton = [[IBPlayerItem alloc] initWithButtonStyle:choose];
+    [chooseButton addTarget:self action:@selector(chooseSongs) forControlEvents:UIControlEventTouchUpInside];
+    IBBarButtonItem *item = [[IBBarButtonItem alloc] initWithButton:chooseButton];
     
-    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:addToPlaylistButton];
-    
-    self.navigationItem.rightBarButtonItem = item;
+    return item;
 
     
 }
 
 
+
+- (void) addToPlaylistAction:(IBPlayerItem*) button{
+    
+    
+    
+}
 
 
 

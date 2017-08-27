@@ -8,11 +8,9 @@
 
 #import "IBArtistsViewController.h"
 #import "IBArtistInfoViewController.h"
-#import "IBArtist.h"
 #import "IBArtistTableViewCell.h"
 #import "IBAllMediaViewController.h"
-#import "IBCurrentParametersManager.h"
-#import "IBFileManager.h"
+
 
 
 
@@ -35,12 +33,15 @@
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-        [self createChooseSongsItem];
-        
+        self.navigationItem.rightBarButtonItem = [self createChooseSongsItem];
         self.tableView.allowsSelectionDuringEditing = YES;
         
+        NSArray *artistsArray = [[IBFileManager sharedManager] getArtists];
+        self.artists = [[IBFileManager sharedManager]checkArtistsMediaItems:artistsArray];
+        
+    }else{
+    self.artists = [[IBFileManager sharedManager] getArtists] ;
     }
-    
     
     [self.navigationItem setHidesBackButton:NO animated:NO];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
@@ -54,9 +55,6 @@
     
     self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Artists"];
     
-    
-    self.artists = [[IBFileManager sharedManager] getArtists] ;
-
 }
 
 - (void)didReceiveMemoryWarning
@@ -91,7 +89,7 @@
                                               reuseIdentifier:identifier];
     }
     
-    MPMediaItem *artist = [self.artists objectAtIndex:indexPath.row];
+    IBMediaItem *artist = [self.artists objectAtIndex:indexPath.row];
     
     
     NSDictionary       *artistParameters = [[IBFileManager sharedManager] getArtistParams:artist];
@@ -115,19 +113,10 @@
     cell.artistCount.attributedText = artistCount;
     
   
-    if ([[IBCurrentParametersManager sharedManager] isEditing]) {
-        
-        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithFrame:CGRectMake(0,0, 20, 20)];
-        [addToPlaylistButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
-        
-        
-        [addToPlaylistButton setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
-        cell.editingAccessoryView = addToPlaylistButton;
-        
-    }else{
-        
-        cell.editingAccessoryView = nil;
-    }
+    IBPlayerItem  *addButton = [[IBPlayerItem alloc]initWithItemState:artist.state];
+    [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [cell setEditingView:addButton];
 
     
     
@@ -142,10 +131,11 @@
     
     IBArtistInfoViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBArtistInfoViewController"];
    
-    MPMediaItem *artist = [self.artists objectAtIndex:indexPath.row];
+    IBMediaItem *artist = [self.artists objectAtIndex:indexPath.row];
+    
+    
     
     [[IBCurrentParametersManager sharedManager] setArtist:artist];
-    
     
     
     [self.navigationController pushViewController:vc animated:YES];
@@ -161,18 +151,8 @@
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
     
    
-    MPMediaItem     *currentArtist   = [self.artists objectAtIndex:indexPath.row];
-    NSString *artistName = [currentArtist valueForProperty:MPMediaItemPropertyArtist];
-    
-    MPMediaPropertyPredicate *artistNamePredicate =
-    [MPMediaPropertyPredicate predicateWithValue: artistName
-                                     forProperty: MPMediaItemPropertyArtist];
-    
-    MPMediaQuery *songsOfArtist = [[MPMediaQuery alloc] init];
-    [songsOfArtist addFilterPredicate:artistNamePredicate];
-    
-    
-    NSArray *songs = [songsOfArtist items];
+    IBMediaItem     *currentArtist   = [self.artists objectAtIndex:indexPath.row];
+    NSArray *songs = [[IBFileManager sharedManager] getAllSongsOfArtist:currentArtist];
     
     if (button.isSelected == NO) {
         [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];
@@ -187,7 +167,7 @@
     }
     
     
-    NSLog(@"added songs = %u",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+    NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
     
     
 }

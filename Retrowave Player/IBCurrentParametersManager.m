@@ -7,6 +7,9 @@
 //
 
 #import "IBCurrentParametersManager.h"
+#import "IBSongsViewController.h"
+#import "IBSongsAddViewController.h"
+#import "IBContentViewController.h"
 
 @implementation IBCurrentParametersManager
 
@@ -20,6 +23,7 @@
     dispatch_once(&onceToken, ^{
         manager = [[IBCurrentParametersManager alloc] init];
         manager.addedSongs = [NSMutableArray array];
+        manager.removedSongs = [NSMutableArray array];
     });
     
     return manager;

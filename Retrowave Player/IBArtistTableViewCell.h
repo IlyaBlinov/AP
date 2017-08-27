@@ -13,8 +13,8 @@
 #import "IBArtistNumberSongsTitle.h"
 #import "IBArtistNumberAlbumsTitle.h"
 #import "IBArtistCount.h"
-
-@interface IBArtistTableViewCell : UITableViewCell
+#import "IBParentCell.h"
+@interface IBArtistTableViewCell : IBParentCell
 
 @property (strong, nonatomic) IBOutlet IBArtistNameTitle *artistName;
 @property (strong, nonatomic) IBOutlet IBArtistParameter *artistSongParameter;
