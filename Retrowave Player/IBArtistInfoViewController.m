@@ -187,7 +187,7 @@
     
     IBMediaItem     *currentArtist = [[IBCurrentParametersManager sharedManager] artist];
    
-    NSArray *songs = [[IBFileManager sharedManager] getSongsOfArtist:currentArtist withParameter:artistRequestParamater];
+    NSArray * songs = [[IBFileManager sharedManager] getSongsOfArtist:currentArtist withParameter:artistRequestParamater];
     
     
     if (button.isSelected == NO) {

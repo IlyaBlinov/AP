@@ -272,16 +272,22 @@
         [[IBCurrentParametersManager sharedManager].addedSongs removeObject:song];
         song.state = default_state;
         
-    }else if (song.state == inPlaylist_state){
+    }else if ( (song.state == inPlaylist_state) && ([[IBCurrentParametersManager sharedManager] coreDataChangingPlaylist])){
         
-        [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+        [button setImage: [UIImage imageNamed:@"cancel-music(4).png"]forState:UIControlStateNormal];
         [button setIsSelected:NO];
         [[IBCurrentParametersManager sharedManager].removedSongs addObject:song];
-        song.state = default_state;
+        song.state = delete_state;
         
         NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
         
         
+    }else if (song.state == delete_state){
+        
+        [button setImage: [UIImage imageNamed:@"inPlaylist.png"]forState:UIControlStateNormal];
+        [button setIsSelected:NO];
+        [[IBCurrentParametersManager sharedManager].removedSongs removeObject:song];
+        song.state = inPlaylist_state;
     }
     
 }

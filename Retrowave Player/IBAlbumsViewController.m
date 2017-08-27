@@ -215,7 +215,7 @@
         
         [button setImage: [UIImage imageNamed:@"cancel-music(4).png"]forState:UIControlStateNormal];
         [button setIsSelected:NO];
-       [[IBCurrentParametersManager sharedManager].addedSongs addObjectsFromArray:songs];
+       [[IBCurrentParametersManager sharedManager].removedSongs addObjectsFromArray:songs];
         album.state = delete_state;
         
         NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
@@ -223,11 +223,11 @@
         
     }else if (album.state == delete_state){
         
-        [button setImage: [UIImage imageNamed:@"cancel-music(4).png"]forState:UIControlStateNormal];
+        [button setImage: [UIImage imageNamed:@"inPlaylist.png"]forState:UIControlStateNormal];
         [button setIsSelected:NO];
-        NSUInteger location = [[IBCurrentParametersManager sharedManager].addedSongs count] - [songs count] ;
-        [[IBCurrentParametersManager sharedManager].addedSongs removeObjectsInRange:NSMakeRange(location, [songs count])];
-        album.state = default_state;
+        NSUInteger location = [[IBCurrentParametersManager sharedManager].removedSongs count] - [songs count] ;
+        [[IBCurrentParametersManager sharedManager].removedSongs removeObjectsInRange:NSMakeRange(location, [songs count])];
+        album.state = inPlaylist_state;
     }
     
 }
