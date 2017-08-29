@@ -145,6 +145,7 @@
     cell.artistTitle.attributedText  = artistName;
     cell.timeDuration.attributedText = timeDuration;
     cell.songCount.attributedText    = songCount;
+       
         
       IBPlayerItem  *addButton = [[IBPlayerItem alloc]initWithItemState:song.state];
        [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
