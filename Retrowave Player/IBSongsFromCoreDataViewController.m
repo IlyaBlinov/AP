@@ -72,9 +72,25 @@
     NSString *title = currentPlaylist.playlistName;
     
     
-    UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
-    [self.navigationItem setLeftBarButtonItem:backItem];
+    IBPlayerItem *removeSongButton = [[IBPlayerItem alloc] initWithButtonStyle:del];
+    [removeSongButton addTarget:self action:@selector(removeSong) forControlEvents:UIControlEventTouchUpInside];
     
+    IBBarButtonItem *removeSongItem = [[IBBarButtonItem alloc] initWithButton:removeSongButton];
+    
+    
+    UIBarButtonItem  *flexBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
+
+    UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
+    
+    NSArray *leftBarButtonItems;
+    
+    if ([[IBCurrentParametersManager sharedManager]isEditing]) {
+        leftBarButtonItems = [NSArray arrayWithObjects:backItem, nil];
+    }else{
+         leftBarButtonItems = [NSArray arrayWithObjects:backItem,removeSongItem, nil];
+    }
+    
+    [self.navigationItem setLeftBarButtonItems:leftBarButtonItems];
     self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Songs"];
     
     
@@ -240,6 +256,20 @@
     
 }
 
+
+#pragma mark - UITableViewDelegate
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if ([[IBCurrentParametersManager sharedManager]isEditing]) {
+        return UITableViewCellEditingStyleNone;
+    }else{
+        return UITableViewCellEditingStyleDelete;
+    }
+    
+    
+}
+
+
 #pragma mark - Actions
 
 
@@ -259,7 +289,16 @@
 }
 
 
-
+- (void) removeSong{
+    
+    if ([self.tableView isEditing]) {
+        [self.tableView setEditing:NO animated:YES];
+    }else{
+        [self.tableView setEditing:YES animated:YES];
+        
+    }    
+    
+}
 
 
 

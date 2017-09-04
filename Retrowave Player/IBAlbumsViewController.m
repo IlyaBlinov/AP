@@ -26,29 +26,16 @@
 
 
 
-- (void)viewDidLoad
-{
+- (void)viewWillAppear:(BOOL)animated{
     
-    
-    [super viewDidLoad];
-    
-    
-    
-   [ self.tableView setEditing: [[IBCurrentParametersManager sharedManager] isEditing]];
-    
-    
-    
-    
-    [self.navigationItem setHidesBackButton:NO animated:NO];
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    
-    
+    [super viewWillAppear:animated];
+
     IBSongsViewType songsType = [[IBCurrentParametersManager sharedManager] songsViewType];
     NSDictionary *titleAndAlbumsDictionary = [[IBFileManager sharedManager] getAlbumsAndTitleFor:songsType];
     
     NSString *title = [titleAndAlbumsDictionary valueForKey:@"title"];
     NSArray  *albums  = [titleAndAlbumsDictionary valueForKey:@"albums"];
-   
+    
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
@@ -58,12 +45,36 @@
         self.albums = [[IBFileManager sharedManager] checkAlbumMediaItems:albums];
         
     }else{
-         self.albums = [NSArray arrayWithArray:albums];
+        self.albums = [NSArray arrayWithArray:albums];
     }
 
-    
     UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
     [self.navigationItem setLeftBarButtonItem:backItem];
+
+    [self.tableView reloadData];
+    
+    
+    
+}
+
+
+
+
+- (void)viewDidLoad
+{
+  
+    [super viewDidLoad];
+    
+    
+   [ self.tableView setEditing: [[IBCurrentParametersManager sharedManager] isEditing]];
+    
+    [self.navigationItem setHidesBackButton:NO animated:NO];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    
+    
+    
+    
+   
     
     self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Albums"];
     

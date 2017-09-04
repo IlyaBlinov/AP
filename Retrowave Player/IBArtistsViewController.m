@@ -23,13 +23,9 @@
 
 @implementation IBArtistsViewController
 
-
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-   
-    [ self.tableView setEditing: [[IBCurrentParametersManager sharedManager] isEditing]];
+- (void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
@@ -40,8 +36,19 @@
         self.artists = [[IBFileManager sharedManager]checkArtistsMediaItems:artistsArray];
         
     }else{
-    self.artists = [[IBFileManager sharedManager] getArtists] ;
+        self.artists = [[IBFileManager sharedManager] getArtists] ;
     }
+    
+    [self.tableView reloadData];
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+   
+    [ self.tableView setEditing: [[IBCurrentParametersManager sharedManager] isEditing]];
+    
+  
     
     [self.navigationItem setHidesBackButton:NO animated:NO];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
