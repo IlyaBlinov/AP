@@ -50,8 +50,14 @@
         
         NSLog(@"songsCount = %lu", (unsigned long)[[self.currentPlaylist songItems]count]);
         
+        
+        
         [[IBCurrentParametersManager sharedManager].addedSongs removeAllObjects];
-        [[IBCurrentParametersManager sharedManager] setCoreDataPlaylist:nil];
+        [[IBCurrentParametersManager sharedManager].removedSongs removeAllObjects];
+        
+        
+        
+        [[IBCurrentParametersManager sharedManager] setCoreDataChangingPlaylist:nil];
         [[IBCurrentParametersManager sharedManager] setReturnSongsViewController:nil];
         [self.tableView reloadData];
         

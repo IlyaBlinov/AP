@@ -233,7 +233,7 @@
     
     }else if (song.state == delete_state){
         
-        [button setImage: [UIImage imageNamed:@"cancel-music(4).png"]forState:UIControlStateNormal];
+        [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
         [button setIsSelected:NO];
         [[IBCurrentParametersManager sharedManager].removedSongs removeObject:song];
         song.state = default_state;

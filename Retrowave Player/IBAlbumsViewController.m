@@ -223,7 +223,7 @@
         
     }else if (album.state == delete_state){
         
-        [button setImage: [UIImage imageNamed:@"cancel-music(4).png"]forState:UIControlStateNormal];
+        [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
         [button setIsSelected:NO];
         NSUInteger location = [[IBCurrentParametersManager sharedManager].addedSongs count] - [songs count] ;
         [[IBCurrentParametersManager sharedManager].addedSongs removeObjectsInRange:NSMakeRange(location, [songs count])];
