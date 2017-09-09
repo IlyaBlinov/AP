@@ -118,7 +118,7 @@
         
         
         if ([removedMediaItems count] > 0) {
-            [[IBCoreDataManager sharedManager]deleteIBSongItemsByPersistentIDs:removedSongsPersistentIDs];
+            [[IBCoreDataManager sharedManager]deleteIBSongItemsByPersistentIDs:removedSongsPersistentIDs fromCoreDataPlaylist:changingPlaylist];
             [[IBCoreDataManager sharedManager] resortPositionsOfSongItemsInPlaylist:changingPlaylist];
 
         }
@@ -133,7 +133,7 @@
         
         
        [coreDataSongsVC dismissViewControllerAnimated:YES completion:nil];
-      
+        
         
     }
 }

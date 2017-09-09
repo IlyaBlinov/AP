@@ -23,13 +23,9 @@
 
 @implementation IBArtistsViewController
 
-
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-   
-    [ self.tableView setEditing: [[IBCurrentParametersManager sharedManager] isEditing]];
+- (void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
@@ -40,8 +36,19 @@
         self.artists = [[IBFileManager sharedManager]checkArtistsMediaItems:artistsArray];
         
     }else{
-    self.artists = [[IBFileManager sharedManager] getArtists] ;
+        self.artists = [[IBFileManager sharedManager] getArtists] ;
     }
+    
+    [self.tableView reloadData];
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+   
+    [ self.tableView setEditing: [[IBCurrentParametersManager sharedManager] isEditing]];
+    
+  
     
     [self.navigationItem setHidesBackButton:NO animated:NO];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
@@ -151,23 +158,49 @@
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
     
    
-    IBMediaItem     *currentArtist   = [self.artists objectAtIndex:indexPath.row];
-    NSArray *songs = [[IBFileManager sharedManager] getAllSongsOfArtist:currentArtist];
+    IBMediaItem     *artist   = [self.artists objectAtIndex:indexPath.row];
+    NSArray *songs = [[IBFileManager sharedManager] getAllSongsOfArtist:artist];
     
-    if (button.isSelected == NO) {
+    
+    
+    
+    
+    if (artist.state == default_state) {
+        
         [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];
         [button setIsSelected:YES];
+        artist.state = added_state;
+        
         [[IBCurrentParametersManager sharedManager].addedSongs addObjectsFromArray:songs];
-    }else{
+        
+    }else if (artist.state == added_state){
+        
         [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
         [button setIsSelected:NO];
-        NSUInteger location = [[IBCurrentParametersManager sharedManager].addedSongs count] - [songs count] ;
         
+        NSUInteger location = [[IBCurrentParametersManager sharedManager].addedSongs count] - [songs count] ;
         [[IBCurrentParametersManager sharedManager].addedSongs removeObjectsInRange:NSMakeRange(location, [songs count])];
+        artist.state = default_state;
+        
+    }else if ( (artist.state == inPlaylist_state) && ([[IBCurrentParametersManager sharedManager]coreDataChangingPlaylist])){
+        
+        [button setImage: [UIImage imageNamed:@"cancel-music(4).png"]forState:UIControlStateNormal];
+        [button setIsSelected:NO];
+        [[IBCurrentParametersManager sharedManager].removedSongs addObjectsFromArray:songs];
+        artist.state = delete_state;
+        
+        NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+        
+        
+    }else if (artist.state == delete_state){
+        
+        [button setImage: [UIImage imageNamed:@"inPlaylist.png"]forState:UIControlStateNormal];
+        [button setIsSelected:NO];
+        NSUInteger location = [[IBCurrentParametersManager sharedManager].removedSongs count] - [songs count] ;
+        [[IBCurrentParametersManager sharedManager].removedSongs removeObjectsInRange:NSMakeRange(location, [songs count])];
+        artist.state = inPlaylist_state;
     }
-    
-    
-    NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+
     
     
 }

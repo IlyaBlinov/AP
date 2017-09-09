@@ -600,11 +600,11 @@
     return mediaItemsArray;
 }
 
-
+#pragma mark - CoreDataPlaylists
 
 - (NSArray*) getPersistentIDsFromCoreDataPlaylist:(IBPlaylist*)playlist{
     
-    NSArray *allItemsInPlaylist = [[IBCoreDataManager sharedManager]allObjectsFromCoreDataPlaylist:playlist];
+    NSSet *allItemsInPlaylist =  playlist.songItems ;
     
     NSMutableArray *persistentIDArray = [NSMutableArray array];
     
@@ -629,6 +629,46 @@
         
 }
     return persistentIDArray;
+}
+
+
+
+
+
+- (NSDictionary*) getPersistentIDsAndPositionsFromCoreDataPlaylist:(IBPlaylist*)playlist{
+    
+    NSSet *allItemsInPlaylist =  playlist.songItems ;
+    
+    NSMutableArray *persistentIDArray = [NSMutableArray array];
+    NSMutableArray *positionsArray = [NSMutableArray array];
+    if ([allItemsInPlaylist count] > 0) {
+        
+        for (IBParentItem *item in allItemsInPlaylist) {
+            
+            if ([item isKindOfClass:[IBPlaylist class]]) {
+                IBPlaylist *tempPlaylist = (IBPlaylist*) item;
+                [persistentIDArray addObject:[NSNumber numberWithUnsignedLongLong: tempPlaylist.persistentID]];
+                [positionsArray addObject:[NSNumber numberWithUnsignedLongLong: tempPlaylist.position]];
+            }else if ([item isKindOfClass:[IBArtistItem class]]) {
+                IBArtistItem *tempArtist = (IBArtistItem*) item;
+                [persistentIDArray addObject:[NSNumber numberWithUnsignedLongLong: tempArtist.persistentID]];
+                [positionsArray addObject:[NSNumber numberWithUnsignedLongLong: tempArtist.position]];
+            }else if ([item isKindOfClass:[IBAlbumItem class]]) {
+                IBAlbumItem *tempAlbum = (IBAlbumItem*) item;
+                [persistentIDArray addObject:[NSNumber numberWithUnsignedLongLong: tempAlbum.persistentID]];
+                [positionsArray addObject:[NSNumber numberWithUnsignedLongLong: tempAlbum.position]];
+            }else if ([item isKindOfClass:[IBSongItem class]]) {
+                IBSongItem *tempSong = (IBSongItem*) item;
+                [persistentIDArray addObject:[NSNumber numberWithUnsignedLongLong: tempSong.persistentID]];
+                [positionsArray addObject:[NSNumber numberWithUnsignedLongLong: tempSong.position]];
+            }
+        }
+        
+    }
+    
+    NSDictionary *positionsAndPersistentIDs = [[NSDictionary alloc] initWithObjectsAndKeys:persistentIDArray,@"persistentIDs", positionsArray, @"positions", nil];
+    
+    return positionsAndPersistentIDs;
 }
 
 

@@ -175,7 +175,9 @@
     return resultArray;
 }
 
-- (void) deleteIBSongItemsByPersistentIDs:(NSArray*) persistentIDsArray{
+- (void) deleteIBSongItemsByPersistentIDs:(NSArray*) persistentIDsArray
+                                                            fromCoreDataPlaylist:(IBPlaylist*) playlist
+{
     
     
     NSManagedObjectContext *context = self.persistentContainer.viewContext;
@@ -190,14 +192,18 @@
     
     for (NSNumber *persistentIDObj in persistentIDsArray) {
         
-      NSPredicate* predicate = [NSPredicate predicateWithFormat:@"persistentID == %llu", [persistentIDObj unsignedLongLongValue]];
+      NSPredicate* predicate = [NSPredicate predicateWithFormat:@"(persistentID == %llu) && (playlists contains %@)", [persistentIDObj unsignedLongLongValue], playlist];
         
         [request setPredicate:predicate];
         
         NSError* requestError = nil;
         NSArray* resultArray = [context executeFetchRequest:request error:&requestError];
-        
-        [self.persistentContainer.viewContext deleteObject:[resultArray firstObject]];
+        NSLog(@"deleted obj count = %d", [resultArray count]);
+        if ([resultArray count] > 0) {
+             //[self.persistentContainer.viewContext deleteObject:[resultArray firstObject]];
+            [playlist removeSongItems:[NSSet setWithArray:resultArray]];
+        }
+       
         
         
         if (requestError) {

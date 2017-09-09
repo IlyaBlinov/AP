@@ -24,7 +24,7 @@
 
 
 - (void) saveIBSongItemsByPersistentIDs:  (NSArray*)persistentIDsArray;
-- (void) deleteIBSongItemsByPersistentIDs:(NSArray*) persistentIDsArray;
+- (void) deleteIBSongItemsByPersistentIDs:(NSArray*) persistentIDsArray fromCoreDataPlaylist:(IBPlaylist*) playlist;
 - (void) resortPositionsOfSongItemsInPlaylist:(IBPlaylist*) playlist;
 
 

@@ -42,27 +42,30 @@
     if ([self isEqual:[[IBCurrentParametersManager sharedManager]returnSongsViewController]]) {
         
         self.currentPlaylist = nil;
+        self.songs = nil;
         IBPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] coreDataChangingPlaylist];
        
-        self.songs = [currentPlaylist.songItems allObjects];
+        NSArray *coreDataSongs     = [currentPlaylist.songItems allObjects];
+        NSArray *persistentIDsOfSongsInCoreDataPlaylist = [coreDataSongs valueForKeyPath:@"@unionOfObjects.persistentID"];
+        NSArray *songs = [[IBFileManager sharedManager] getSongsByPersistentIDs:persistentIDsOfSongsInCoreDataPlaylist];
+        self.songs = [[IBFileManager sharedManager] checkSongMediaItems:songs];
+        
         
         self.currentPlaylist = currentPlaylist;
         
-        NSLog(@"songsCount = %lu", (unsigned long)[[self.currentPlaylist songItems]count]);
+        NSLog(@"songsCount = %lu", (unsigned long)[self.songs count]);
         
         
         
         [[IBCurrentParametersManager sharedManager].addedSongs removeAllObjects];
         [[IBCurrentParametersManager sharedManager].removedSongs removeAllObjects];
-        
-        
-        
-        [[IBCurrentParametersManager sharedManager] setCoreDataChangingPlaylist:nil];
+        [[IBCurrentParametersManager sharedManager] setCoreDataPlaylist:nil];
         [[IBCurrentParametersManager sharedManager] setReturnSongsViewController:nil];
         [self.tableView reloadData];
-        
+   
     }
-}
+    
+   }
 
 - (void)loadView
 {
@@ -73,13 +76,30 @@
     self.currentPlaylist = currentPlaylist;
     
    
-    self.songs      = [currentPlaylist.songItems allObjects];
+    NSArray *coreDataSongs     = [currentPlaylist.songItems allObjects];
+    NSArray *persistentIDsOfSongsInCoreDataPlaylist = [coreDataSongs valueForKeyPath:@"@unionOfObjects.persistentID"];
+   
+    NSArray *songs = [[IBFileManager sharedManager] getSongsByPersistentIDs:persistentIDsOfSongsInCoreDataPlaylist];
+    self.songs = [[IBFileManager sharedManager] checkSongMediaItems:songs];
     NSString *title = currentPlaylist.playlistName;
     
     
-    UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
-    [self.navigationItem setLeftBarButtonItem:backItem];
+    IBPlayerItem *removeSongButton = [[IBPlayerItem alloc] initWithButtonStyle:del];
+    [removeSongButton addTarget:self action:@selector(removeSong) forControlEvents:UIControlEventTouchUpInside];
     
+    IBBarButtonItem *removeSongItem = [[IBBarButtonItem alloc] initWithButton:removeSongButton];
+
+    UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
+    
+    NSArray *leftBarButtonItems;
+    
+    if ([[IBCurrentParametersManager sharedManager]isEditing]) {
+        leftBarButtonItems = [NSArray arrayWithObjects:backItem, nil];
+    }else{
+         leftBarButtonItems = [NSArray arrayWithObjects:backItem,removeSongItem, nil];
+    }
+    
+    [self.navigationItem setLeftBarButtonItems:leftBarButtonItems];
     self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Songs"];
     
     
@@ -153,9 +173,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return [[self.fetchedResultsController fetchedObjects]count];
+    //return [[self.fetchedResultsController fetchedObjects] count];
     
-    
+    return [self.songs count];
 }
 
 
@@ -172,9 +192,12 @@
     }
     
     
-    IBSongItem *coreDataSong = [self.fetchedResultsController objectAtIndexPath:indexPath];
+   IBSongItem *coreDataSong = [self.fetchedResultsController objectAtIndexPath:indexPath];
+   
+   IBMediaItem *song = [[IBFileManager sharedManager]getSongByPersistentID:[NSNumber numberWithUnsignedLongLong:coreDataSong.persistentID]];
     
-    IBMediaItem *song = [[IBFileManager sharedManager]getSongByPersistentID:[NSNumber numberWithUnsignedLongLong:coreDataSong.persistentID]];
+    
+   // IBMediaItem *song = [self.songs objectAtIndex:indexPath.row];
     
     MPMediaItem *songItem = (MPMediaItem*)song.mediaEntity;
     
@@ -205,6 +228,8 @@
     cell.timeDuration.attributedText = timeDuration;
     cell.songCount.attributedText    = songCount;
     
+    
+      
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
@@ -245,6 +270,67 @@
     
 }
 
+
+#pragma mark - UITableViewDelegate
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if ([[IBCurrentParametersManager sharedManager]isEditing]) {
+        return UITableViewCellEditingStyleNone;
+    }else{
+        return UITableViewCellEditingStyleDelete;
+    }
+    
+    
+}
+
+
+
+- (nullable NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    IBSongCellTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    
+    __weak IBSongsFromCoreDataViewController *weakSelf = self;
+    
+    NSDictionary *newAttributes = [IBFontAttributes attributesOfMainTitle];
+    NSDictionary *systemAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:17]};
+    
+    NSString *title = @"DELETE";
+    NSString *titleWhiteSpace = [self whitespaceReplacementString:title WithSystemAttributes:systemAttributes newAttributes:newAttributes];
+    
+    UITableViewRowAction *rowAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:titleWhiteSpace handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        
+        if (cell.editingStyle == UITableViewCellEditingStyleDelete) {
+            
+            [weakSelf.tableView beginUpdates];
+            
+            IBSongItem *removingSong = [weakSelf.fetchedResultsController objectAtIndexPath:indexPath];
+            
+            IBPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] coreDataPlaylist];
+            
+            [currentPlaylist removeSongItems:[NSSet setWithObject:removingSong]];
+            [[IBCoreDataManager sharedManager]resortPositionsOfSongItemsInPlaylist:currentPlaylist];
+            
+            [[IBCoreDataManager sharedManager] saveContext];
+            [weakSelf.tableView endUpdates];
+           // [weakSelf.tableView reloadData];
+            
+        }
+        
+        
+    }];
+    
+    
+    UIImage *patternImage = [self imageForTableViewRowActionWithTitle:title textAttributes:newAttributes backgroundColor:[UIColor purpleColor] cellHeight:CGRectGetHeight(cell.bounds)];
+    
+    rowAction.backgroundColor = [UIColor colorWithPatternImage:patternImage];
+    
+    return [NSArray arrayWithObject:rowAction];
+    
+}
+
+
+
+
 #pragma mark - Actions
 
 
@@ -264,7 +350,16 @@
 }
 
 
-
+- (void) removeSong{
+    
+    if ([self.tableView isEditing]) {
+        [self.tableView setEditing:NO animated:YES];
+    }else{
+        [self.tableView setEditing:YES animated:YES];
+        
+    }    
+    
+}
 
 
 
@@ -273,7 +368,9 @@
     CGPoint point = [button convertPoint:CGPointZero toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
     
+
     IBMediaItem *song = [self.songs objectAtIndex:indexPath.row];
+    
     
     if (song.state == default_state) {
         
@@ -301,10 +398,10 @@
         
     }else if (song.state == delete_state){
         
-        [button setImage: [UIImage imageNamed:@"cancel-music(4).png"]forState:UIControlStateNormal];
+        [button setImage: [UIImage imageNamed:@"inPlaylist.png"]forState:UIControlStateNormal];
         [button setIsSelected:NO];
         [[IBCurrentParametersManager sharedManager].removedSongs removeObject:song];
-        song.state = default_state;
+        song.state = inPlaylist_state;
     }
     
 }

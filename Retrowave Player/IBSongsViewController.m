@@ -145,6 +145,7 @@
     cell.artistTitle.attributedText  = artistName;
     cell.timeDuration.attributedText = timeDuration;
     cell.songCount.attributedText    = songCount;
+       
         
       IBPlayerItem  *addButton = [[IBPlayerItem alloc]initWithItemState:song.state];
        [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -232,11 +233,11 @@
     
     
     }else if (song.state == delete_state){
-        
-        [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+    
+        [button setImage: [UIImage imageNamed:@"inPlaylist.png"]forState:UIControlStateNormal];
         [button setIsSelected:NO];
         [[IBCurrentParametersManager sharedManager].removedSongs removeObject:song];
-        song.state = default_state;
+        song.state = inPlaylist_state;
     }
 
 }

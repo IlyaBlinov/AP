@@ -34,7 +34,7 @@ typedef enum{
 @property (assign, nonatomic) ItemState state;
 @property (strong, nonatomic) MPMediaEntity *mediaEntity;
 @property (assign, nonatomic) ItemType type;
-
+@property (assign, nonatomic) NSInteger position;
 
 
 @end

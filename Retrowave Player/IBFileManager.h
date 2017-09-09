@@ -67,7 +67,7 @@
 - (NSArray*) getSongsPersistentIDsByArtistPersistentID:(NSNumber*) persistentID;
 
 - (NSArray*) getPersistentIDsFromCoreDataPlaylist:(IBPlaylist*)playlist;
-
+- (NSDictionary*) getPersistentIDsAndPositionsFromCoreDataPlaylist:(IBPlaylist*)playlist;
 
 
 @end
