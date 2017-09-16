@@ -136,10 +136,7 @@
             NSArray *allAlbumsOfArtist = [[IBFileManager sharedManager] getAllSongsOfArtist:artist];
             NSArray *checkedAllAlbumsOfArtist = [[IBFileManager sharedManager] checkAlbumMediaItems:allAlbumsOfArtist];
             
-            statesOfSongs = [checkedAllAlbumsOfArtist valueForKeyPath:@"@distinctUnionOfObjects.state"];
-
-            
-            
+            statesOfSongs = [checkedAllAlbumsOfArtist valueForKeyPath:@"@distinctUnionOfObjects.state"];  
             
         }
             

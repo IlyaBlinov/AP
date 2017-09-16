@@ -8,13 +8,14 @@
 
 #import "IBSongsFromCoreDataViewController.h"
 #import "IBSongCellTableViewCell.h"
+#import "IBCoreDataManager.h"
 @interface IBSongsFromCoreDataViewController ()
 @property (strong, nonatomic) IBPlaylist *currentPlaylist;
 @property (strong, nonatomic) NSArray *songs;
 @end
 
 @implementation IBSongsFromCoreDataViewController
-@synthesize fetchedResultsController = _fetchedResultsController;
+//@synthesize fetchedResultsController = _fetchedResultsController;
 
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -45,14 +46,12 @@
         self.songs = nil;
         IBPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] coreDataChangingPlaylist];
        
-        NSArray *coreDataSongs     = [currentPlaylist.songItems allObjects];
-        NSArray *persistentIDsOfSongsInCoreDataPlaylist = [coreDataSongs valueForKeyPath:@"@unionOfObjects.persistentID"];
-        NSArray *songs = [[IBFileManager sharedManager] getSongsByPersistentIDs:persistentIDsOfSongsInCoreDataPlaylist];
+       
+        NSArray *songs = [[IBFileManager sharedManager] getIBMediaItemsFromCoreDataPlaylist:currentPlaylist];
         self.songs = [[IBFileManager sharedManager] checkSongMediaItems:songs];
         
         
         self.currentPlaylist = currentPlaylist;
-        
         NSLog(@"songsCount = %lu", (unsigned long)[self.songs count]);
         
         
@@ -75,11 +74,9 @@
     IBPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] coreDataPlaylist];
     self.currentPlaylist = currentPlaylist;
     
-   
-    NSArray *coreDataSongs     = [currentPlaylist.songItems allObjects];
-    NSArray *persistentIDsOfSongsInCoreDataPlaylist = [coreDataSongs valueForKeyPath:@"@unionOfObjects.persistentID"];
-   
-    NSArray *songs = [[IBFileManager sharedManager] getSongsByPersistentIDs:persistentIDsOfSongsInCoreDataPlaylist];
+  
+    
+    NSArray *songs = [[IBFileManager sharedManager] getIBMediaItemsFromCoreDataPlaylist:currentPlaylist];
     self.songs = [[IBFileManager sharedManager] checkSongMediaItems:songs];
     NSString *title = currentPlaylist.playlistName;
     
@@ -118,67 +115,14 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Fetched results controller
-
-- (NSFetchedResultsController *)fetchedResultsController
-{
-    if (_fetchedResultsController != nil) {
-        return _fetchedResultsController;
-    }
-    
-    
-    NSManagedObjectContext *managedObjectContext = self.persistentContainer.viewContext;
-    
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    // Edit the entity name as appropriate.
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"IBSongItem" inManagedObjectContext:managedObjectContext];
-    [fetchRequest setEntity:entity];
-    
-    // Set the batch size to a suitable number.
-    [fetchRequest setFetchBatchSize:20];
-    
-    // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"position" ascending:YES];
-    NSArray *sortDescriptors = @[sortDescriptor];
-    
-    [fetchRequest setSortDescriptors:sortDescriptors];
-    
-    
-    IBPlaylist *playlist = [[IBCurrentParametersManager sharedManager] coreDataPlaylist];
-    NSLog(@"%llu",playlist.persistentID);
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"playlists contains %@", playlist];
-    
-    [fetchRequest setPredicate:predicate];
-    
-    
-    
-    // Edit the section name key path and cache name if appropriate.
-    // nil for section name key path means "no sections".
-    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:managedObjectContext sectionNameKeyPath:nil cacheName:nil];
-    aFetchedResultsController.delegate = self;
-    self.fetchedResultsController = aFetchedResultsController;
-    
-    NSError *error = nil;
-    if (![self.fetchedResultsController performFetch:&error]) {
-        // Replace this implementation with code to handle the error appropriately.
-        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
-    }
-    
-    return _fetchedResultsController;
-}
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    //return [[self.fetchedResultsController fetchedObjects] count];
-    
     return [self.songs count];
+    
 }
-
-
 - (IBSongCellTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
@@ -192,12 +136,7 @@
     }
     
     
-   IBSongItem *coreDataSong = [self.fetchedResultsController objectAtIndexPath:indexPath];
-   
-   IBMediaItem *song = [[IBFileManager sharedManager]getSongByPersistentID:[NSNumber numberWithUnsignedLongLong:coreDataSong.persistentID]];
-    
-    
-   // IBMediaItem *song = [self.songs objectAtIndex:indexPath.row];
+    IBMediaItem *song = [self.songs objectAtIndex:indexPath.row];
     
     MPMediaItem *songItem = (MPMediaItem*)song.mediaEntity;
     
@@ -220,7 +159,7 @@
     NSAttributedString *songName = [[NSAttributedString alloc] initWithString:songTitle];
     NSAttributedString *artistName = [[NSAttributedString alloc] initWithString:artistTitle];
     NSAttributedString *timeDuration = [[NSAttributedString alloc] initWithString:songDurationTitle];
-    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%lld", coreDataSong.position + 1]];
+    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%lld", song.position + 1]];
     
     
     cell.songTitle.attributedText    = songName;
@@ -292,7 +231,7 @@
     __weak IBSongsFromCoreDataViewController *weakSelf = self;
     
     NSDictionary *newAttributes = [IBFontAttributes attributesOfMainTitle];
-    NSDictionary *systemAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:17]};
+    NSDictionary *systemAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:16]};
     
     NSString *title = @"DELETE";
     NSString *titleWhiteSpace = [self whitespaceReplacementString:title WithSystemAttributes:systemAttributes newAttributes:newAttributes];
@@ -301,21 +240,20 @@
         
         if (cell.editingStyle == UITableViewCellEditingStyleDelete) {
             
-            [weakSelf.tableView beginUpdates];
-            
-            IBSongItem *removingSong = [weakSelf.fetchedResultsController objectAtIndexPath:indexPath];
+            IBMediaItem *removingSong = [self.songs objectAtIndex:indexPath.row];
             
             IBPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] coreDataPlaylist];
             
-            [currentPlaylist removeSongItems:[NSSet setWithObject:removingSong]];
+            [[IBCoreDataManager sharedManager] deleteIBSongItemsByPersistentIDs:@[[NSNumber numberWithLongLong:removingSong.mediaEntity.persistentID]] fromCoreDataPlaylist:currentPlaylist];
+           
             [[IBCoreDataManager sharedManager]resortPositionsOfSongItemsInPlaylist:currentPlaylist];
             
-            [[IBCoreDataManager sharedManager] saveContext];
-            [weakSelf.tableView endUpdates];
-           // [weakSelf.tableView reloadData];
+            
+            self.songs = [[IBFileManager sharedManager] getIBMediaItemsFromCoreDataPlaylist:currentPlaylist];
+
+            [weakSelf.tableView reloadData];
             
         }
-        
         
     }];
     
@@ -354,10 +292,14 @@
     
     if ([self.tableView isEditing]) {
         [self.tableView setEditing:NO animated:YES];
+        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithButtonStyle:add];
+        [addToPlaylistButton addTarget:self action:@selector(addNewSongs) forControlEvents:UIControlEventTouchUpInside];
+        IBBarButtonItem *addToPlaylistItem = [[IBBarButtonItem alloc] initWithButton:addToPlaylistButton];
+        self.navigationItem.rightBarButtonItem = addToPlaylistItem;
     }else{
         [self.tableView setEditing:YES animated:YES];
-        
-    }    
+        self.navigationItem.rightBarButtonItem =  nil;
+    }
     
 }
 
@@ -408,6 +350,62 @@
 
 
 
+#pragma mark - Edit Delete Button Of Cell
+
+- (UIImage*) imageForTableViewRowActionWithTitle:(NSString*) title textAttributes:(NSDictionary*) attributes backgroundColor:(UIColor*) color cellHeight:(CGFloat) cellHeight{
+    
+    
+    NSString *titleString = title;
+    NSDictionary *originalAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:17]};
+    CGSize originalSize = [titleString  sizeWithAttributes:originalAttributes];
+    
+    CGSize newSize = CGSizeMake(originalSize.width * 2.5, originalSize.height * 2);
+    
+    CGRect drawingRect = CGRectIntegral(CGRectMake(0, 0, newSize.width, newSize.height));
+    UIGraphicsBeginImageContextWithOptions(drawingRect.size, YES, [UIScreen mainScreen].nativeScale);
+    
+    CGContextRef contextRef = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(contextRef, color.CGColor);
+    CGContextFillRect(contextRef, drawingRect);
+    
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:drawingRect];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.attributedText = [[NSAttributedString alloc] initWithString:title attributes:[IBFontAttributes attributesOfMainTitle]];
+    
+    [label drawTextInRect:drawingRect];
+    
+    UIImage *returningImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    
+    return returningImage;
+    
+}
+
+
+- (NSString *) whitespaceReplacementString:(NSString*) string WithSystemAttributes:(NSDictionary *)systemAttributes newAttributes:(NSDictionary *)newAttributes
+{
+    NSString *stringTitle = string;
+    NSMutableString *stringTitleWS = [[NSMutableString alloc] initWithString:@""];
+    
+    CGFloat diff = 0;
+    CGSize  stringTitleSize = [stringTitle sizeWithAttributes:newAttributes];
+    CGSize stringTitleWSSize;
+    NSDictionary *originalAttributes = systemAttributes;
+    do {
+        [stringTitleWS appendString:@" "];
+        stringTitleWSSize = [stringTitleWS sizeWithAttributes:originalAttributes];
+        diff = (stringTitleSize.width - stringTitleWSSize.width);
+        if (diff <= 1.5) {
+            break;
+        }
+    }
+    while (diff > 0);
+    
+    return stringTitleWS;
+}
 
 
 @end

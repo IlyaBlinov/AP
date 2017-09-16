@@ -192,7 +192,7 @@
     
     for (NSNumber *persistentIDObj in persistentIDsArray) {
         
-      NSPredicate* predicate = [NSPredicate predicateWithFormat:@"(persistentID == %llu) && (playlists contains %@)", [persistentIDObj unsignedLongLongValue], playlist];
+      NSPredicate* predicate = [NSPredicate predicateWithFormat:@"(persistentID == %llu) && (playlists contains %@)", [persistentIDObj longLongValue], playlist];
         
         [request setPredicate:predicate];
         

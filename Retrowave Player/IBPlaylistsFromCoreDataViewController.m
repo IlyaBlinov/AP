@@ -272,9 +272,7 @@
                 NSLog(@"Unresolved error %@, %@", error, error.userInfo);
                 abort();
             }
-            
-           
-                   }
+              }
 
         
     }];
@@ -399,11 +397,17 @@
     
     
     if ([self.tableView isEditing]) {
-        
         [self.tableView setEditing:NO animated:YES];
+        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithButtonStyle:add];
+        [addToPlaylistButton addTarget:self action:@selector(addNewPlaylist) forControlEvents:UIControlEventTouchUpInside];
+        
+        IBBarButtonItem *addToPlaylistItem = [[IBBarButtonItem alloc] initWithButton:addToPlaylistButton];
+        
+        self.navigationItem.rightBarButtonItem = addToPlaylistItem;
+      
     }else{
         [self.tableView setEditing:YES animated:YES];
-
+         self.navigationItem.rightBarButtonItem = nil;
     }
     
 }
