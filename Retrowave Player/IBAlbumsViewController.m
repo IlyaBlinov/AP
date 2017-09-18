@@ -30,7 +30,16 @@
     
     [super viewWillAppear:animated];
 
-    IBSongsViewType songsType = [[IBCurrentParametersManager sharedManager] songsViewType];
+    
+   // NSLog(@"controllersbefore = %d",[[self.navigationController viewControllers]count]);
+     IBSongsViewType songsType = [[IBCurrentParametersManager sharedManager] songsViewType];
+    if ([[self.navigationController viewControllers] count] > 3) {
+        songsType = artist_type;
+        [IBCurrentParametersManager sharedManager].songsViewType = artist_type;
+    }
+    
+    
+   
     NSDictionary *titleAndAlbumsDictionary = [[IBFileManager sharedManager] getAlbumsAndTitleFor:songsType];
     
     NSString *title = [titleAndAlbumsDictionary valueForKey:@"title"];
