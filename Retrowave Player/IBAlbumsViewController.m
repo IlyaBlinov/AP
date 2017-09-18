@@ -216,8 +216,7 @@
     
     if (album.state == default_state) {
         
-        [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];
-        [button setIsSelected:YES];
+        [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateNormal];
         album.state = added_state;
         
         [[IBCurrentParametersManager sharedManager].addedSongs addObjectsFromArray:songs];
@@ -225,7 +224,6 @@
     }else if (album.state == added_state){
         
         [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
-        [button setIsSelected:NO];
         
         NSUInteger location = [[IBCurrentParametersManager sharedManager].addedSongs count] - [songs count] ;
         [[IBCurrentParametersManager sharedManager].addedSongs removeObjectsInRange:NSMakeRange(location, [songs count])];
@@ -234,7 +232,6 @@
     }else if ( (album.state == inPlaylist_state) && ([[IBCurrentParametersManager sharedManager]coreDataChangingPlaylist])){
         
         [button setImage: [UIImage imageNamed:@"cancel-music(4).png"]forState:UIControlStateNormal];
-        [button setIsSelected:NO];
        [[IBCurrentParametersManager sharedManager].removedSongs addObjectsFromArray:songs];
         album.state = delete_state;
         
@@ -244,7 +241,7 @@
     }else if (album.state == delete_state){
         
         [button setImage: [UIImage imageNamed:@"inPlaylist.png"]forState:UIControlStateNormal];
-        [button setIsSelected:NO];
+        
         NSUInteger location = [[IBCurrentParametersManager sharedManager].removedSongs count] - [songs count] ;
         [[IBCurrentParametersManager sharedManager].removedSongs removeObjectsInRange:NSMakeRange(location, [songs count])];
         album.state = inPlaylist_state;

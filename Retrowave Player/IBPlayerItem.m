@@ -40,13 +40,13 @@
                 
             case move_next:
                 imageName = @"skip-track.png";
-                
+                 break;
             case add_all:
                 imageName = @"add_all.png";
-                
+                 break;
             case remove_all:
                 imageName = @"cancel_all.png";
-                
+                 break;
             default:
                 break;
         }
