@@ -42,10 +42,10 @@
                 imageName = @"skip-track.png";
                 
             case add_all:
-                imageName = @"skip-track.png";
+                imageName = @"add_all.png";
                 
             case remove_all:
-                imageName = @"skip-track.png";
+                imageName = @"cancel_all.png";
                 
             default:
                 break;
