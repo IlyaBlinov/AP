@@ -46,11 +46,30 @@
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
+        self.songs = [[IBFileManager sharedManager] checkSongMediaItems:songs];
         
         IBBarButtonItem *chooseBarButton = [self createChooseSongsItem];
         
-        IBPlayerItem *addAllSongs = [[IBPlayerItem alloc] initWithButtonStyle:add_all];
-        [addAllSongs setIsSelected:YES];
+        NSArray *statesOfSongs = [self.songs valueForKeyPath:@"@distinctUnionOfObjects.state"];
+        
+        
+        BOOL containsInPlaylistState = [statesOfSongs containsObject:[NSNumber numberWithUnsignedInteger:inPlaylist_state]];
+        BOOL containsAddedState = [statesOfSongs containsObject:[NSNumber numberWithUnsignedInteger:added_state]];
+        
+        
+        
+        ButtonStyle style = add_all;
+        if (   ( ([statesOfSongs count] == 1) && containsAddedState)
+            |( containsInPlaylistState && containsAddedState && ([statesOfSongs count] == 2))  ) {
+            style = remove_all;
+        }
+        
+        IBPlayerItem *addAllSongs = [[IBPlayerItem alloc] initWithButtonStyle:style];
+        if (style == add_all) {
+            [addAllSongs setIsSelected:YES];
+        }else{
+        [addAllSongs setIsSelected:NO];
+        }
         [addAllSongs addTarget:self action:@selector(addAllSongs:) forControlEvents:UIControlEventTouchUpInside];
         IBBarButtonItem *addAllSongsBarButton = [[IBBarButtonItem alloc] initWithButton:addAllSongs];
         
@@ -64,7 +83,7 @@
         
         [self.navigationController setNavigationBarHidden:NO];
         [self.tableView setEditing:YES];
-        self.songs = [[IBFileManager sharedManager] checkSongMediaItems:songs];
+        
         
       
         
@@ -219,6 +238,10 @@
 
 - (void) addAllSongs:(IBPlayerItem*) button{
     
+    NSArray *allStatesOfSongs = [self.songs valueForKeyPath:@"@distinctUnionOfObjects.state"];
+    ItemState state = [[allStatesOfSongs firstObject] unsignedIntegerValue];
+    if ( ([allStatesOfSongs count] == 1) && (state == inPlaylist_state ) ) {
+    }else{
     if ([button isSelected]) {
         [button setImage: [UIImage imageNamed:@"cancel_all.png"]forState:UIControlStateNormal];
         [button setIsSelected:NO];
@@ -233,14 +256,16 @@
         [button setImage: [UIImage imageNamed:@"add_all.png"]forState:UIControlStateNormal];
         [button setIsSelected:YES];
         
-        
         for (IBMediaItem *song in self.songs) {
             if (song.state == added_state) {
-                song.state = default_state;
-                [[IBCurrentParametersManager sharedManager].addedSongs removeObject:song];
+                [[IBCurrentParametersManager sharedManager] removeSongFromArray:song];
+                 song.state = default_state;
             }
         }
     }
+    }
+    
+    NSLog(@"added songs count = %d",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
     
     [self.tableView reloadData];
     

@@ -38,7 +38,7 @@
     }else{
         self.artists = [[IBFileManager sharedManager] getArtists] ;
     }
-    
+    NSLog(@"added songs count = %d",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
     [self.tableView reloadData];
 }
 

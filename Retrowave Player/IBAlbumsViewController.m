@@ -44,14 +44,51 @@
     
     NSString *title = [titleAndAlbumsDictionary valueForKey:@"title"];
     NSArray  *albums  = [titleAndAlbumsDictionary valueForKey:@"albums"];
-    
+    self.albums = [[IBFileManager sharedManager] checkAlbumMediaItems:albums];
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-        self.navigationItem.rightBarButtonItem =  [self createChooseSongsItem];
+        //self.navigationItem.rightBarButtonItem =  [self createChooseSongsItem];
+        IBBarButtonItem *chooseBarButton = [self createChooseSongsItem];
+        
+        NSArray *statesOfSongs = [self.albums valueForKeyPath:@"@distinctUnionOfObjects.state"];
+        
+        BOOL containsInPlaylistState = [statesOfSongs containsObject:[NSNumber numberWithUnsignedInteger:inPlaylist_state]];
+        BOOL containsAddedState = [statesOfSongs containsObject:[NSNumber numberWithUnsignedInteger:added_state]];
+        
+        
+        
+        ButtonStyle style = add_all;
+        if (   ( ([statesOfSongs count] == 1) && containsAddedState)
+            |( containsInPlaylistState && containsAddedState && ([statesOfSongs count] == 2))  ) {
+            style = remove_all;
+        }
+
+        
+        IBPlayerItem *addAllSongs = [[IBPlayerItem alloc] initWithButtonStyle:style];
+        if (style == add_all) {
+            [addAllSongs setIsSelected:YES];
+        }else{
+            [addAllSongs setIsSelected:NO];
+        }
+        [addAllSongs addTarget:self action:@selector(addAllSongs:) forControlEvents:UIControlEventTouchUpInside];
+        IBBarButtonItem *addAllSongsBarButton = [[IBBarButtonItem alloc] initWithButton:addAllSongs];
+        
+        if (songsType == artist_type) {
+            self.navigationItem.rightBarButtonItems = @[chooseBarButton,addAllSongsBarButton];
+            
+        }else{
+            self.navigationItem.rightBarButtonItem = chooseBarButton;
+        }
+
+        
+        
+        
+        
+        
         
         self.tableView.allowsSelectionDuringEditing = YES;
-        self.albums = [[IBFileManager sharedManager] checkAlbumMediaItems:albums];
+        
         
     }else{
         self.albums = [NSArray arrayWithArray:albums];
@@ -202,6 +239,77 @@
 
 
 #pragma mark - Action
+
+
+
+- (void) addAllSongs:(IBPlayerItem*) button{
+    
+    NSArray *allStatesOfAlbums = [self.albums valueForKeyPath:@"@distinctUnionOfObjects.state"];
+    ItemState state = [[allStatesOfAlbums firstObject] unsignedIntegerValue];
+    if ( ([allStatesOfAlbums count] == 1) && (state == inPlaylist_state ) ) {
+        
+    }else{
+    
+    if ([button isSelected]) {
+        [button setImage: [UIImage imageNamed:@"cancel_all.png"]forState:UIControlStateNormal];
+        [button setIsSelected:NO];
+        
+        for (IBMediaItem *album in self.albums) {
+             NSArray *songsArray = [[IBFileManager sharedManager] getAllSongsOfAlbum:album];
+             NSArray *checkedSongsArray = [[IBFileManager sharedManager] checkSongMediaItems:songsArray];
+            
+            if (album.state == default_state) {
+                album.state = added_state;
+                
+                for (IBMediaItem *song in checkedSongsArray) {
+                    if (song.state == default_state) {
+                        [[IBCurrentParametersManager sharedManager].addedSongs addObject:song];
+                    }
+                }
+                
+                
+            }
+        }
+    }else{
+        [button setImage: [UIImage imageNamed:@"add_all.png"]forState:UIControlStateNormal];
+        [button setIsSelected:YES];
+        
+        
+        for (IBMediaItem *album in self.albums) {
+            NSArray *songsArray = [[IBFileManager sharedManager] getAllSongsOfAlbum:album];
+            NSArray *checkedSongsArray = [[IBFileManager sharedManager] checkSongMediaItems:songsArray];
+            
+            if (album.state == added_state) {
+                album.state = default_state;
+                
+                for (IBMediaItem *song in checkedSongsArray) {
+                    if (song.state == added_state) {
+                        [[IBCurrentParametersManager sharedManager] removeSongFromArray:song];
+                        song.state = default_state;
+
+                    }
+                }
+                
+                
+            }
+        }
+    }
+    }
+    [self.tableView reloadData];
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 - (void) addToPlaylistAction:(IBPlayerItem*) button{
     

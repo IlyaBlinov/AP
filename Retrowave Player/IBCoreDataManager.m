@@ -80,8 +80,8 @@
     
     NSManagedObjectContext *context = self.persistentContainer.viewContext;
     
-    NSFetchRequest* songRequest = [[NSFetchRequest alloc] init];
-    NSFetchRequest* albumRequest = [[NSFetchRequest alloc] init];
+    NSFetchRequest* songRequest   = [[NSFetchRequest alloc] init];
+    NSFetchRequest* albumRequest  = [[NSFetchRequest alloc] init];
     NSFetchRequest* artistRequest = [[NSFetchRequest alloc] init];
     
     

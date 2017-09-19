@@ -43,7 +43,7 @@ typedef enum {
 @property (strong, nonatomic) IBPlaylist *coreDataChangingPlaylist;
 
 
-
+- (void) removeSongFromArray:(IBMediaItem*) song;
 
 
 @end

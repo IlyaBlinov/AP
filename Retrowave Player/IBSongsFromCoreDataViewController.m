@@ -26,7 +26,27 @@
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-        self.navigationItem.rightBarButtonItem =  [self createChooseSongsItem];
+        IBBarButtonItem *chooseBarButton = [self createChooseSongsItem];
+        
+        NSArray *statesOfSongs = [self.songs valueForKeyPath:@"@distinctUnionOfObjects.state"];
+        
+        ItemState state = [[statesOfSongs firstObject] unsignedIntegerValue];
+        
+        ButtonStyle style = add_all;
+        if (([statesOfSongs count] == 1) && (state == added_state)) {
+            style = remove_all;
+        }
+        
+        IBPlayerItem *addAllSongs = [[IBPlayerItem alloc] initWithButtonStyle:style];
+        if (style == add_all) {
+            [addAllSongs setIsSelected:YES];
+        }else{
+            [addAllSongs setIsSelected:NO];
+        }
+        [addAllSongs addTarget:self action:@selector(addAllSongs:) forControlEvents:UIControlEventTouchUpInside];
+        IBBarButtonItem *addAllSongsBarButton = [[IBBarButtonItem alloc] initWithButton:addAllSongs];
+ 
+        self.navigationItem.rightBarButtonItems = @[chooseBarButton,addAllSongsBarButton];
         
     }else{
         
@@ -271,6 +291,41 @@
 
 #pragma mark - Actions
 
+- (void) addAllSongs:(IBPlayerItem*) button{
+    
+    NSArray *allStatesOfSongs = [self.songs valueForKeyPath:@"@distinctUnionOfObjects.state"];
+    ItemState state = [[allStatesOfSongs firstObject] unsignedIntegerValue];
+    if ( (([allStatesOfSongs count] == 1) && (state == inPlaylist_state )) | ([self.songs count] == 0) ) {
+    }else{
+        if ([button isSelected]) {
+            [button setImage: [UIImage imageNamed:@"cancel_all.png"]forState:UIControlStateNormal];
+            [button setIsSelected:NO];
+            
+            for (IBMediaItem *song in self.songs) {
+                if (song.state == default_state) {
+                    song.state = added_state;
+                    [[IBCurrentParametersManager sharedManager].addedSongs addObject:song];
+                }
+            }
+        }else{
+            [button setImage: [UIImage imageNamed:@"add_all.png"]forState:UIControlStateNormal];
+            [button setIsSelected:YES];
+            
+            
+            for (IBMediaItem *song in self.songs) {
+                if (song.state == added_state) {
+                    [[IBCurrentParametersManager sharedManager] removeSongFromArray:song];
+                    song.state = default_state;
+                }
+            }
+        }
+        
+        
+    }
+    
+    [self.tableView reloadData];
+    
+}
 
 
 - (void)addNewSongs{

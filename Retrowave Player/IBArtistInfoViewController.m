@@ -20,12 +20,12 @@
 
 @implementation IBArtistInfoViewController
 
-//- (void)viewWillAppear:(BOOL)animated{
-//    
-//    [super viewWillAppear:animated];
-//    
-//    [self.tableView reloadData];
-//}
+- (void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
+    
+   NSLog(@"added songs count = %d",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+}
 
 
 - (void)viewDidLoad
