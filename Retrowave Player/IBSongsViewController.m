@@ -36,6 +36,9 @@
     
     [super viewDidLoad];
     
+    
+    NSLog(@"added songs count = %d",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+    
     IBSongsViewType songsType = [[IBCurrentParametersManager sharedManager] songsViewType];
     NSDictionary *titleAndSongsDictionary = [[IBFileManager sharedManager] getSongsAndTitleFor:songsType];
     
@@ -248,8 +251,12 @@
 
         for (IBMediaItem *song in self.songs) {
             if (song.state == default_state) {
-                song.state = added_state;
                 [[IBCurrentParametersManager sharedManager].addedSongs addObject:song];
+                song.state = added_state;
+                
+                NSNumber *persistentID  = [song.mediaEntity valueForProperty:MPMediaItemPropertyPersistentID];
+                NSLog(@"persistentID of added song = %lld", [persistentID longLongValue]);
+                
             }
         }
     }else{
@@ -285,7 +292,8 @@
         [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateNormal];
         song.state = added_state;
         [[IBCurrentParametersManager sharedManager].addedSongs addObject:song];
-        
+        NSNumber *persistentID  = [song.mediaEntity valueForProperty:MPMediaItemPropertyPersistentID];
+        NSLog(@"persistentID of added song = %lld", [persistentID longLongValue]);
     }else if (song.state == added_state){
         
         [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
@@ -298,7 +306,7 @@
         [[IBCurrentParametersManager sharedManager].removedSongs addObject:song];
         song.state = delete_state;
   
-    NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+   
     
     
     }else if (song.state == delete_state){
@@ -308,6 +316,9 @@
         song.state = inPlaylist_state;
     }
 
+     NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+    
+    
 }
 
 

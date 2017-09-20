@@ -48,7 +48,6 @@
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-        //self.navigationItem.rightBarButtonItem =  [self createChooseSongsItem];
         IBBarButtonItem *chooseBarButton = [self createChooseSongsItem];
         
         NSArray *statesOfSongs = [self.albums valueForKeyPath:@"@distinctUnionOfObjects.state"];
@@ -117,15 +116,8 @@
     [self.navigationItem setHidesBackButton:NO animated:NO];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     
-    
-    
-    
-   
-    
     self.navigationItem.titleView = [IBFontAttributes getCustomTitleForControllerName:@"Albums"];
-    
-    
-    
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -172,8 +164,8 @@
     MPMediaItem *albumItem = (MPMediaItem*)[album mediaEntity];
     
     
-    NSString *albumTitle =       [albumItem valueForProperty:MPMediaItemPropertyAlbumTitle];
-    NSString *albumArtistTitle = [albumItem valueForProperty:MPMediaItemPropertyAlbumArtist];
+    NSString *albumTitle =               [albumItem valueForProperty:MPMediaItemPropertyAlbumTitle];
+    NSString *albumArtistTitle =         [albumItem valueForProperty:MPMediaItemPropertyAlbumArtist];
     MPMediaItemArtwork *albumImageItem = [albumItem valueForProperty:MPMediaItemPropertyArtwork];
     
     CGRect imageRect = cell.albumImage.bounds;

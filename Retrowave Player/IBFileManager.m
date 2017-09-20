@@ -804,7 +804,8 @@
 
        if ([persistentIDsArrayOfChangingPlaylist count] > 0) {
            
-           NSNumber *persistentID = [NSNumber numberWithLongLong: item.persistentID];
+           NSNumber *persistentID = [item valueForProperty:MPMediaItemPropertyPersistentID];
+         //  NSLog(@"persistentID = %@",persistentID);
        if ([persistentIDsArrayOfChangingPlaylist containsObject:persistentID]) {
                 mediaItem.state = inPlaylist_state;
        }
@@ -812,14 +813,14 @@
        }
         
        if ([addedMediItemsArray count] > 0) {
-       if ([persistentIDAddedItemsArray containsObject:[NSNumber numberWithLongLong: item.persistentID]]) {
+       if ([persistentIDAddedItemsArray containsObject:[item valueForProperty:MPMediaItemPropertyPersistentID]]) {
            mediaItem.state = added_state;
        }
        }
         
         
         if ([removedMediItemsArray count] > 0) {
-            if ([persistentIDRemovedItemsArray containsObject:[NSNumber numberWithLongLong: item.persistentID]]) {
+            if ([persistentIDRemovedItemsArray containsObject:[item valueForProperty:MPMediaItemPropertyPersistentID]]) {
                 mediaItem.state = delete_state;
             }
         }
