@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		23027B721F42E0B800259CE7 /* IBParentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 23027B711F42E0B800259CE7 /* IBParentCell.m */; };
+		23027B7D1F71511100259CE7 /* add_all.png in Resources */ = {isa = PBXBuildFile; fileRef = 23027B7B1F71511100259CE7 /* add_all.png */; };
+		23027B7E1F71511100259CE7 /* cancel_all.png in Resources */ = {isa = PBXBuildFile; fileRef = 23027B7C1F71511100259CE7 /* cancel_all.png */; };
 		230B68A11F06848700476F44 /* IBFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B68A01F06848700476F44 /* IBFileManager.m */; };
 		230B68A61F0D12CA00476F44 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 230B68A51F0D12CA00476F44 /* CoreData.framework */; };
 		230B69261F0E444400476F44 /* IBCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B69251F0E444400476F44 /* IBCoreDataManager.m */; };
@@ -284,6 +286,8 @@
 /* Begin PBXFileReference section */
 		23027B701F42E0B800259CE7 /* IBParentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBParentCell.h; sourceTree = "<group>"; };
 		23027B711F42E0B800259CE7 /* IBParentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBParentCell.m; sourceTree = "<group>"; };
+		23027B7B1F71511100259CE7 /* add_all.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = add_all.png; path = ../../../../add_all.png; sourceTree = "<group>"; };
+		23027B7C1F71511100259CE7 /* cancel_all.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cancel_all.png; path = ../../../../cancel_all.png; sourceTree = "<group>"; };
 		230B689F1F06848700476F44 /* IBFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBFileManager.h; sourceTree = "<group>"; };
 		230B68A01F06848700476F44 /* IBFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBFileManager.m; sourceTree = "<group>"; };
 		230B68A51F0D12CA00476F44 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -738,6 +742,8 @@
 				6F004B9C1EACCEFC007755C3 /* add 256 x 256.png */,
 				6F004B9D1EACCEFC007755C3 /* add 512 x 512.png */,
 				6F004B9E1EACCEFC007755C3 /* add 64 x 64.png */,
+				23027B7B1F71511100259CE7 /* add_all.png */,
+				23027B7C1F71511100259CE7 /* cancel_all.png */,
 			);
 			path = "Add Magenta";
 			sourceTree = "<group>";
@@ -1417,6 +1423,7 @@
 				6F004D381EACCEFD007755C3 /* mute-volume-adjustment(1).png in Resources */,
 				6F004CA81EACCEFD007755C3 /* vinyl-music-player(1).png in Resources */,
 				6F004CB21EACCEFD007755C3 /* music-folder(3).png in Resources */,
+				23027B7E1F71511100259CE7 /* cancel_all.png in Resources */,
 				6F004C9B1EACCEFC007755C3 /* add 64 x 64.png in Resources */,
 				6F004D441EACCEFD007755C3 /* sound-adjustment(5).png in Resources */,
 				6F004D111EACCEFD007755C3 /* music-player-pause-lines(2).png in Resources */,
@@ -1506,6 +1513,7 @@
 				6F004CAA1EACCEFD007755C3 /* vinyl-music-player(3).png in Resources */,
 				6F004D1A1EACCEFD007755C3 /* music-player-play(3).png in Resources */,
 				6F004D201EACCEFD007755C3 /* songs-list(1).png in Resources */,
+				23027B7D1F71511100259CE7 /* add_all.png in Resources */,
 				6FCDBDDC1EC1D64D00B326D7 /* Added.png in Resources */,
 				6F004D501EACCEFD007755C3 /* music-playlist(1).png in Resources */,
 				6F004D421EACCEFD007755C3 /* sound-adjustment(3).png in Resources */,

@@ -133,7 +133,7 @@
         
         
        [coreDataSongsVC dismissViewControllerAnimated:YES completion:nil];
-      
+        
         
     }
 }
@@ -164,13 +164,16 @@
     
     IBContentViewController *vc;
     
+    
+    NSLog(@"All Controllers = %@", allControllers);
+    
     if ([allControllers count] > 1) {
         vc = [allControllers objectAtIndex:[allControllers count] - 2];
     }else{
          vc = [allControllers objectAtIndex:[allControllers count] - 1];
     }
     
-    
+    NSLog(@"VC description = %@", [vc class]);
     
     [self.navigationController popToViewController:vc animated:YES];
     NSLog(@"popToViewController %@", [vc description]);

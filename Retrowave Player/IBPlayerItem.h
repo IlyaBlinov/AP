@@ -15,7 +15,9 @@ typedef enum{
     add,
     del,
     move_next,
-    user_defaults
+    user_defaults,
+    add_all,
+    remove_all
     
     
 }ButtonStyle;

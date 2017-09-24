@@ -479,9 +479,30 @@
     
 }
 
+#pragma mark - return MPMediaItems By PersistentID & Position
 
 
-
+- (IBMediaItem*) getSongByPersistentID:(NSNumber*) persistentID andPosition:(NSNumber*) position{
+    
+    
+    MPMediaPropertyPredicate *persisitentIDPredicate =
+    [MPMediaPropertyPredicate predicateWithValue: persistentID
+                                     forProperty: MPMediaItemPropertyPersistentID];
+    
+    MPMediaQuery *songsByPersistenID = [[MPMediaQuery alloc] init];
+    [songsByPersistenID addFilterPredicate:persisitentIDPredicate];
+    
+    if ([songsByPersistenID.items count] > 0) {
+        IBMediaItem *songItem = [[IBMediaItem alloc] init];
+        songItem.mediaEntity = [songsByPersistenID.items firstObject];
+        songItem.position = [position longLongValue];
+        return songItem;
+    }else{
+        return nil;
+    }
+    
+    
+}
 
 #pragma mark - return MPMediaItems By PersistentID
 
@@ -521,7 +542,30 @@
     return mediaItemsArray;
 }
 
-
+- (NSArray*) getSongsByPersistentIDsAndPositions:(NSDictionary*) persistentIDsAndPositions{
+    
+    NSMutableArray *mediaItemsArray = [NSMutableArray array];
+    
+    NSArray *persistentIDs = [persistentIDsAndPositions valueForKey:@"persistentIDs"];
+    NSArray *positions     = [persistentIDsAndPositions valueForKey:@"positions"];
+    
+    for (int i = 0; i < [persistentIDs count];i++) {
+        
+        NSNumber *persistentID = [persistentIDs objectAtIndex:i];
+        NSNumber *position     = [positions objectAtIndex:i];
+        
+        IBMediaItem *item = [self getSongByPersistentID:persistentID andPosition:position];
+        
+        [mediaItemsArray addObject:item];
+    }
+    
+    NSSortDescriptor *positionDescriptor = [[NSSortDescriptor alloc] initWithKey:@"position" ascending:YES];
+    
+    [mediaItemsArray sortUsingDescriptors:@[positionDescriptor]];
+    
+    
+    return mediaItemsArray;
+}
 
 
 
@@ -600,11 +644,24 @@
     return mediaItemsArray;
 }
 
+#pragma mark - CoreDataPlaylists
+
+
+- (NSArray*) getIBMediaItemsFromCoreDataPlaylist:(IBPlaylist*) playlist{
+    
+    NSDictionary *coreDataPersistentIDsAndPositions = [self getPersistentIDsAndPositionsFromCoreDataPlaylist:playlist];
+    NSArray *songs = [self getSongsByPersistentIDsAndPositions:coreDataPersistentIDsAndPositions];
+
+    
+    return songs;
+
+}
+
 
 
 - (NSArray*) getPersistentIDsFromCoreDataPlaylist:(IBPlaylist*)playlist{
     
-    NSArray *allItemsInPlaylist = [[IBCoreDataManager sharedManager]allObjectsFromCoreDataPlaylist:playlist];
+    NSSet *allItemsInPlaylist =  playlist.songItems ;
     
     NSMutableArray *persistentIDArray = [NSMutableArray array];
     
@@ -614,21 +671,61 @@
         
         if ([item isKindOfClass:[IBPlaylist class]]) {
             IBPlaylist *tempPlaylist = (IBPlaylist*) item;
-            [persistentIDArray addObject:[NSNumber numberWithUnsignedLongLong: tempPlaylist.persistentID]];
+            [persistentIDArray addObject:tempPlaylist.persistentID];
         }else if ([item isKindOfClass:[IBArtistItem class]]) {
             IBArtistItem *tempArtist = (IBArtistItem*) item;
-            [persistentIDArray addObject:[NSNumber numberWithUnsignedLongLong: tempArtist.persistentID]];
+            [persistentIDArray addObject: tempArtist.persistentID];
         }else if ([item isKindOfClass:[IBAlbumItem class]]) {
             IBAlbumItem *tempAlbum = (IBAlbumItem*) item;
-            [persistentIDArray addObject:[NSNumber numberWithUnsignedLongLong: tempAlbum.persistentID]];
+            [persistentIDArray addObject: tempAlbum.persistentID];
         }else if ([item isKindOfClass:[IBSongItem class]]) {
             IBSongItem *tempSong = (IBSongItem*) item;
-            [persistentIDArray addObject:[NSNumber numberWithUnsignedLongLong: tempSong.persistentID]];
+            [persistentIDArray addObject:tempSong.persistentID];
         }
     }
         
 }
     return persistentIDArray;
+}
+
+
+
+
+
+- (NSDictionary*) getPersistentIDsAndPositionsFromCoreDataPlaylist:(IBPlaylist*)playlist{
+    
+    NSSet *allItemsInPlaylist =  playlist.songItems ;
+    
+    NSMutableArray *persistentIDArray = [NSMutableArray array];
+    NSMutableArray *positionsArray    = [NSMutableArray array];
+    if ([allItemsInPlaylist count] > 0) {
+        
+        for (IBParentItem *item in allItemsInPlaylist) {
+            
+            if ([item isKindOfClass:[IBPlaylist class]]) {
+                IBPlaylist *tempPlaylist = (IBPlaylist*) item;
+                [persistentIDArray addObject: tempPlaylist.persistentID];
+                [positionsArray addObject: tempPlaylist.position];
+            }else if ([item isKindOfClass:[IBArtistItem class]]) {
+                IBArtistItem *tempArtist = (IBArtistItem*) item;
+                [persistentIDArray addObject: tempArtist.persistentID];
+                [positionsArray addObject:tempArtist.position];
+            }else if ([item isKindOfClass:[IBAlbumItem class]]) {
+                IBAlbumItem *tempAlbum = (IBAlbumItem*) item;
+                [persistentIDArray addObject:tempAlbum.persistentID];
+                [positionsArray addObject: tempAlbum.position];
+            }else if ([item isKindOfClass:[IBSongItem class]]) {
+                IBSongItem *tempSong = (IBSongItem*) item;
+                [persistentIDArray addObject: tempSong.persistentID];
+                [positionsArray addObject: tempSong.position];
+            }
+        }
+        
+    }
+    
+    NSDictionary *positionsAndPersistentIDs = [[NSDictionary alloc] initWithObjectsAndKeys:persistentIDArray,@"persistentIDs", positionsArray, @"positions", nil];
+    
+    return positionsAndPersistentIDs;
 }
 
 
@@ -707,7 +804,8 @@
 
        if ([persistentIDsArrayOfChangingPlaylist count] > 0) {
            
-           NSNumber *persistentID = [NSNumber numberWithLongLong: item.persistentID];
+           NSNumber *persistentID = [item valueForProperty:MPMediaItemPropertyPersistentID];
+         //  NSLog(@"persistentID = %@",persistentID);
        if ([persistentIDsArrayOfChangingPlaylist containsObject:persistentID]) {
                 mediaItem.state = inPlaylist_state;
        }
@@ -715,14 +813,14 @@
        }
         
        if ([addedMediItemsArray count] > 0) {
-       if ([persistentIDAddedItemsArray containsObject:[NSNumber numberWithLongLong: item.persistentID]]) {
+       if ([persistentIDAddedItemsArray containsObject:[item valueForProperty:MPMediaItemPropertyPersistentID]]) {
            mediaItem.state = added_state;
        }
        }
         
         
         if ([removedMediItemsArray count] > 0) {
-            if ([persistentIDRemovedItemsArray containsObject:[NSNumber numberWithLongLong: item.persistentID]]) {
+            if ([persistentIDRemovedItemsArray containsObject:[item valueForProperty:MPMediaItemPropertyPersistentID]]) {
                 mediaItem.state = delete_state;
             }
         }
@@ -807,6 +905,61 @@
         artist.state = default_state;
         
         NSArray *allSongsOfArtist = [self getAllSongsOfArtist:artist];
+        NSArray *songsOfArtistsPersistentIDs = [allSongsOfArtist valueForKeyPath:@"@unionOfObjects.mediaEntity.persistentID"];
+        
+        
+        if ([songsOfArtistsPersistentIDs count] > 0) {
+            
+            if ([persistentIDsArrayOfChangingPlaylist count] > 0) {
+                
+                if ([self objects:persistentIDsArrayOfChangingPlaylist contains:songsOfArtistsPersistentIDs]) {
+                    artist.state = inPlaylist_state;
+                }
+                
+            }
+            
+            if ([addedMediItemsArray count] > 0) {
+                if ([self objects:persistentIDAddedItemsArray contains:songsOfArtistsPersistentIDs]) {
+                    artist.state = added_state;
+                }
+            }
+            
+            
+            if ([removedMediItemsArray count] > 0) {
+                if ([self objects:persistentIDRemovedItemsArray contains:songsOfArtistsPersistentIDs]) {
+                    artist.state = delete_state;
+                }
+            }
+            
+        }
+    }
+    
+    return  artistsArray;
+    
+}
+
+
+
+
+- (NSArray*) checkPlaylistMediaItems:(NSArray*) playlistArray{
+    
+    NSArray *persistentIDsArrayOfChangingPlaylist = [self getPersistentIDsArrayFromChangingPlaylist];
+    
+    
+    NSArray *addedMediItemsArray = [[IBCurrentParametersManager sharedManager]addedSongs];
+    NSArray *persistentIDAddedItemsArray = [addedMediItemsArray valueForKeyPath:@"@unionOfObjects.mediaEntity.persistentID"];
+    
+    
+    NSArray *removedMediItemsArray = [[IBCurrentParametersManager sharedManager]removedSongs];
+    NSArray *persistentIDRemovedItemsArray = [removedMediItemsArray valueForKeyPath:@"@unionOfObjects.mediaEntity.persistentID"];
+    
+    
+    
+    for (IBMediaItem *playlist in playlistArray) {
+        
+        playlist.state = default_state;
+        
+        NSArray *allSongsOfPlaylist = [self getIBMediaItemsFromCoreDataPlaylist:<#(IBPlaylist *)#>];
         NSArray *songsOfArtistsPersistentIDs = [allSongsOfArtist valueForKeyPath:@"@unionOfObjects.mediaEntity.persistentID"];
         
         

@@ -80,8 +80,8 @@
     
     NSManagedObjectContext *context = self.persistentContainer.viewContext;
     
-    NSFetchRequest* songRequest = [[NSFetchRequest alloc] init];
-    NSFetchRequest* albumRequest = [[NSFetchRequest alloc] init];
+    NSFetchRequest* songRequest   = [[NSFetchRequest alloc] init];
+    NSFetchRequest* albumRequest  = [[NSFetchRequest alloc] init];
     NSFetchRequest* artistRequest = [[NSFetchRequest alloc] init];
     
     
@@ -192,7 +192,7 @@
     
     for (NSNumber *persistentIDObj in persistentIDsArray) {
         
-      NSPredicate* predicate = [NSPredicate predicateWithFormat:@"(persistentID == %llu) && (playlists contains %@)", [persistentIDObj unsignedLongLongValue], playlist];
+      NSPredicate* predicate = [NSPredicate predicateWithFormat:@"(persistentID == %llu) && (playlists contains %@)", [persistentIDObj longLongValue], playlist];
         
         [request setPredicate:predicate];
         
@@ -237,7 +237,7 @@
     
     [request setSortDescriptors:sortDescriptors];
     
-    NSLog(@"%llu",playlist.persistentID);
+    NSLog(@"%llu",[playlist.persistentID longLongValue]);
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"playlists contains %@", playlist];
     
     [request setPredicate:predicate];
@@ -254,8 +254,10 @@
     
     for (IBSongItem *song in resultArray) {
         
-        if (song.position != startPosition) {
-             song.position = startPosition;
+        NSNumber *startPos = [NSNumber numberWithLongLong:startPosition];
+        
+        if (song.position != startPos) {
+             song.position = startPos;
         }
         startPosition++;
     }
@@ -281,8 +283,10 @@
         
         IBSongItem *song = [NSEntityDescription insertNewObjectForEntityForName:@"IBSongItem"
                                                          inManagedObjectContext:self.persistentContainer.viewContext];
-        song.persistentID = [persistentID unsignedLongLongValue];
-        song.position = startPosition;
+        
+        NSNumber *startPos = [NSNumber numberWithLongLong:startPosition];
+        song.persistentID = persistentID;
+        song.position = startPos;
         startPosition++;
         [addedSongSet addObject:song];
         

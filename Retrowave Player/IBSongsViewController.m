@@ -36,6 +36,9 @@
     
     [super viewDidLoad];
     
+    
+    NSLog(@"added songs count = %d",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+    
     IBSongsViewType songsType = [[IBCurrentParametersManager sharedManager] songsViewType];
     NSDictionary *titleAndSongsDictionary = [[IBFileManager sharedManager] getSongsAndTitleFor:songsType];
     
@@ -46,11 +49,44 @@
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-        self.navigationItem.rightBarButtonItem = [self createChooseSongsItem];
+        self.songs = [[IBFileManager sharedManager] checkSongMediaItems:songs];
+        
+        IBBarButtonItem *chooseBarButton = [self createChooseSongsItem];
+        
+        NSArray *statesOfSongs = [self.songs valueForKeyPath:@"@distinctUnionOfObjects.state"];
+        
+        
+        BOOL containsInPlaylistState = [statesOfSongs containsObject:[NSNumber numberWithUnsignedInteger:inPlaylist_state]];
+        BOOL containsAddedState = [statesOfSongs containsObject:[NSNumber numberWithUnsignedInteger:added_state]];
+        
+        
+        
+        ButtonStyle style = add_all;
+        if (   ( ([statesOfSongs count] == 1) && containsAddedState)
+            |( containsInPlaylistState && containsAddedState && ([statesOfSongs count] == 2))  ) {
+            style = remove_all;
+        }
+        
+        IBPlayerItem *addAllSongs = [[IBPlayerItem alloc] initWithButtonStyle:style];
+        if (style == add_all) {
+            [addAllSongs setIsSelected:YES];
+        }else{
+        [addAllSongs setIsSelected:NO];
+        }
+        [addAllSongs addTarget:self action:@selector(addAllSongs:) forControlEvents:UIControlEventTouchUpInside];
+        IBBarButtonItem *addAllSongsBarButton = [[IBBarButtonItem alloc] initWithButton:addAllSongs];
+        
+        
+        if (songsType != allSongs_type) {
+            self.navigationItem.rightBarButtonItems = @[chooseBarButton,addAllSongsBarButton];
+
+        }else{
+        self.navigationItem.rightBarButtonItem = chooseBarButton;
+        }
         
         [self.navigationController setNavigationBarHidden:NO];
         [self.tableView setEditing:YES];
-        self.songs = [[IBFileManager sharedManager] checkSongMediaItems:songs];
+        
         
       
         
@@ -201,6 +237,49 @@
 
 #pragma mark - Actions
 
+
+
+- (void) addAllSongs:(IBPlayerItem*) button{
+    
+    NSArray *allStatesOfSongs = [self.songs valueForKeyPath:@"@distinctUnionOfObjects.state"];
+    ItemState state = [[allStatesOfSongs firstObject] unsignedIntegerValue];
+    if ( ([allStatesOfSongs count] == 1) && (state == inPlaylist_state ) ) {
+    }else{
+    if ([button isSelected]) {
+        [button setImage: [UIImage imageNamed:@"cancel_all.png"]forState:UIControlStateNormal];
+        [button setIsSelected:NO];
+
+        for (IBMediaItem *song in self.songs) {
+            if (song.state == default_state) {
+                [[IBCurrentParametersManager sharedManager].addedSongs addObject:song];
+                song.state = added_state;
+                
+                NSNumber *persistentID  = [song.mediaEntity valueForProperty:MPMediaItemPropertyPersistentID];
+                NSLog(@"persistentID of added song = %lld", [persistentID longLongValue]);
+                
+            }
+        }
+    }else{
+        [button setImage: [UIImage imageNamed:@"add_all.png"]forState:UIControlStateNormal];
+        [button setIsSelected:YES];
+        
+        for (IBMediaItem *song in self.songs) {
+            if (song.state == added_state) {
+                [[IBCurrentParametersManager sharedManager] removeSongFromArray:song];
+                 song.state = default_state;
+            }
+        }
+    }
+    }
+    
+    NSLog(@"added songs count = %d",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+    
+    [self.tableView reloadData];
+    
+}
+
+
+
 - (void) addToPlaylistAction:(IBPlayerItem*) button{
     
     CGPoint point = [button convertPoint:CGPointZero toView:self.tableView];
@@ -210,36 +289,36 @@
     
     if (song.state == default_state) {
       
-        [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];
-        [button setIsSelected:YES];
+        [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateNormal];
         song.state = added_state;
         [[IBCurrentParametersManager sharedManager].addedSongs addObject:song];
-        
+        NSNumber *persistentID  = [song.mediaEntity valueForProperty:MPMediaItemPropertyPersistentID];
+        NSLog(@"persistentID of added song = %lld", [persistentID longLongValue]);
     }else if (song.state == added_state){
         
         [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
-               [button setIsSelected:NO];
                [[IBCurrentParametersManager sharedManager].addedSongs removeObject:song];
                song.state = default_state;
 
     }else if ( (song.state == inPlaylist_state) && ([[IBCurrentParametersManager sharedManager] coreDataChangingPlaylist])){
        
         [button setImage: [UIImage imageNamed:@"cancel-music(4).png"]forState:UIControlStateNormal];
-        [button setIsSelected:NO];
         [[IBCurrentParametersManager sharedManager].removedSongs addObject:song];
         song.state = delete_state;
   
-    NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+   
     
     
     }else if (song.state == delete_state){
-        
+    
         [button setImage: [UIImage imageNamed:@"inPlaylist.png"]forState:UIControlStateNormal];
-        [button setIsSelected:NO];
         [[IBCurrentParametersManager sharedManager].removedSongs removeObject:song];
         song.state = inPlaylist_state;
     }
 
+     NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+    
+    
 }
 
 

@@ -15,9 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<IBPlaylist *> *)fetchRequest;
 
-@property (nonatomic) int64_t persistentID;
+@property (nonatomic) NSNumber *persistentID;
 @property (nullable, nonatomic, copy) NSString *playlistName;
-@property (nonatomic) int64_t position;
+@property (nonatomic) NSNumber *position;
 @property (nullable, nonatomic, retain) NSSet<IBAlbumItem *> *albumItems;
 @property (nullable, nonatomic, retain) NSSet<IBArtistItem *> *artistItems;
 @property (nullable, nonatomic, retain) NSSet<IBSongItem *> *songItems;

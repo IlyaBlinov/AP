@@ -33,6 +33,26 @@
 
 
 
-
+- (void) removeSongFromArray:(IBMediaItem*) song{
+    
+    if ([self.addedSongs count] > 0) {
+        
+        NSArray *persistentIDs = [self.addedSongs valueForKeyPath:@"@unionOfObjects.mediaEntity.persistentID"];
+        
+        NSNumber *persistentIDOfSong = [song.mediaEntity valueForProperty:MPMediaItemPropertyPersistentID];
+        
+        if ([persistentIDs containsObject:persistentIDOfSong]) {
+            
+            NSInteger index = [persistentIDs indexOfObject:persistentIDOfSong];
+            
+            [self.addedSongs removeObjectAtIndex:index];
+            
+            
+        }
+  
+    }
+    
+    
+}
 
 @end

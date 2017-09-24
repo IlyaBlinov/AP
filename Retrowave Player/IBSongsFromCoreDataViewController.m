@@ -8,13 +8,14 @@
 
 #import "IBSongsFromCoreDataViewController.h"
 #import "IBSongCellTableViewCell.h"
+#import "IBCoreDataManager.h"
 @interface IBSongsFromCoreDataViewController ()
 @property (strong, nonatomic) IBPlaylist *currentPlaylist;
 @property (strong, nonatomic) NSArray *songs;
 @end
 
 @implementation IBSongsFromCoreDataViewController
-@synthesize fetchedResultsController = _fetchedResultsController;
+//@synthesize fetchedResultsController = _fetchedResultsController;
 
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -25,7 +26,27 @@
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
-        self.navigationItem.rightBarButtonItem =  [self createChooseSongsItem];
+        IBBarButtonItem *chooseBarButton = [self createChooseSongsItem];
+        
+        NSArray *statesOfSongs = [self.songs valueForKeyPath:@"@distinctUnionOfObjects.state"];
+        
+        ItemState state = [[statesOfSongs firstObject] unsignedIntegerValue];
+        
+        ButtonStyle style = add_all;
+        if (([statesOfSongs count] == 1) && (state == added_state)) {
+            style = remove_all;
+        }
+        
+        IBPlayerItem *addAllSongs = [[IBPlayerItem alloc] initWithButtonStyle:style];
+        if (style == add_all) {
+            [addAllSongs setIsSelected:YES];
+        }else{
+            [addAllSongs setIsSelected:NO];
+        }
+        [addAllSongs addTarget:self action:@selector(addAllSongs:) forControlEvents:UIControlEventTouchUpInside];
+        IBBarButtonItem *addAllSongsBarButton = [[IBBarButtonItem alloc] initWithButton:addAllSongs];
+ 
+        self.navigationItem.rightBarButtonItems = @[chooseBarButton,addAllSongsBarButton];
         
     }else{
         
@@ -42,22 +63,28 @@
     if ([self isEqual:[[IBCurrentParametersManager sharedManager]returnSongsViewController]]) {
         
         self.currentPlaylist = nil;
+        self.songs = nil;
         IBPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] coreDataChangingPlaylist];
        
-        self.songs = [currentPlaylist.songItems allObjects];
+       
+        NSArray *songs = [[IBFileManager sharedManager] getIBMediaItemsFromCoreDataPlaylist:currentPlaylist];
+        self.songs = [[IBFileManager sharedManager] checkSongMediaItems:songs];
+        
         
         self.currentPlaylist = currentPlaylist;
+        NSLog(@"songsCount = %lu", (unsigned long)[self.songs count]);
         
-        NSLog(@"songsCount = %lu", (unsigned long)[[self.currentPlaylist songItems]count]);
+        
         
         [[IBCurrentParametersManager sharedManager].addedSongs removeAllObjects];
         [[IBCurrentParametersManager sharedManager].removedSongs removeAllObjects];
         [[IBCurrentParametersManager sharedManager] setCoreDataPlaylist:nil];
         [[IBCurrentParametersManager sharedManager] setReturnSongsViewController:nil];
         [self.tableView reloadData];
-        
+   
     }
-}
+    
+   }
 
 - (void)loadView
 {
@@ -67,8 +94,10 @@
     IBPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] coreDataPlaylist];
     self.currentPlaylist = currentPlaylist;
     
-   
-    self.songs      = [currentPlaylist.songItems allObjects];
+  
+    
+    NSArray *songs = [[IBFileManager sharedManager] getIBMediaItemsFromCoreDataPlaylist:currentPlaylist];
+    self.songs = [[IBFileManager sharedManager] checkSongMediaItems:songs];
     NSString *title = currentPlaylist.playlistName;
     
     
@@ -76,9 +105,6 @@
     [removeSongButton addTarget:self action:@selector(removeSong) forControlEvents:UIControlEventTouchUpInside];
     
     IBBarButtonItem *removeSongItem = [[IBBarButtonItem alloc] initWithButton:removeSongButton];
-    
-    
-    UIBarButtonItem  *flexBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
 
     UIBarButtonItem *backItem =   [self setLeftBackBarButtonItem:title];
     
@@ -109,67 +135,14 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Fetched results controller
-
-- (NSFetchedResultsController *)fetchedResultsController
-{
-    if (_fetchedResultsController != nil) {
-        return _fetchedResultsController;
-    }
-    
-    
-    NSManagedObjectContext *managedObjectContext = self.persistentContainer.viewContext;
-    
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    // Edit the entity name as appropriate.
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"IBSongItem" inManagedObjectContext:managedObjectContext];
-    [fetchRequest setEntity:entity];
-    
-    // Set the batch size to a suitable number.
-    [fetchRequest setFetchBatchSize:20];
-    
-    // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"position" ascending:YES];
-    NSArray *sortDescriptors = @[sortDescriptor];
-    
-    [fetchRequest setSortDescriptors:sortDescriptors];
-    
-    
-    IBPlaylist *playlist = [[IBCurrentParametersManager sharedManager] coreDataPlaylist];
-    NSLog(@"%llu",playlist.persistentID);
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"playlists contains %@", playlist];
-    
-    [fetchRequest setPredicate:predicate];
-    
-    
-    
-    // Edit the section name key path and cache name if appropriate.
-    // nil for section name key path means "no sections".
-    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:managedObjectContext sectionNameKeyPath:nil cacheName:nil];
-    aFetchedResultsController.delegate = self;
-    self.fetchedResultsController = aFetchedResultsController;
-    
-    NSError *error = nil;
-    if (![self.fetchedResultsController performFetch:&error]) {
-        // Replace this implementation with code to handle the error appropriately.
-        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
-    }
-    
-    return _fetchedResultsController;
-}
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return [[self.fetchedResultsController fetchedObjects]count];
-    
+    return [self.songs count];
     
 }
-
-
 - (IBSongCellTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
@@ -183,9 +156,7 @@
     }
     
     
-    IBSongItem *coreDataSong = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    
-    IBMediaItem *song = [[IBFileManager sharedManager]getSongByPersistentID:[NSNumber numberWithUnsignedLongLong:coreDataSong.persistentID]];
+    IBMediaItem *song = [self.songs objectAtIndex:indexPath.row];
     
     MPMediaItem *songItem = (MPMediaItem*)song.mediaEntity;
     
@@ -208,7 +179,7 @@
     NSAttributedString *songName = [[NSAttributedString alloc] initWithString:songTitle];
     NSAttributedString *artistName = [[NSAttributedString alloc] initWithString:artistTitle];
     NSAttributedString *timeDuration = [[NSAttributedString alloc] initWithString:songDurationTitle];
-    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%lld", coreDataSong.position + 1]];
+    NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%lld", song.position + 1]];
     
     
     cell.songTitle.attributedText    = songName;
@@ -216,6 +187,8 @@
     cell.timeDuration.attributedText = timeDuration;
     cell.songCount.attributedText    = songCount;
     
+    
+      
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
         
@@ -270,8 +243,89 @@
 }
 
 
+
+- (nullable NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    IBSongCellTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    
+    __weak IBSongsFromCoreDataViewController *weakSelf = self;
+    
+    NSDictionary *newAttributes = [IBFontAttributes attributesOfMainTitle];
+    NSDictionary *systemAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:16]};
+    
+    NSString *title = @"DELETE";
+    NSString *titleWhiteSpace = [self whitespaceReplacementString:title WithSystemAttributes:systemAttributes newAttributes:newAttributes];
+    
+    UITableViewRowAction *rowAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:titleWhiteSpace handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        
+        if (cell.editingStyle == UITableViewCellEditingStyleDelete) {
+            
+            IBMediaItem *removingSong = [self.songs objectAtIndex:indexPath.row];
+            
+            IBPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] coreDataPlaylist];
+            
+            [[IBCoreDataManager sharedManager] deleteIBSongItemsByPersistentIDs:@[[NSNumber numberWithLongLong:removingSong.mediaEntity.persistentID]] fromCoreDataPlaylist:currentPlaylist];
+           
+            [[IBCoreDataManager sharedManager]resortPositionsOfSongItemsInPlaylist:currentPlaylist];
+            
+            
+            self.songs = [[IBFileManager sharedManager] getIBMediaItemsFromCoreDataPlaylist:currentPlaylist];
+
+            [weakSelf.tableView reloadData];
+            
+        }
+        
+    }];
+    
+    
+    UIImage *patternImage = [self imageForTableViewRowActionWithTitle:title textAttributes:newAttributes backgroundColor:[UIColor purpleColor] cellHeight:CGRectGetHeight(cell.bounds)];
+    
+    rowAction.backgroundColor = [UIColor colorWithPatternImage:patternImage];
+    
+    return [NSArray arrayWithObject:rowAction];
+    
+}
+
+
+
+
 #pragma mark - Actions
 
+- (void) addAllSongs:(IBPlayerItem*) button{
+    
+    NSArray *allStatesOfSongs = [self.songs valueForKeyPath:@"@distinctUnionOfObjects.state"];
+    ItemState state = [[allStatesOfSongs firstObject] unsignedIntegerValue];
+    if ( (([allStatesOfSongs count] == 1) && (state == inPlaylist_state )) | ([self.songs count] == 0) ) {
+    }else{
+        if ([button isSelected]) {
+            [button setImage: [UIImage imageNamed:@"cancel_all.png"]forState:UIControlStateNormal];
+            [button setIsSelected:NO];
+            
+            for (IBMediaItem *song in self.songs) {
+                if (song.state == default_state) {
+                    song.state = added_state;
+                    [[IBCurrentParametersManager sharedManager].addedSongs addObject:song];
+                }
+            }
+        }else{
+            [button setImage: [UIImage imageNamed:@"add_all.png"]forState:UIControlStateNormal];
+            [button setIsSelected:YES];
+            
+            
+            for (IBMediaItem *song in self.songs) {
+                if (song.state == added_state) {
+                    [[IBCurrentParametersManager sharedManager] removeSongFromArray:song];
+                    song.state = default_state;
+                }
+            }
+        }
+        
+        
+    }
+    
+    [self.tableView reloadData];
+    
+}
 
 
 - (void)addNewSongs{
@@ -293,10 +347,14 @@
     
     if ([self.tableView isEditing]) {
         [self.tableView setEditing:NO animated:YES];
+        IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithButtonStyle:add];
+        [addToPlaylistButton addTarget:self action:@selector(addNewSongs) forControlEvents:UIControlEventTouchUpInside];
+        IBBarButtonItem *addToPlaylistItem = [[IBBarButtonItem alloc] initWithButton:addToPlaylistButton];
+        self.navigationItem.rightBarButtonItem = addToPlaylistItem;
     }else{
         [self.tableView setEditing:YES animated:YES];
-        
-    }    
+        self.navigationItem.rightBarButtonItem =  nil;
+    }
     
 }
 
@@ -307,7 +365,9 @@
     CGPoint point = [button convertPoint:CGPointZero toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
     
+
     IBMediaItem *song = [self.songs objectAtIndex:indexPath.row];
+    
     
     if (song.state == default_state) {
         
@@ -335,16 +395,72 @@
         
     }else if (song.state == delete_state){
         
-        [button setImage: [UIImage imageNamed:@"cancel-music(4).png"]forState:UIControlStateNormal];
+        [button setImage: [UIImage imageNamed:@"inPlaylist.png"]forState:UIControlStateNormal];
         [button setIsSelected:NO];
         [[IBCurrentParametersManager sharedManager].removedSongs removeObject:song];
-        song.state = default_state;
+        song.state = inPlaylist_state;
     }
     
 }
 
 
 
+#pragma mark - Edit Delete Button Of Cell
+
+- (UIImage*) imageForTableViewRowActionWithTitle:(NSString*) title textAttributes:(NSDictionary*) attributes backgroundColor:(UIColor*) color cellHeight:(CGFloat) cellHeight{
+    
+    
+    NSString *titleString = title;
+    NSDictionary *originalAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:17]};
+    CGSize originalSize = [titleString  sizeWithAttributes:originalAttributes];
+    
+    CGSize newSize = CGSizeMake(originalSize.width * 2.5, originalSize.height * 2);
+    
+    CGRect drawingRect = CGRectIntegral(CGRectMake(0, 0, newSize.width, newSize.height));
+    UIGraphicsBeginImageContextWithOptions(drawingRect.size, YES, [UIScreen mainScreen].nativeScale);
+    
+    CGContextRef contextRef = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(contextRef, color.CGColor);
+    CGContextFillRect(contextRef, drawingRect);
+    
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:drawingRect];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.attributedText = [[NSAttributedString alloc] initWithString:title attributes:[IBFontAttributes attributesOfMainTitle]];
+    
+    [label drawTextInRect:drawingRect];
+    
+    UIImage *returningImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    
+    return returningImage;
+    
+}
+
+
+- (NSString *) whitespaceReplacementString:(NSString*) string WithSystemAttributes:(NSDictionary *)systemAttributes newAttributes:(NSDictionary *)newAttributes
+{
+    NSString *stringTitle = string;
+    NSMutableString *stringTitleWS = [[NSMutableString alloc] initWithString:@""];
+    
+    CGFloat diff = 0;
+    CGSize  stringTitleSize = [stringTitle sizeWithAttributes:newAttributes];
+    CGSize stringTitleWSSize;
+    NSDictionary *originalAttributes = systemAttributes;
+    do {
+        [stringTitleWS appendString:@" "];
+        stringTitleWSSize = [stringTitleWS sizeWithAttributes:originalAttributes];
+        diff = (stringTitleSize.width - stringTitleWSSize.width);
+        if (diff <= 1.5) {
+            break;
+        }
+    }
+    while (diff > 0);
+    
+    return stringTitleWS;
+}
 
 
 @end
