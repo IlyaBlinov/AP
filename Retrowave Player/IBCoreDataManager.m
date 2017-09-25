@@ -251,12 +251,14 @@
     }
 
     int64_t startPosition = 0;
-    NSNumber *startPosition = [NSNumber numberWithLongLong:0];
+   
     
     for (IBSongItem *song in resultArray) {
         
-        if (song.position != startPosition) {
-             song.position = startPosition;
+        NSNumber *startPos = [NSNumber numberWithLongLong:startPosition];
+        
+        if (song.position != startPos) {
+             song.position = startPos;
         }
         startPosition++;
     }
@@ -282,9 +284,11 @@
         
         IBSongItem *song = [NSEntityDescription insertNewObjectForEntityForName:@"IBSongItem"
                                                          inManagedObjectContext:self.persistentContainer.viewContext];
-        //song.persistentID = [persistentID unsignedLongLongValue];
+
+        
+        NSNumber *startPos = [NSNumber numberWithLongLong:startPosition];
         song.persistentID = persistentID;
-        song.position = startPosition;
+        song.position = startPos;
         startPosition++;
         [addedSongSet addObject:song];
         

@@ -114,7 +114,7 @@
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"playlistName" ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"playlistName" ascending:YES];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
@@ -125,8 +125,10 @@
         IBPlaylist *exceptionPlaylist = [[IBCurrentParametersManager sharedManager] coreDataChangingPlaylist];
         
         
-        NSLog(@"%llu",exceptionPlaylist.persistentID);
-        NSPredicate* predicate = [NSPredicate predicateWithFormat:@"persistentID != %llu", exceptionPlaylist.persistentID];
+        NSLog(@"%@",exceptionPlaylist.persistentID);
+        NSPredicate* predicate = [NSPredicate predicateWithFormat:@"(songItems.@count != 0) && (persistentID != %llu)", [exceptionPlaylist.persistentID unsignedLongLongValue]];
+
+        
         
         [fetchRequest setPredicate:predicate];
     }
@@ -191,18 +193,18 @@
         cell.songCount.attributedText        = songCount;
         
         
-        
-        
-        if ([[IBCurrentParametersManager sharedManager] isEditing]) {
-            
-            IBPlayerItem *addButton = [[IBPlayerItem alloc]initWithButtonStyle:add];
-            [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
-            
-            cell.editingAccessoryView = addButton;
-            
+        IBPlayerItem *accessoryButton = [[IBPlayerItem alloc] initWithButtonStyle:move_next];
+       
+       if ([[IBCurrentParametersManager sharedManager] isEditing]) {
+//            
+//            IBPlayerItem *addButton = [[IBPlayerItem alloc]initWithButtonStyle:add];
+//            [addButton addTarget:self action:@selector(addToPlaylistAction:) forControlEvents:UIControlEventTouchUpInside];
+//            
+           cell.editingAccessoryView = accessoryButton;
+//            
         }else{
+        
             
-            IBPlayerItem *accessoryButton = [[IBPlayerItem alloc] initWithButtonStyle:move_next];
             
             cell.accessoryView = accessoryButton;
         }
@@ -324,7 +326,7 @@
             persistentID = arc4random() % 500000000 + 10000000;
         }
         
-        newPlaylist.persistentID = persistentID;
+        newPlaylist.persistentID = [NSNumber numberWithUnsignedLongLong:persistentID];
     
         [self.tableView reloadData];
         [[IBCoreDataManager sharedManager]saveContext];
@@ -362,33 +364,33 @@
 
 
 
-- (void) addToPlaylistAction:(IBPlayerItem*) button{
-    
-    CGPoint point = [button convertPoint:CGPointZero toView:self.tableView];
-    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
-    
-    
-    IBPlaylist   *currentPlaylist = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    
-    NSArray *songs = [currentPlaylist.songItems allObjects];
-    
-    if (button.isSelected == NO) {
-        [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];
-        [button setIsSelected:YES];
-        [[IBCurrentParametersManager sharedManager].addedSongs addObjectsFromArray:songs];
-    }else{
-        [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
-        [button setIsSelected:NO];
-        NSUInteger location = [[IBCurrentParametersManager sharedManager].addedSongs count] - [songs count] ;
-        
-        [[IBCurrentParametersManager sharedManager].addedSongs removeObjectsInRange:NSMakeRange(location, [songs count])];
-    }
-    
-    
-    NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
-    
-    
-}
+//- (void) addToPlaylistAction:(IBPlayerItem*) button{
+//    
+//    CGPoint point = [button convertPoint:CGPointZero toView:self.tableView];
+//    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
+//    
+//    
+//    IBPlaylist   *currentPlaylist = [self.fetchedResultsController objectAtIndexPath:indexPath];
+//    
+//    NSArray *songs = [currentPlaylist.songItems allObjects];
+//    
+//    if (button.isSelected == NO) {
+//        [button setImage: [UIImage imageNamed:@"Added.png"]forState:UIControlStateSelected];
+//        [button setIsSelected:YES];
+//        [[IBCurrentParametersManager sharedManager].addedSongs addObjectsFromArray:songs];
+//    }else{
+//        [button setImage: [UIImage imageNamed:@"add 64 x 64.png"]forState:UIControlStateNormal];
+//        [button setIsSelected:NO];
+//        NSUInteger location = [[IBCurrentParametersManager sharedManager].addedSongs count] - [songs count] ;
+//        
+//        [[IBCurrentParametersManager sharedManager].addedSongs removeObjectsInRange:NSMakeRange(location, [songs count])];
+//    }
+//    
+//    
+//    NSLog(@"added songs = %lu",(unsigned long)[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
+//    
+//    
+//}
 
 
 
