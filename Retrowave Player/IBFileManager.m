@@ -671,16 +671,16 @@
         
         if ([item isKindOfClass:[IBPlaylist class]]) {
             IBPlaylist *tempPlaylist = (IBPlaylist*) item;
-            [persistentIDArray addObject:[NSNumber numberWithLongLong: tempPlaylist.persistentID]];
+            [persistentIDArray addObject:tempPlaylist.persistentID];
         }else if ([item isKindOfClass:[IBArtistItem class]]) {
             IBArtistItem *tempArtist = (IBArtistItem*) item;
-            [persistentIDArray addObject:[NSNumber numberWithLongLong: tempArtist.persistentID]];
+            [persistentIDArray addObject: tempArtist.persistentID];
         }else if ([item isKindOfClass:[IBAlbumItem class]]) {
             IBAlbumItem *tempAlbum = (IBAlbumItem*) item;
-            [persistentIDArray addObject:[NSNumber numberWithLongLong: tempAlbum.persistentID]];
+            [persistentIDArray addObject:tempAlbum.persistentID];
         }else if ([item isKindOfClass:[IBSongItem class]]) {
             IBSongItem *tempSong = (IBSongItem*) item;
-            [persistentIDArray addObject:[NSNumber numberWithLongLong: tempSong.persistentID]];
+            [persistentIDArray addObject:tempSong.persistentID];
         }
     }
         
@@ -704,11 +704,11 @@
             
             if ([item isKindOfClass:[IBPlaylist class]]) {
                 IBPlaylist *tempPlaylist = (IBPlaylist*) item;
-                [persistentIDArray addObject:[NSNumber numberWithLongLong: tempPlaylist.persistentID]];
+                [persistentIDArray addObject:tempPlaylist.persistentID];
                 [positionsArray addObject:[NSNumber numberWithLongLong: tempPlaylist.position]];
             }else if ([item isKindOfClass:[IBArtistItem class]]) {
                 IBArtistItem *tempArtist = (IBArtistItem*) item;
-                [persistentIDArray addObject:[NSNumber numberWithLongLong: tempArtist.persistentID]];
+                [persistentIDArray addObject:tempArtist.persistentID];
                 [positionsArray addObject:[NSNumber numberWithLongLong: tempArtist.position]];
             }else if ([item isKindOfClass:[IBAlbumItem class]]) {
                 IBAlbumItem *tempAlbum = (IBAlbumItem*) item;

@@ -237,7 +237,7 @@
     
     [request setSortDescriptors:sortDescriptors];
     
-    NSLog(@"%llu",playlist.persistentID);
+    NSLog(@"%llu",[playlist.persistentID longLongValue]);
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"playlists contains %@", playlist];
     
     [request setPredicate:predicate];
@@ -251,6 +251,7 @@
     }
 
     int64_t startPosition = 0;
+    NSNumber *startPosition = [NSNumber numberWithLongLong:0];
     
     for (IBSongItem *song in resultArray) {
         
@@ -281,7 +282,8 @@
         
         IBSongItem *song = [NSEntityDescription insertNewObjectForEntityForName:@"IBSongItem"
                                                          inManagedObjectContext:self.persistentContainer.viewContext];
-        song.persistentID = [persistentID unsignedLongLongValue];
+        //song.persistentID = [persistentID unsignedLongLongValue];
+        song.persistentID = persistentID;
         song.position = startPosition;
         startPosition++;
         [addedSongSet addObject:song];
