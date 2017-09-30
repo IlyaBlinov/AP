@@ -13,24 +13,25 @@
 
 @interface IBPlayerController : UIViewController
 
-@property (strong, nonatomic) IBMediaItem *song;
 @property (strong, nonatomic) IBVisualizerMusic *visualizer;
 
-@property (weak, nonatomic) IBOutlet IBPlayerItem *playPauseButton;
+@property (weak, nonatomic) IBOutlet UIButton        *playPauseButton;
 @property (weak, nonatomic) IBOutlet UIButton        *returnToSongsButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *fastForwardButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *fastRemindButton;
 
 
-@property (weak, nonatomic) IBOutlet UISlider *musicTimeLine;
+
 @property (weak, nonatomic) IBOutlet UILabel  *musicTimePlus;
 @property (weak, nonatomic) IBOutlet UILabel  *musicTimeSub;
 
+
 @property (weak, nonatomic) IBOutlet UISlider *volumeSlider;
+@property (weak, nonatomic) IBOutlet UISlider *musicTimeLine;
 
 
-- (IBAction)playPauseButtonAction    :(UIButton*) button;
-- (IBAction)returnToSongsButtonAction:(UIButton       *) button;
+
+- (IBAction)playPauseButtonAction    :(UIButton*)        button;
 - (IBAction)fastForwarButtonAction   :(UIBarButtonItem*) button;
 - (IBAction)fastRemindButtonAction   :(UIBarButtonItem*) button;
 

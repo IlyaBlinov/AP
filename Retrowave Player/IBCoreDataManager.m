@@ -49,6 +49,11 @@
                      * The store could not be migrated to the current model version.
                      Check the error message to determine what the actual problem was.
                      */
+                    
+                    
+                   [storeDescription setOption:@YES forKey:NSMigratePersistentStoresAutomaticallyOption];
+                   [storeDescription setOption:@YES forKey:NSInferMappingModelAutomaticallyOption];
+                    
                     NSLog(@"Unresolved error %@, %@", error, error.userInfo);
                     abort();
                 }
@@ -251,6 +256,7 @@
     }
 
     int64_t startPosition = 0;
+   
     
     for (IBSongItem *song in resultArray) {
         
@@ -283,6 +289,7 @@
         
         IBSongItem *song = [NSEntityDescription insertNewObjectForEntityForName:@"IBSongItem"
                                                          inManagedObjectContext:self.persistentContainer.viewContext];
+
         
         NSNumber *startPos = [NSNumber numberWithLongLong:startPosition];
         song.persistentID = persistentID;

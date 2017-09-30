@@ -79,7 +79,7 @@
     
     
     
-    NSLog(@"count in mainlayer = %ld", [[mainLayer sublayers] count]);
+   // NSLog(@"count in mainlayer = %ld", [[mainLayer sublayers] count]);
     
     CAKeyframeAnimation *frameAnimationBackgroundColor = [CAKeyframeAnimation animationWithKeyPath:@"backgroundColor"];
     

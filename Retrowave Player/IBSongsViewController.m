@@ -174,7 +174,7 @@
     NSAttributedString *songName     = [[NSAttributedString alloc] initWithString:songTitle];
     NSAttributedString *artistName   = [[NSAttributedString alloc] initWithString:artistTitle];
     NSAttributedString *timeDuration = [[NSAttributedString alloc] initWithString:songDurationTitle];
-    NSAttributedString *songCount    = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%ld", indexPath.row + 1]];
+    NSAttributedString *songCount    = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", indexPath.row + 1]];
     
     
     cell.songTitle.attributedText    = songName;
@@ -200,24 +200,20 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-       IBMediaItem *song = [self.songs objectAtIndex:indexPath.row];
-   
+    IBMediaItem *song = [self.songs objectAtIndex:indexPath.row];
     
-//    IBPlayerController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBPlayerController"];
-//    
-//    [vc setSong:song];
-//    [vc.playPauseButton setSelected: YES];
-//
-//    [self.navigationController pushViewController:vc animated:YES];
+    [[IBCurrentParametersManager sharedManager] setCurrentSong:song];
+    [[IBCurrentParametersManager sharedManager] setIsPlayingMusic:YES];
+    [IBCurrentParametersManager sharedManager].queueOfPlayingItems = nil;
+    [IBCurrentParametersManager sharedManager].queueOfPlayingItems = [NSArray arrayWithArray:
+    [self.songs valueForKeyPath:@"@unionOfObjects.mediaEntity"]];
     
-    
-    
+       
+    [self.tabBarController setSelectedIndex:2];
     
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    
     return UITableViewCellEditingStyleNone;
 }
 

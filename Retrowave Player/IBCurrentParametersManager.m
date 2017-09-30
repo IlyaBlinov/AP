@@ -47,11 +47,9 @@
             
             [self.addedSongs removeObjectAtIndex:index];
             
-            
         }
   
     }
-    
     
 }
 
