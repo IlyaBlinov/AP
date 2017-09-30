@@ -14,7 +14,12 @@
         <relationship name="playlists" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="IBPlaylist" inverseName="artistItems" inverseEntity="IBPlaylist" syncable="YES"/>
         <relationship name="songs" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="IBSongItem" inverseName="artist" inverseEntity="IBSongItem" syncable="YES"/>
     </entity>
-    <entity name="IBParentItem" representedClassName="IBParentItem" syncable="YES"/>
+    <entity name="IBParentItem" representedClassName="IBParentItem" syncable="YES">
+        <relationship name="currentAlbum" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="IBAlbumItem" syncable="YES"/>
+        <relationship name="currentArtist" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="IBArtistItem" syncable="YES"/>
+        <relationship name="currentPlaylist" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="IBPlaylist" syncable="YES"/>
+        <relationship name="currentSong" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="IBSongItem" syncable="YES"/>
+    </entity>
     <entity name="IBPlaylist" representedClassName="IBPlaylist" syncable="YES">
         <attribute name="persistentID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="playlistName" optional="YES" attributeType="String" syncable="YES"/>
@@ -24,6 +29,7 @@
         <relationship name="songItems" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="IBSongItem" inverseName="playlists" inverseEntity="IBSongItem" syncable="YES"/>
     </entity>
     <entity name="IBSongItem" representedClassName="IBSongItem" parentEntity="IBParentItem" syncable="YES">
+        <attribute name="pausedTime" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="persistentID" optional="YES" attributeType="Integer 64" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="position" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="albums" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="IBAlbumItem" inverseName="songs" inverseEntity="IBAlbumItem" syncable="YES"/>
@@ -33,8 +39,8 @@
     <elements>
         <element name="IBAlbumItem" positionX="-1676" positionY="-261" width="128" height="118"/>
         <element name="IBArtistItem" positionX="-1271" positionY="-241" width="128" height="118"/>
-        <element name="IBParentItem" positionX="-1577" positionY="-378" width="128" height="43"/>
+        <element name="IBParentItem" positionX="-1577" positionY="-378" width="128" height="103"/>
         <element name="IBPlaylist" positionX="-1856" positionY="-81" width="128" height="133"/>
-        <element name="IBSongItem" positionX="-1278" positionY="-58" width="128" height="118"/>
+        <element name="IBSongItem" positionX="-1278" positionY="-58" width="128" height="133"/>
     </elements>
 </model>

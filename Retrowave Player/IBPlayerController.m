@@ -12,6 +12,7 @@
 #import "IBPlayerItem.h"
 #import "IBVisualizerMusic.h"
 #import "IBFileManager.h"
+
 @interface IBPlayerController ()
 
 @property (strong, nonatomic) MPMusicPlayerController *musicPlayerController;
@@ -26,40 +27,62 @@
 
 
 
-- (void)viewDidLoad
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidLoad];
+    [super viewWillAppear:YES];
   
-    self.navigationItem.hidesBackButton = YES;
-    self.navigationController.navigationBarHidden = YES;
 
     
-   IBMainTabBarController *tabBarController = (IBMainTabBarController*)[self.navigationController tabBarController];
-    
+    IBMainTabBarController *tabBarController = (IBMainTabBarController*)self.tabBarController;
     IBVisualizerMusic *visualizer = [tabBarController visualizer];
     
     self.visualizer = visualizer;
     
-   
-    [self.playPauseButton setSelected:NO];
     
-    self.timerForMusicTimeLineRefresh = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateMusicTimeLine) userInfo:nil repeats:YES];
+    MPVolumeView *volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(18, 440, 284, 31)];
+    [self.view addSubview:volumeView];
     
     self.musicPlayerController =  [MPMusicPlayerController applicationMusicPlayer];
-   
-       if (self.song) {
-        [self.visualizer startKenwoodVisualizerAnimation];
-        self.visualizer.isStarted = YES;
-        
-       }
     
-    if (self.visualizer.isStarted) {
-        [self.playPauseButton setIsSelected:YES];
+    
+    NSArray *queuePlaylingItems = [[IBCurrentParametersManager sharedManager] queueOfPlayingItems];
+    
+    if ([queuePlaylingItems count] > 0) {
+       [self.musicPlayerController setQueueWithItemCollection:[MPMediaItemCollection collectionWithItems:queuePlaylingItems]];
     }
     
     
     
-
+    if ([[IBCurrentParametersManager sharedManager] isPlayingMusic]) {
+    
+        MPMediaItem *currentSong = (MPMediaItem*)[[[IBCurrentParametersManager sharedManager]currentSong] mediaEntity];
+        
+        if ((self.musicPlayerController.playbackState == MPMusicPlaybackStatePlaying) && ([self.musicPlayerController.nowPlayingItem isEqual:currentSong])) {
+        }else{
+            [self.musicPlayerController stop];
+        
+    if (currentSong) {
+        [self.musicPlayerController setNowPlayingItem:nil];
+        [self.musicPlayerController setNowPlayingItem:currentSong];
+        NSLog(@"index of now item = %d",[self.musicPlayerController indexOfNowPlayingItem]);
+        }
+        
+        [self.musicPlayerController prepareToPlay];
+        [self.musicPlayerController play];
+        
+        
+    [self.playPauseButton setSelected:YES];
+    
+    self.timerForMusicTimeLineRefresh = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateMusicTimeLine) userInfo:nil repeats:YES];
+       
+    [self.visualizer startKenwoodVisualizerAnimation];
+    self.visualizer.isStarted = YES;
+        
+    }
+   
+    }else{
+        [self.playPauseButton setSelected:NO];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -74,17 +97,17 @@
 - (IBAction)playPauseButtonAction:(IBPlayerItem *) button{
    
     if ( [self.visualizer isStarted]){
-  
+        [self.musicPlayerController pause];
         [self.visualizer stopVisualizerAnimation];
          self.visualizer.isStarted = NO;
-        [button setIsSelected:NO];
+        [button setSelected:NO];
           }
 
     else {
-        
+        [self.musicPlayerController play];
         [self.visualizer startKenwoodVisualizerAnimation];
         self.visualizer.isStarted = YES;
-        [button setIsSelected:YES];
+        [button setSelected:YES];
        
     }
     
@@ -96,18 +119,15 @@
 }
 
 
-- (IBAction)returnToSongsButtonAction:(UIButton*) button{
-    
-    [self.navigationController popViewControllerAnimated:YES];
-    
-}
+
 
 - (IBAction)fastForwarButtonAction   :(UIButton*) button{
-    //[self.musicPlayerController skipToNextItem];
+    [self.musicPlayerController skipToNextItem];
+    NSLog(@"index of next item = %d",[self.musicPlayerController indexOfNowPlayingItem]);
 }
 
 - (IBAction)fastRemindButtonAction   :(UIButton*) button{
-   // [self.musicPlayerController skipToPreviousItem];
+    [self.musicPlayerController skipToPreviousItem];
 }
 
 - (IBAction)timeLineSliderValueChanged :(UISlider*) slider{

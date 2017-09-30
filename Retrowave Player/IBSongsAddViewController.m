@@ -235,17 +235,10 @@
     
     IBMediaItem *song = [self.songs objectAtIndex:indexPath.row];
     
-    
-    IBPlayerController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"IBPlayerController"];
-    
-    [vc setSong:song];
-    [vc.playPauseButton setSelected: YES];
-    
-    [self.navigationController pushViewController:vc animated:YES];
-    
-    
-    
-    
+    [[IBCurrentParametersManager sharedManager] setCurrentSong:song];
+    [[IBCurrentParametersManager sharedManager] setIsPlayingMusic:YES];
+    [IBCurrentParametersManager sharedManager].queueOfPlayingItems = [self.songs valueForKeyPath:@"@unionOfObjects.mediaEntity"];
+    [self.tabBarController setSelectedIndex:2];
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
