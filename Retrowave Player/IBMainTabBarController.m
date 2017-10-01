@@ -66,7 +66,7 @@
     
     
 //    IBVisualizerMusic *visualizer = [[IBVisualizerMusic alloc] initWithFrame:playerItemView.frame];
-    IBVisualizerMusic *visualizer = [[IBVisualizerMusic alloc] initWithFrameKenwoodFRC:playerItemView.frame];
+    IBVisualizerMusic *visualizer = [[IBVisualizerMusic alloc] initWithFrame:playerItemView.frame];
 
         visualizer.isStarted = NO;
     [self.tabBar.viewForFirstBaselineLayout addSubview:visualizer];

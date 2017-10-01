@@ -166,7 +166,7 @@
         while (positionX < endPositionX ) {
             
             IBVisualizerLayer *sublayer = [IBVisualizerLayer layer];
-            sublayer.colors = [NSArray arrayWithObjects:(id)[UIColor magentaColor].CGColor,(id)[UIColor whiteColor].CGColor, nil];
+            sublayer.colors = [NSArray arrayWithObjects:(id)[UIColor cyanColor].CGColor,(id)[UIColor whiteColor].CGColor, nil];
             
             
             positionX = (1 + 2 * i) * widthEq;

@@ -281,6 +281,11 @@
 		6FCDBDDC1EC1D64D00B326D7 /* Added.png in Resources */ = {isa = PBXBuildFile; fileRef = 6FCDBDDB1EC1D64D00B326D7 /* Added.png */; };
 		6FCDBDDF1EC2018600B326D7 /* IBCurrentParametersManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FCDBDDE1EC2018600B326D7 /* IBCurrentParametersManager.m */; };
 		6FD252E11EB261A900EB3721 /* IBAllMediaCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FD252E01EB261A900EB3721 /* IBAllMediaCell.m */; };
+		6FFD7EE51F81052100333FC1 /* 7279ccfc443dda57dd07bfaf1bf2999a.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6FFD7EDF1F81052100333FC1 /* 7279ccfc443dda57dd07bfaf1bf2999a.jpg */; };
+		6FFD7EE61F81052100333FC1 /* HylandMotel.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6FFD7EE01F81052100333FC1 /* HylandMotel.jpg */; };
+		6FFD7EE81F81052100333FC1 /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 6FFD7EE21F81052100333FC1 /* refresh.png */; };
+		6FFD7EE91F81052100333FC1 /* shuffle.png in Resources */ = {isa = PBXBuildFile; fileRef = 6FFD7EE31F81052100333FC1 /* shuffle.png */; };
+		6FFD7EEA1F81052100333FC1 /* tumblr_mc8fu4gAWT1qlect9o1_500-6603.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6FFD7EE41F81052100333FC1 /* tumblr_mc8fu4gAWT1qlect9o1_500-6603.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -617,6 +622,11 @@
 		6FCDBDDE1EC2018600B326D7 /* IBCurrentParametersManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBCurrentParametersManager.m; sourceTree = "<group>"; };
 		6FD252DF1EB261A900EB3721 /* IBAllMediaCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBAllMediaCell.h; sourceTree = "<group>"; };
 		6FD252E01EB261A900EB3721 /* IBAllMediaCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBAllMediaCell.m; sourceTree = "<group>"; };
+		6FFD7EDF1F81052100333FC1 /* 7279ccfc443dda57dd07bfaf1bf2999a.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 7279ccfc443dda57dd07bfaf1bf2999a.jpg; path = ../7279ccfc443dda57dd07bfaf1bf2999a.jpg; sourceTree = "<group>"; };
+		6FFD7EE01F81052100333FC1 /* HylandMotel.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = HylandMotel.jpg; path = ../HylandMotel.jpg; sourceTree = "<group>"; };
+		6FFD7EE21F81052100333FC1 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = refresh.png; path = ../refresh.png; sourceTree = "<group>"; };
+		6FFD7EE31F81052100333FC1 /* shuffle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = shuffle.png; path = ../shuffle.png; sourceTree = "<group>"; };
+		6FFD7EE41F81052100333FC1 /* tumblr_mc8fu4gAWT1qlect9o1_500-6603.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "tumblr_mc8fu4gAWT1qlect9o1_500-6603.jpg"; path = "../tumblr_mc8fu4gAWT1qlect9o1_500-6603.jpg"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -711,6 +721,11 @@
 		6F004B981EACCEFC007755C3 /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				6FFD7EDF1F81052100333FC1 /* 7279ccfc443dda57dd07bfaf1bf2999a.jpg */,
+				6FFD7EE01F81052100333FC1 /* HylandMotel.jpg */,
+				6FFD7EE21F81052100333FC1 /* refresh.png */,
+				6FFD7EE31F81052100333FC1 /* shuffle.png */,
+				6FFD7EE41F81052100333FC1 /* tumblr_mc8fu4gAWT1qlect9o1_500-6603.jpg */,
 				6F004B991EACCEFC007755C3 /* Add */,
 				6F004BA41EACCEFC007755C3 /* albums */,
 				6F004BB51EACCEFC007755C3 /* all media */,
@@ -1404,6 +1419,7 @@
 				6F004D2C1EACCEFD007755C3 /* suffle-option(5).png in Resources */,
 				6F004CC21EACCEFD007755C3 /* skip-track(3).png in Resources */,
 				6F004CF51EACCEFD007755C3 /* fast-forward-arrow(6).png in Resources */,
+				6FFD7EE81F81052100333FC1 /* refresh.png in Resources */,
 				6F004CCC1EACCEFD007755C3 /* artists 128 x 128.png in Resources */,
 				6F004CEA1EACCEFD007755C3 /* downloading-down-arrow(3).png in Resources */,
 				6FCDBDC51EB3BC5F00B326D7 /* cassette-tape30x30.png in Resources */,
@@ -1456,6 +1472,7 @@
 				6F004CE51EACCEFD007755C3 /* cancel-music(6).png in Resources */,
 				6F004CDF1EACCEFD007755C3 /* anonymous-logo.png in Resources */,
 				6F004C751EACCEFC007755C3 /* Automani.ttf in Resources */,
+				6FFD7EEA1F81052100333FC1 /* tumblr_mc8fu4gAWT1qlect9o1_500-6603.jpg in Resources */,
 				6F004D281EACCEFD007755C3 /* suffle-option(1).png in Resources */,
 				6F004CA91EACCEFD007755C3 /* vinyl-music-player(2).png in Resources */,
 				6F004C781EACCEFC007755C3 /* Flottflott.ttf in Resources */,
@@ -1479,6 +1496,8 @@
 				6F004D001EACCEFD007755C3 /* lines-menu(1).png in Resources */,
 				6F004D0B1EACCEFD007755C3 /* volume-adjustment-mute(4).png in Resources */,
 				6F004D541EACCEFD007755C3 /* music-playlist(5).png in Resources */,
+				6FFD7EE51F81052100333FC1 /* 7279ccfc443dda57dd07bfaf1bf2999a.jpg in Resources */,
+				6FFD7EE61F81052100333FC1 /* HylandMotel.jpg in Resources */,
 				6FA46FBD1E1BF4B3008B9F33 /* Assets.xcassets in Resources */,
 				6F004D4F1EACCEFD007755C3 /* volume-control.png in Resources */,
 				6F004CAD1EACCEFD007755C3 /* vinyl-music-player(6).png in Resources */,
@@ -1515,6 +1534,7 @@
 				6F004D101EACCEFD007755C3 /* music-player-pause-lines(1).png in Resources */,
 				6F004C9D1EACCEFC007755C3 /* add-song(2).png in Resources */,
 				6F004CA51EACCEFC007755C3 /* cd-player(6).png in Resources */,
+				6FFD7EE91F81052100333FC1 /* shuffle.png in Resources */,
 				6F004CE41EACCEFD007755C3 /* cancel-music(5).png in Resources */,
 				6F004CC91EACCEFD007755C3 /* artists2 256 x 256.png in Resources */,
 				6F004CBF1EACCEFD007755C3 /* last-track-left-arrow.png in Resources */,

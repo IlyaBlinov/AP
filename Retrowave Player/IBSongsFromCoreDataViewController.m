@@ -242,7 +242,20 @@
     
 }
 
-
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    IBMediaItem *song = [self.songs objectAtIndex:indexPath.row];
+    
+    [[IBCurrentParametersManager sharedManager] setCurrentSong:song];
+    [[IBCurrentParametersManager sharedManager] setIsPlayingMusic:YES];
+    [IBCurrentParametersManager sharedManager].queueOfPlayingItems = nil;
+    [IBCurrentParametersManager sharedManager].queueOfPlayingItems = [NSArray arrayWithArray:
+                                                                      [self.songs valueForKeyPath:@"@unionOfObjects.mediaEntity"]];
+    
+    
+    [self.tabBarController setSelectedIndex:2];
+    
+}
 
 - (nullable NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath{
     

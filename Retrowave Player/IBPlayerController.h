@@ -16,10 +16,9 @@
 @property (strong, nonatomic) IBVisualizerMusic *visualizer;
 
 @property (weak, nonatomic) IBOutlet UIButton        *playPauseButton;
-@property (weak, nonatomic) IBOutlet UIButton        *returnToSongsButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *fastForwardButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *fastRemindButton;
-
+@property (weak, nonatomic) IBOutlet UIImageView     *albumArt;
 
 
 @property (weak, nonatomic) IBOutlet UILabel  *musicTimePlus;
