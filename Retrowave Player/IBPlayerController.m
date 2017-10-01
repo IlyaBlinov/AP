@@ -29,6 +29,7 @@
 {
     [super viewDidLoad];
     
+     self.musicPlayerController =  [MPMusicPlayerController systemMusicPlayer];
     
     IBMainTabBarController *tabBarController = (IBMainTabBarController*)self.tabBarController;
     IBVisualizerMusic *visualizer = [tabBarController visualizer];
@@ -46,29 +47,33 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     
-    self.musicPlayerController =  [MPMusicPlayerController systemMusicPlayer];
-    MPMediaItem *nowPlaylingSong = [self.musicPlayerController nowPlayingItem];
-    
-    NSLog(@"nowPlaylingSongTitle = %@",[nowPlaylingSong valueForProperty:MPMediaItemPropertyTitle]);
-    NSArray *queuePlaylingItems = [[IBCurrentParametersManager sharedManager] queueOfPlayingItems];
-    
-    if ([queuePlaylingItems count] > 0) {
-        self.queueOfSongs = queuePlaylingItems;
-        [self.musicPlayerController setQueueWithItemCollection:[MPMediaItemCollection collectionWithItems:queuePlaylingItems]];
-    }
-    
-    
+   
     
     if ([[IBCurrentParametersManager sharedManager] isPlayingMusic]) {
     
+        MPMediaItem *nowPlaylingSong = [self.musicPlayerController nowPlayingItem];
+        
+        NSLog(@"nowPlaylingSongTitle = %@",[nowPlaylingSong valueForProperty:MPMediaItemPropertyTitle]);
+        NSArray *queuePlaylingItems = [[IBCurrentParametersManager sharedManager] queueOfPlayingItems];
+        
+        
+        
+        
         MPMediaItem *currentSong = (MPMediaItem*)[[[IBCurrentParametersManager sharedManager]currentSong] mediaEntity];
         
         if ((self.musicPlayerController.playbackState == MPMusicPlaybackStatePlaying) && ([self.musicPlayerController.nowPlayingItem isEqual:currentSong])) {
         }else{
             [self.musicPlayerController stop];
         
+            if ([queuePlaylingItems count] > 0) {
+                self.queueOfSongs = queuePlaylingItems;
+                [self.musicPlayerController setQueueWithItemCollection:[MPMediaItemCollection collectionWithItems:queuePlaylingItems]];
+            }
+
+            
+            
     if (currentSong) {
-        [self.musicPlayerController setNowPlayingItem:nil];
+        //[self.musicPlayerController setNowPlayingItem:nil];
         [self.musicPlayerController setNowPlayingItem:currentSong];
         
         self.albumArt.image = [self getAlbumArtFromSong:currentSong];
