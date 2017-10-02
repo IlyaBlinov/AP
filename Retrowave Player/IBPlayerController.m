@@ -29,7 +29,10 @@
 {
     [super viewDidLoad];
     
-     self.musicPlayerController =  [MPMusicPlayerController systemMusicPlayer];
+    
+    self.musicPlayerController =  [MPMusicPlayerController systemMusicPlayer];
+    self.musicPlayerController.shuffleMode = MPMusicShuffleModeOff;
+    self.musicPlayerController.repeatMode = MPMusicRepeatModeNone;
     
     IBMainTabBarController *tabBarController = (IBMainTabBarController*)self.tabBarController;
     IBVisualizerMusic *visualizer = [tabBarController visualizer];
@@ -40,24 +43,23 @@
     MPVolumeView *volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(18, 440, 284, 31)];
     [self.view addSubview:volumeView];
     
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeNowPlayingSong:) name:MPMusicPlayerControllerNowPlayingItemDidChangeNotification object:nil];
+    
+    [self.musicPlayerController beginGeneratingPlaybackNotifications];
+    
 }
 
 
 
 - (void)viewWillAppear:(BOOL)animated
-{
-    
-   
-    
+{  
     if ([[IBCurrentParametersManager sharedManager] isPlayingMusic]) {
     
         MPMediaItem *nowPlaylingSong = [self.musicPlayerController nowPlayingItem];
         
         NSLog(@"nowPlaylingSongTitle = %@",[nowPlaylingSong valueForProperty:MPMediaItemPropertyTitle]);
         NSArray *queuePlaylingItems = [[IBCurrentParametersManager sharedManager] queueOfPlayingItems];
-        
-        
-        
         
         MPMediaItem *currentSong = (MPMediaItem*)[[[IBCurrentParametersManager sharedManager]currentSong] mediaEntity];
         
@@ -75,6 +77,11 @@
     if (currentSong) {
         //[self.musicPlayerController setNowPlayingItem:nil];
         [self.musicPlayerController setNowPlayingItem:currentSong];
+        
+        NSDictionary *playingInfo = [NSDictionary dictionaryWithObject:[currentSong valueForProperty:MPMediaItemPropertyTitle] forKey:MPMediaItemPropertyTitle];
+        
+        [[MPNowPlayingInfoCenter defaultCenter]setNowPlayingInfo:playingInfo
+         ];
         
         self.albumArt.image = [self getAlbumArtFromSong:currentSong];
         NSLog(@"index of now item = %d and title = %@",[self.musicPlayerController indexOfNowPlayingItem],[currentSong valueForProperty:MPMediaItemPropertyTitle]);
@@ -105,6 +112,15 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+
+
+- (void)dealloc
+{
+    [self.musicPlayerController endGeneratingPlaybackNotifications];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    self.musicPlayerController = nil;
+}
 #pragma mark - Actions
 
 
@@ -138,16 +154,83 @@
 
 
 - (IBAction)fastForwarButtonAction   :(UIButton*) button{
-    MPMediaItem *nextSong = [self getNextSong];
-    self.albumArt.image = [self getAlbumArtFromSong:nextSong];
-      [self playNextOrPreviousSong:nextSong];
+//    MPMediaItem *nextSong = [self getNextSong];
+//    [self playNextOrPreviousSong:nextSong];
+    NSLog(@"fastForwarButtonAction");
+    [self.musicPlayerController skipToNextItem];
+  
 }
 
 - (IBAction)fastRemindButtonAction   :(UIButton*) button{
-    MPMediaItem *previousSong = [self getPreviousSong];
-    self.albumArt.image = [self getAlbumArtFromSong:previousSong];
-    [self playNextOrPreviousSong:previousSong];
+//    MPMediaItem *previousSong = [self getPreviousSong];
+//    [self playNextOrPreviousSong:previousSong];
+    [self.musicPlayerController skipToPreviousItem];
 }
+
+
+- (IBAction)repeatModeChangedAction     :(UIButton*)        button{
+    
+    MPMusicRepeatMode repeatMode = [self.musicPlayerController repeatMode];
+    
+    switch (repeatMode) {
+            
+        case MPMusicRepeatModeNone:
+           [self.musicPlayerController setRepeatMode:MPMusicRepeatModeAll];
+            break;
+            
+        case MPMusicRepeatModeAll:
+            [self.musicPlayerController setRepeatMode:MPMusicRepeatModeOne];
+            break;
+            
+        case MPMusicRepeatModeOne:
+             [self.musicPlayerController setRepeatMode:MPMusicRepeatModeNone];
+            break;
+            
+            
+        default:
+            break;
+    }
+    
+}
+
+
+- (IBAction)shuffleModeChangedAction    :(UIButton*)        button{
+    
+    MPMusicShuffleMode shuffleMode = [self.musicPlayerController shuffleMode];
+    
+    switch (shuffleMode) {
+        case MPMusicShuffleModeOff:
+            [self.musicPlayerController setShuffleMode:MPMusicShuffleModeSongs];
+            break;
+            
+            
+        case MPMusicShuffleModeSongs:
+             [self.musicPlayerController setShuffleMode:MPMusicShuffleModeOff];
+            break;
+        default:
+            break;
+    }
+    
+    
+    
+}
+
+
+
+
+#pragma mark  - Notifications
+
+
+- (void) changeNowPlayingSong:(NSNotification*) notification{
+    
+    MPMediaItem *nowPlayingSong = [self.musicPlayerController nowPlayingItem];
+    [[IBCurrentParametersManager sharedManager].currentSong setMediaEntity:nowPlayingSong];
+    
+    self.albumArt.image = [self getAlbumArtFromSong:nowPlayingSong];
+    
+}
+
+
 
 - (IBAction)timeLineSliderValueChanged :(UISlider*) slider{
     
@@ -243,14 +326,19 @@
 
 
 - (void) playNextOrPreviousSong:(MPMediaItem*) song{
-    
+    [[IBCurrentParametersManager sharedManager].currentSong setMediaEntity:song];
+
     [self.musicPlayerController stop];
-    [self.musicPlayerController setNowPlayingItem:nil];
     [self.musicPlayerController setNowPlayingItem:song];
     [self.musicPlayerController prepareToPlay];
     [self.musicPlayerController play];
     [self.playPauseButton setSelected:YES];
      [IBCurrentParametersManager sharedManager].isPlayingMusic = YES;
+    
+    if ( self.visualizer.isStarted == NO) {
+        self.visualizer.isStarted = YES;
+        [self.visualizer startVisualizerAnimation];
+    }
     
 }
 

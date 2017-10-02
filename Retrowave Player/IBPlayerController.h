@@ -30,11 +30,17 @@
 
 
 
-- (IBAction)playPauseButtonAction    :(UIButton*)        button;
-- (IBAction)fastForwarButtonAction   :(UIBarButtonItem*) button;
-- (IBAction)fastRemindButtonAction   :(UIBarButtonItem*) button;
+- (IBAction)playPauseButtonAction       :(UIButton*)        button;
+- (IBAction)fastForwarButtonAction      :(UIBarButtonItem*) button;
+- (IBAction)fastRemindButtonAction      :(UIBarButtonItem*) button;
+- (IBAction)repeatModeChangedAction     :(UIButton*)        button;
+- (IBAction)shuffleModeChangedAction    :(UIButton*)        button;
+
 
 - (IBAction)volumeSliderValueChanged   :(UISlider*) slider;
 - (IBAction)timeLineSliderValueChanged :(UISlider*) slider;
+
+
+
 
 @end

@@ -202,6 +202,7 @@
     
     IBMediaItem *song = [self.songs objectAtIndex:indexPath.row];
     
+    
     [[IBCurrentParametersManager sharedManager] setCurrentSong:song];
     [[IBCurrentParametersManager sharedManager] setIsPlayingMusic:YES];
     [IBCurrentParametersManager sharedManager].queueOfPlayingItems = nil;
