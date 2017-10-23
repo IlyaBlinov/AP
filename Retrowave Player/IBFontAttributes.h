@@ -33,5 +33,8 @@ typedef enum{
 
 + (UILabel*) getCustomTitleForControllerName:(NSString*) controllerName;
 
++ (NSDictionary*) attributesOfSongTitle;
++ (NSDictionary*) attributesOfPlayingSongTitle;
+
 
 @end

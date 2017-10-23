@@ -30,6 +30,8 @@
 - (void) loadView{
     [super loadView];
     
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeNowPlayingSong:) name:MPMusicPlayerControllerNowPlayingItemDidChangeNotification object:nil];
+    
     
     IBMediaItem *currentPlaylist = [[IBCurrentParametersManager sharedManager] playlist];
     self.currentPlaylist = currentPlaylist;
@@ -180,8 +182,9 @@
     NSAttributedString *timeDuration = [[NSAttributedString alloc] initWithString:songDurationTitle];
     NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", indexPath.row + 1]];
     
+    BOOL songIsNowPlaying = [self matchCurrentPlayingSongWithSong:song];
     
-    cell.songTitle.attributedText    = songName;
+    [cell.songTitle setAttributedText:songName withNowPlayling:songIsNowPlaying];
     cell.artistTitle.attributedText  = artistName;
     cell.timeDuration.attributedText = timeDuration;
     cell.songCount.attributedText    = songCount;
@@ -242,8 +245,6 @@
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    
     return UITableViewCellEditingStyleNone;
 }
 
@@ -371,6 +372,24 @@
         [self.navigationController presentViewController:nav animated:YES completion:nil];
      
 }
+#pragma mark - Notifications
 
+
+- (void) changeNowPlayingSong:(NSNotification*) notification{
+    
+    NSLog(@"notInfo = %@", notification.userInfo);
+    
+    NSNumber *persistentIDOfNowPlayingItem = [notification.userInfo valueForKey:@"MPMusicPlayerControllerNowPlayingItemPersistentIDKey"];
+    
+    if ([persistentIDOfNowPlayingItem longLongValue] != 0) {
+        
+        [[MPMusicPlayerController systemMusicPlayer]endGeneratingPlaybackNotifications];
+        NSDictionary *parameters = [[IBFileManager sharedManager] getPlaylistParams:self.currentPlaylist];
+        self.songs      = [parameters objectForKey:@"songs"];
+        [self.tableView reloadData];
+        
+    }
+    
+}
 
 @end

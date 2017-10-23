@@ -28,4 +28,9 @@
 
 - (void)chooseSongs;
 
+
+- (BOOL) matchCurrentPlayingSongWithSong:(IBMediaItem*) song;
+
+- (void) changeNowPlayingSong:(NSNotification*) notification;
+
 @end

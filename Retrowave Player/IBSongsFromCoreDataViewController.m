@@ -22,6 +22,10 @@
     
     [super viewWillAppear:animated];
     
+    NSArray *songs = [[IBFileManager sharedManager] getIBMediaItemsFromCoreDataPlaylist:self.currentPlaylist];
+    self.songs = [[IBFileManager sharedManager] checkSongMediaItems:songs];
+
+    
     [ self.tableView setEditing: [[IBCurrentParametersManager sharedManager] isEditing]];
     
     if ([[IBCurrentParametersManager sharedManager] isEditing]) {
@@ -49,6 +53,7 @@
         self.navigationItem.rightBarButtonItems = @[chooseBarButton,addAllSongsBarButton];
         
     }else{
+        
         
         IBPlayerItem *addToPlaylistButton = [[IBPlayerItem alloc] initWithButtonStyle:add];
         [addToPlaylistButton addTarget:self action:@selector(addNewSongs) forControlEvents:UIControlEventTouchUpInside];
@@ -83,21 +88,21 @@
         [self.tableView reloadData];
    
     }
-    
+   
    }
 
 - (void)loadView
 {
     [super loadView];
     
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeNowPlayingSong:) name:MPMusicPlayerControllerNowPlayingItemDidChangeNotification object:nil];
     
     IBPlaylist *currentPlaylist = [[IBCurrentParametersManager sharedManager] coreDataPlaylist];
     self.currentPlaylist = currentPlaylist;
     
   
     
-    NSArray *songs = [[IBFileManager sharedManager] getIBMediaItemsFromCoreDataPlaylist:currentPlaylist];
-    self.songs = [[IBFileManager sharedManager] checkSongMediaItems:songs];
+    
     NSString *title = currentPlaylist.playlistName;
     
     
@@ -182,7 +187,9 @@
     NSAttributedString *songCount = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%lld", song.position + 1]];
     
     
-    cell.songTitle.attributedText    = songName;
+    BOOL songIsNowPlaying = [self matchCurrentPlayingSongWithSong:song];
+    
+    [cell.songTitle setAttributedText:songName withNowPlayling:songIsNowPlaying];
     cell.artistTitle.attributedText  = artistName;
     cell.timeDuration.attributedText = timeDuration;
     cell.songCount.attributedText    = songCount;

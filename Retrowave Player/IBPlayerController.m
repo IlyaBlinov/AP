@@ -25,6 +25,15 @@
 
 @implementation IBPlayerController
 
+
+- (void) loadView{
+    [super loadView];
+    
+    MPVolumeView *volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(18, 440, 284, 31)];
+    [self.view addSubview:volumeView];
+    
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -40,14 +49,14 @@
     self.visualizer = visualizer;
     [self.playPauseButton setSelected:YES];
     
-    MPVolumeView *volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(18, 440, 284, 31)];
-    [self.view addSubview:volumeView];
     
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeNowPlayingSong:) name:MPMusicPlayerControllerNowPlayingItemDidChangeNotification object:nil];
+//    
+   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeNowPlayingSong:) name:MPMusicPlayerControllerNowPlayingItemDidChangeNotification object:nil];
     
-    [self.musicPlayerController beginGeneratingPlaybackNotifications];
+  //  [self.musicPlayerController beginGeneratingPlaybackNotifications];
     
+
 }
 
 
@@ -57,14 +66,21 @@
     if ([[IBCurrentParametersManager sharedManager] isPlayingMusic]) {
     
         MPMediaItem *nowPlaylingSong = [self.musicPlayerController nowPlayingItem];
-        
-        NSLog(@"nowPlaylingSongTitle = %@",[nowPlaylingSong valueForProperty:MPMediaItemPropertyTitle]);
-        NSArray *queuePlaylingItems = [[IBCurrentParametersManager sharedManager] queueOfPlayingItems];
+        NSNumber *persistentIDNowPlayingSong = [nowPlaylingSong valueForProperty:MPMediaItemPropertyPersistentID];
         
         MPMediaItem *currentSong = (MPMediaItem*)[[[IBCurrentParametersManager sharedManager]currentSong] mediaEntity];
+        NSNumber *persistentIDCurrentSong = [currentSong valueForProperty:MPMediaItemPropertyPersistentID];
         
-        if ((self.musicPlayerController.playbackState == MPMusicPlaybackStatePlaying) && ([self.musicPlayerController.nowPlayingItem isEqual:currentSong])) {
+       
+        NSArray *queuePlaylingItems = [[IBCurrentParametersManager sharedManager] queueOfPlayingItems];
+        
+        
+        
+        if ((self.musicPlayerController.playbackState == MPMusicPlaybackStatePlaying) &&
+            ([persistentIDNowPlayingSong isEqual:persistentIDCurrentSong])) {
+             NSLog(@"nowPlaylingSongTitleNotChanged = %@",[nowPlaylingSong valueForProperty:MPMediaItemPropertyTitle]);
         }else{
+            
             [self.musicPlayerController stop];
         
             if ([queuePlaylingItems count] > 0) {
@@ -75,13 +91,9 @@
             
             
     if (currentSong) {
-        //[self.musicPlayerController setNowPlayingItem:nil];
+        [self.musicPlayerController beginGeneratingPlaybackNotifications];
         [self.musicPlayerController setNowPlayingItem:currentSong];
         
-        NSDictionary *playingInfo = [NSDictionary dictionaryWithObject:[currentSong valueForProperty:MPMediaItemPropertyTitle] forKey:MPMediaItemPropertyTitle];
-        
-        [[MPNowPlayingInfoCenter defaultCenter]setNowPlayingInfo:playingInfo
-         ];
         
         self.albumArt.image = [self getAlbumArtFromSong:currentSong];
         NSLog(@"index of now item = %d and title = %@",[self.musicPlayerController indexOfNowPlayingItem],[currentSong valueForProperty:MPMediaItemPropertyTitle]);
@@ -91,11 +103,12 @@
         [self.musicPlayerController prepareToPlay];
         [self.musicPlayerController play];
         
+            
+            [self.timerForMusicTimeLineRefresh invalidate];
+        self.timerForMusicTimeLineRefresh = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateMusicTimeLine) userInfo:nil repeats:YES];
         
     [self.playPauseButton setSelected:YES];
     
-    self.timerForMusicTimeLineRefresh = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateMusicTimeLine) userInfo:nil repeats:YES];
-       
     [self.visualizer startVisualizerAnimation];
     self.visualizer.isStarted = YES;
         
@@ -117,6 +130,7 @@
 
 - (void)dealloc
 {
+    NSLog(@"IBPlayerController dealloc");
     [self.musicPlayerController endGeneratingPlaybackNotifications];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.musicPlayerController = nil;
@@ -157,6 +171,7 @@
 //    MPMediaItem *nextSong = [self getNextSong];
 //    [self playNextOrPreviousSong:nextSong];
     NSLog(@"fastForwarButtonAction");
+     [self.musicPlayerController beginGeneratingPlaybackNotifications];
     [self.musicPlayerController skipToNextItem];
   
 }
@@ -164,7 +179,9 @@
 - (IBAction)fastRemindButtonAction   :(UIButton*) button{
 //    MPMediaItem *previousSong = [self getPreviousSong];
 //    [self playNextOrPreviousSong:previousSong];
+     [self.musicPlayerController beginGeneratingPlaybackNotifications];
     [self.musicPlayerController skipToPreviousItem];
+ 
 }
 
 
@@ -223,16 +240,21 @@
 
 - (void) changeNowPlayingSong:(NSNotification*) notification{
     
+    NSLog(@"changeNowPlayingSong in playerController");
     MPMediaItem *nowPlayingSong = [self.musicPlayerController nowPlayingItem];
     [[IBCurrentParametersManager sharedManager].currentSong setMediaEntity:nowPlayingSong];
-    
     self.albumArt.image = [self getAlbumArtFromSong:nowPlayingSong];
-    
+        
 }
 
 
 
 - (IBAction)timeLineSliderValueChanged :(UISlider*) slider{
+    
+    
+   // [self.musicPlayerController setCurrentPlaybackTime:10.0];
+    
+    
     
 }
 
@@ -241,10 +263,25 @@
 
 - (void) updateMusicTimeLine{
     
-//    self.currentSong =  self.musicPlayerController.nowPlayingItem;
-//    
-//    self.musicTimeLabelForLine.text = [NSString stringWithFormat:@"%5.2f",self.currentSong.playbackDuration];
     
+    double currentTime = [self.musicPlayerController currentPlaybackTime];
+    
+    NSTimeInterval songPlaybackTime = [[ [self.musicPlayerController nowPlayingItem] valueForProperty:MPMediaItemPropertyPlaybackDuration] doubleValue];
+    
+    NSDateComponentsFormatter *dateFormatter = [[NSDateComponentsFormatter alloc] init];
+    dateFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
+    dateFormatter.allowedUnits = NSCalendarUnitMinute | NSCalendarUnitSecond;
+    dateFormatter.unitsStyle = NSDateComponentsFormatterUnitsStylePositional;
+    
+    
+   
+    
+    self.musicTimePlus.text = [NSString stringWithFormat:@"%@",[dateFormatter stringFromTimeInterval:currentTime]];
+    self.musicTimeSub.text =[NSString stringWithFormat:@"%@",[dateFormatter stringFromTimeInterval:songPlaybackTime - currentTime]];
+
+    
+//    NSLog(@"time elapsed = %@", self.musicTimePlus.text);
+//    NSLog(@"time  = %f", songPlaybackTime);
     
 }
 

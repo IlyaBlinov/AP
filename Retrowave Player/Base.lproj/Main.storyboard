@@ -14,7 +14,7 @@
         <scene sceneID="Vag-eo-fMK">
             <objects>
                 <tableViewController storyboardIdentifier="IBAllMediaViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="6sC-XQ-N2x" userLabel="Table View Controller - All Media" customClass="IBAllMediaViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="22" sectionFooterHeight="22" id="fhw-8f-cn9">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="22" sectionFooterHeight="22" id="fhw-8f-cn9">
                         <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -1042,7 +1042,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="53"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GDr-a6-ios" customClass="IBMainTitle">
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GDr-a6-ios" customClass="IBSongTitle">
                                             <rect key="frame" x="61" y="6" width="177" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <attributedString key="attributedText">
@@ -1169,7 +1169,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="53"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ugf-z7-Sjr" customClass="IBMainTitle">
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ugf-z7-Sjr" customClass="IBSongTitle">
                                             <rect key="frame" x="55" y="7" width="177" height="23"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="177" id="SN0-9g-ZMH"/>
@@ -1346,7 +1346,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="53"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WCw-bD-AQb" customClass="IBMainTitle">
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WCw-bD-AQb" customClass="IBSongTitle">
                                             <rect key="frame" x="55" y="7" width="177" height="23"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="177" id="dCQ-ws-cHl"/>

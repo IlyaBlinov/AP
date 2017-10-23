@@ -27,14 +27,29 @@
 
 @implementation IBSongsViewController
 
-
+//- (void) viewWillAppear:(BOOL)animated{
+//    [super viewWillAppear:YES];
+//    
+//     if (![[IBCurrentParametersManager sharedManager] isEditing]) {
+//         
+//         IBSongsViewType songsType = [[IBCurrentParametersManager sharedManager] songsViewType];
+//         NSDictionary *titleAndSongsDictionary = [[IBFileManager sharedManager] getSongsAndTitleFor:songsType];
+//         
+//         NSArray  *songs  = [titleAndSongsDictionary valueForKey:@"songs"];
+//         self.songs = songs;
+//         
+//         
+//     }
+//}
 
 
 - (void)viewDidLoad
 {
     
-    
     [super viewDidLoad];
+    
+    
+   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeNowPlayingSong:) name:MPMusicPlayerControllerNowPlayingItemDidChangeNotification object:nil];
     
     
     NSLog(@"added songs count = %d",[[[IBCurrentParametersManager sharedManager]addedSongs]count]);
@@ -117,6 +132,8 @@
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+    
     self.songs = nil;
 }
 
@@ -176,8 +193,10 @@
     NSAttributedString *timeDuration = [[NSAttributedString alloc] initWithString:songDurationTitle];
     NSAttributedString *songCount    = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", indexPath.row + 1]];
     
-    
-    cell.songTitle.attributedText    = songName;
+        
+    BOOL songIsNowPlaying = [self matchCurrentPlayingSongWithSong:song];
+        
+    [cell.songTitle setAttributedText:songName withNowPlayling:songIsNowPlaying];
     cell.artistTitle.attributedText  = artistName;
     cell.timeDuration.attributedText = timeDuration;
     cell.songCount.attributedText    = songCount;
@@ -212,6 +231,13 @@
        
     [self.tabBarController setSelectedIndex:2];
     
+    
+//    __weak IBSongsViewController *weakSelf = self;
+//    dispatch_async(dispatch_queue_create("reload", DISPATCH_QUEUE_CONCURRENT), ^{
+//         [weakSelf.tableView reloadData];
+//    });
+    
+   
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -319,7 +345,27 @@
 }
 
 
+#pragma mark - Notifications
 
+
+- (void) changeNowPlayingSong:(NSNotification*) notification{
+    
+    NSLog(@"notInfo = %@", notification.userInfo);
+    
+    NSNumber *persistentIDOfNowPlayingItem = [notification.userInfo valueForKey:@"MPMusicPlayerControllerNowPlayingItemPersistentIDKey"];
+    
+    if ([persistentIDOfNowPlayingItem longLongValue] != 0) {
+        
+        [[MPMusicPlayerController systemMusicPlayer]endGeneratingPlaybackNotifications];
+        IBSongsViewType songsType = [[IBCurrentParametersManager sharedManager] songsViewType];
+        NSDictionary *titleAndSongsDictionary = [[IBFileManager sharedManager] getSongsAndTitleFor:songsType];
+        NSArray  *songs  = [titleAndSongsDictionary valueForKey:@"songs"];
+        self.songs = songs;
+        [self.tableView reloadData];
+        
+    }
+    
+}
 
 
 @end

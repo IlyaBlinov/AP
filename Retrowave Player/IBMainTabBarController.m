@@ -144,7 +144,7 @@
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item{
     
   if([item.title isEqualToString:@"Playlists"]){
-      [IBCurrentParametersManager sharedManager].songsViewType = playlist_type;
+     // [IBCurrentParametersManager sharedManager].songsViewType = playlist_type;
     }else if([item.title isEqualToString:@"Songs"] | [item.title isEqualToString:@"Books"]){
       [IBCurrentParametersManager sharedManager].songsViewType = allSongs_type;
     }else if ([item.title isEqualToString:@"  All Media"] && [[IBCurrentParametersManager sharedManager]isEditing]){

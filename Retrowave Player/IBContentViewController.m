@@ -190,6 +190,26 @@
 #pragma mark - addSongs
 
 
+
+
+- (BOOL) matchCurrentPlayingSongWithSong:(IBMediaItem*) song{
+    
+    MPMediaItem *currentPlayingSong =  [[MPMusicPlayerController systemMusicPlayer]nowPlayingItem];
+   
+    NSNumber *persistentIDOfCurrentPlayingSong = [currentPlayingSong valueForProperty:MPMediaItemPropertyPersistentID];
+    
+    MPMediaItem *songItem = (MPMediaItem*)song.mediaEntity;
+    NSNumber *persitentIDOfSong = [songItem valueForProperty:MPMediaItemPropertyPersistentID];
+    BOOL songIsNowPlaying = [persistentIDOfCurrentPlayingSong isEqual:persitentIDOfSong];
+    
+    return songIsNowPlaying;
+    
+}
+
+
+
+
+
 - (IBBarButtonItem*) createChooseSongsItem{
     
     IBPlayerItem *chooseButton = [[IBPlayerItem alloc] initWithButtonStyle:choose];
@@ -209,6 +229,22 @@
     
 }
 
+#pragma mark - Notifications
 
+
+- (void) changeNowPlayingSong:(NSNotification*) notification{
+    
+    NSLog(@"notInfo = %@", notification.userInfo);
+    
+    NSNumber *persistentIDOfNowPlayingItem = [notification.userInfo valueForKey:@"MPMusicPlayerControllerNowPlayingItemPersistentIDKey"];
+    
+    if ([persistentIDOfNowPlayingItem longLongValue] != 0) {
+        
+        [[MPMusicPlayerController systemMusicPlayer]endGeneratingPlaybackNotifications];
+        [self.tableView reloadData];
+        
+    }
+    
+}
 
 @end
