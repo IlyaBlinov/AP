@@ -22,6 +22,7 @@
 		230B69DE1F13841500476F44 /* IBBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 230B69D61F13841500476F44 /* IBBarButtonItem.m */; };
 		2361E7121F9CB5D200F34CFC /* Neoneon.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2361E7111F9CB5D200F34CFC /* Neoneon.otf */; };
 		2361E7151F9DD2F300F34CFC /* IBSongTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 2361E7141F9DD2F300F34CFC /* IBSongTitle.m */; };
+		2361E71C1FD5772900F34CFC /* IBTimeLineSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 2361E71B1FD5772900F34CFC /* IBTimeLineSlider.m */; };
 		236727F21ED30C0A0054678D /* IBSongsAddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 236727F11ED30C0A0054678D /* IBSongsAddViewController.m */; };
 		239AD1801F1C9B570095F577 /* IBSongsFromCoreDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD17F1F1C9B570095F577 /* IBSongsFromCoreDataViewController.m */; };
 		239AD19B1F20C6E20095F577 /* IBPlaylist+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 239AD18A1F20C6E10095F577 /* IBPlaylist+CoreDataClass.m */; };
@@ -318,6 +319,8 @@
 		2361E7111F9CB5D200F34CFC /* Neoneon.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Neoneon.otf; sourceTree = "<group>"; };
 		2361E7131F9DD2F300F34CFC /* IBSongTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBSongTitle.h; sourceTree = "<group>"; };
 		2361E7141F9DD2F300F34CFC /* IBSongTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBSongTitle.m; sourceTree = "<group>"; };
+		2361E71A1FD5772900F34CFC /* IBTimeLineSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBTimeLineSlider.h; sourceTree = "<group>"; };
+		2361E71B1FD5772900F34CFC /* IBTimeLineSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBTimeLineSlider.m; sourceTree = "<group>"; };
 		236727F01ED30C0A0054678D /* IBSongsAddViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBSongsAddViewController.h; sourceTree = "<group>"; };
 		236727F11ED30C0A0054678D /* IBSongsAddViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBSongsAddViewController.m; sourceTree = "<group>"; };
 		239AD17E1F1C9B570095F577 /* IBSongsFromCoreDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBSongsFromCoreDataViewController.h; sourceTree = "<group>"; };
@@ -712,6 +715,15 @@
 				239AD1981F20C6E20095F577 /* IBArtistItem+CoreDataProperties.m */,
 			);
 			name = "CoreDataModels v1";
+			sourceTree = "<group>";
+		};
+		2361E7191FD576CB00F34CFC /* Sliders */ = {
+			isa = PBXGroup;
+			children = (
+				2361E71A1FD5772900F34CFC /* IBTimeLineSlider.h */,
+				2361E71B1FD5772900F34CFC /* IBTimeLineSlider.m */,
+			);
+			name = Sliders;
 			sourceTree = "<group>";
 		};
 		239AD1841F1E14540095F577 /* IBMediaItem */ = {
@@ -1188,6 +1200,7 @@
 		6F004D5E1EACD186007755C3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				2361E7191FD576CB00F34CFC /* Sliders */,
 				230B69311F0E6C5300476F44 /* BarButtons */,
 				6F004D601EACD238007755C3 /* Labels */,
 				6F004D611EACD272007755C3 /* Buttons */,
@@ -1699,6 +1712,7 @@
 				6F004C901EACCEFC007755C3 /* IBPlayerItem.m in Sources */,
 				6F004C931EACCEFC007755C3 /* IBSongCount.m in Sources */,
 				6F004C851EACCEFC007755C3 /* IBArtistsViewController.m in Sources */,
+				2361E71C1FD5772900F34CFC /* IBTimeLineSlider.m in Sources */,
 				239AD19C1F20C6E20095F577 /* IBPlaylist+CoreDataProperties.m in Sources */,
 				6F004C801EACCEFC007755C3 /* IBArtistInfoViewController.m in Sources */,
 				6FCDBDC81EB498D700B326D7 /* IBPlaylistlistViewController.m in Sources */,

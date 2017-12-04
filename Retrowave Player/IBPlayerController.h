@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 
-@class IBPlayerItem, IBVisualizerMusic, MPMediaItem, IBMediaItem;
+@class IBPlayerItem, IBVisualizerMusic, MPMediaItem, IBMediaItem, IBTimeLineSlider, IBSongTitle, IBDetailedTitle;
 
 @interface IBPlayerController : UIViewController
 
@@ -24,9 +24,12 @@
 @property (weak, nonatomic) IBOutlet UILabel  *musicTimePlus;
 @property (weak, nonatomic) IBOutlet UILabel  *musicTimeSub;
 
+@property (weak, nonatomic) IBOutlet IBSongTitle      *songTitle;
+@property (weak, nonatomic) IBOutlet IBDetailedTitle  *artistTitle;
+
 
 @property (weak, nonatomic) IBOutlet UISlider *volumeSlider;
-@property (weak, nonatomic) IBOutlet UISlider *musicTimeLine;
+@property (weak, nonatomic) IBOutlet IBTimeLineSlider *musicTimeLine;
 
 
 
