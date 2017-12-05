@@ -40,8 +40,8 @@
 - (IBAction)shuffleModeChangedAction    :(UIButton*)        button;
 
 
-- (IBAction)volumeSliderValueChanged   :(UISlider*) slider;
-- (IBAction)timeLineSliderValueChanged :(UISlider*) slider;
+- (IBAction)volumeSliderValueChanged    :(UISlider*) slider;
+- (IBAction)timeLineSliderValueChanged  :(UISlider*) slider;
 
 
 

@@ -30,9 +30,10 @@
 
 - (void) loadView{
     [super loadView];
-    
+  
     MPVolumeView *volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(18, 440, 284, 31)];
     [self.view addSubview:volumeView];
+
     
 }
 
@@ -43,7 +44,7 @@
     
     self.musicPlayerController =  [MPMusicPlayerController applicationMusicPlayer];
     self.musicPlayerController.shuffleMode = MPMusicShuffleModeOff;
-    self.musicPlayerController.repeatMode = MPMusicRepeatModeNone;
+    self.musicPlayerController.repeatMode = MPMusicRepeatModeAll;
     
     IBMainTabBarController *tabBarController = (IBMainTabBarController*)self.tabBarController;
     IBVisualizerMusic *visualizer = [tabBarController visualizer];
@@ -51,9 +52,13 @@
     self.visualizer = visualizer;
     [self.playPauseButton setSelected:YES];
     
-    
+    self.musicTimeLine.continuous = YES;
+
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(nowPlayingSongChanged:) name:MPMusicPlayerControllerNowPlayingItemDidChangeNotification object:self.musicPlayerController];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive) name:@"applicationWillResignActive" object:nil];
     
     [self.musicPlayerController beginGeneratingPlaybackNotifications];
     
@@ -145,9 +150,42 @@
 #pragma mark - Actions
 
 
+
+
+
+- (IBAction)timeLineSliderValueChanged :(UISlider*) slider{
+   
+    if ([self.timerForMusicTimeLineRefresh isValid]) {
+        [self.timerForMusicTimeLineRefresh invalidate];
+    }
+    
+     NSTimeInterval songPlaybackTime = [[ [self.musicPlayerController nowPlayingItem] valueForProperty:MPMediaItemPropertyPlaybackDuration] doubleValue];
+    
+    NSDateComponentsFormatter *dateFormatter = [[NSDateComponentsFormatter alloc] init];
+    dateFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
+    dateFormatter.allowedUnits = NSCalendarUnitMinute | NSCalendarUnitSecond;
+    dateFormatter.unitsStyle = NSDateComponentsFormatterUnitsStylePositional;
+    
+    
+    
+    self.musicTimePlus.text = [NSString stringWithFormat:@"%@",[dateFormatter stringFromTimeInterval:self.musicTimeLine.value]];
+    
+    self.musicTimeSub.text =  [NSString stringWithFormat:@"%@",[dateFormatter stringFromTimeInterval:songPlaybackTime  - self.musicTimeLine.value]];
+    
+    
+    [self.musicPlayerController setCurrentPlaybackTime:self.musicTimeLine.value];
+    
+    self.timerForMusicTimeLineRefresh = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateMusicTimeLine) userInfo:nil repeats:YES];
+    
+   
+}
+
+
+
 - (IBAction)playPauseButtonAction:(IBPlayerItem *) button{
    
     if ( [self.visualizer isStarted]){
+        [self.timerForMusicTimeLineRefresh invalidate];
         [self.musicPlayerController pause];
         [self.visualizer stopVisualizerAnimation];
          self.visualizer.isStarted = NO;
@@ -156,6 +194,7 @@
           }
 
     else {
+        self.timerForMusicTimeLineRefresh = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateMusicTimeLine) userInfo:nil repeats:YES];
         [self.musicPlayerController play];
         [self.visualizer startVisualizerAnimation];
         self.visualizer.isStarted = YES;
@@ -182,7 +221,8 @@
 
 - (IBAction)fastRemindButtonAction   :(UIButton*) button{
     [self.musicPlayerController skipToPreviousItem];
- 
+    NSLog(@"fastRemindButtonAction");
+
 }
 
 
@@ -194,14 +234,17 @@
             
         case MPMusicRepeatModeNone:
            [self.musicPlayerController setRepeatMode:MPMusicRepeatModeAll];
+            NSLog(@"Now repeat mode is Mode all");
             break;
             
         case MPMusicRepeatModeAll:
             [self.musicPlayerController setRepeatMode:MPMusicRepeatModeOne];
+            NSLog(@"Now repeat mode is Mode one");
             break;
             
         case MPMusicRepeatModeOne:
-             [self.musicPlayerController setRepeatMode:MPMusicRepeatModeNone];
+             [self.musicPlayerController setRepeatMode:MPMusicRepeatModeAll];
+            NSLog(@"Now repeat mode is Mode all");
             break;
             
             
@@ -219,11 +262,13 @@
     switch (shuffleMode) {
         case MPMusicShuffleModeOff:
             [self.musicPlayerController setShuffleMode:MPMusicShuffleModeSongs];
+            NSLog(@"Now shuffleMode is Mode songs");
             break;
             
             
         case MPMusicShuffleModeSongs:
              [self.musicPlayerController setShuffleMode:MPMusicShuffleModeOff];
+            NSLog(@"Now shuffleMode is Mode OFF");
             break;
         default:
             break;
@@ -255,14 +300,6 @@
 
 #pragma mark - TimerForUpdateMusicTimeLine
 
-- (IBAction)timeLineSliderValueChanged :(UISlider*) slider{
-    
-    
-    // [self.musicPlayerController setCurrentPlaybackTime:10.0];
-    
-    
-    
-}
 - (void) updateMusicTimeLine{
     
     
@@ -275,13 +312,13 @@
     dateFormatter.allowedUnits = NSCalendarUnitMinute | NSCalendarUnitSecond;
     dateFormatter.unitsStyle = NSDateComponentsFormatterUnitsStylePositional;
     
-    self.musicTimeLine.value++;
+    self.musicTimeLine.value = currentTime;
     
     //NSLog(@"time = %f",self.musicTimeLine.value);
    
     
     self.musicTimePlus.text = [NSString stringWithFormat:@"%@",[dateFormatter stringFromTimeInterval:currentTime]];
-    self.musicTimeSub.text =[NSString stringWithFormat:@"%@",[dateFormatter stringFromTimeInterval:songPlaybackTime - currentTime]];
+    self.musicTimeSub.text =  [NSString stringWithFormat:@"%@",[dateFormatter stringFromTimeInterval:songPlaybackTime - currentTime]];
 
     
 //    NSLog(@"time elapsed = %@", self.musicTimePlus.text);
@@ -360,6 +397,12 @@
 }
 
 
+
+#pragma mark - Notifications
+
+- (void) applicationWillResignActive{
+    NSLog(@"applicationWillResignActive IBPlayerController");
+}
 
 
 @end
