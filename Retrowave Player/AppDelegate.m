@@ -8,7 +8,8 @@
 
 #import "AppDelegate.h"
 #import "IBCoreDataManager.h"
-#import "IBPlayerController.h"
+#import "IBCurrentParametersManager.h"
+#import "IBVisualizerMusic.h"
 @interface AppDelegate ()
 
 @end
@@ -18,7 +19,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    
+   
     
     
     return YES;
@@ -30,7 +31,11 @@
     // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
     NSLog(@"applicationWillResignActive");
     
+    
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"applicationWillResignActive" object:nil];
+    IBVisualizerMusic *visualizer = [[IBCurrentParametersManager sharedManager] visualizer];
+    [visualizer stopVisualizerAnimation];
     
 }
 
@@ -51,6 +56,11 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     NSLog(@"applicationDidBecomeActive");
+    if ([[IBCurrentParametersManager sharedManager] isPlayingMusic]) {
+        IBVisualizerMusic *visualizer = [[IBCurrentParametersManager sharedManager] visualizer];
+        [visualizer startVisualizerAnimation];
+    }
+    
 
 }
 
@@ -61,7 +71,8 @@
    
     NSLog(@"applicationWillTerminate");
     [[IBCoreDataManager sharedManager]saveContext];
-    
+    IBVisualizerMusic *visualizer = [[IBCurrentParametersManager sharedManager] visualizer];
+    [visualizer stopVisualizerAnimation];
     
 }
 

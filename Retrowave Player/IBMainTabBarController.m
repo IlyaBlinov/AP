@@ -72,6 +72,7 @@
     [self.tabBar.viewForFirstBaselineLayout addSubview:visualizer];
     self.visualizer = visualizer;
     
+    [[IBCurrentParametersManager sharedManager]setVisualizer:visualizer];
     
     
     

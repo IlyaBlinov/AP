@@ -11,7 +11,7 @@
 #import "IBPlaylist+CoreDataClass.h"
 #import "IBMediaItem.h"
 
-@class IBMediaItem, IBSongsAddViewController,MPMediaPlaylist, IBContentViewController;
+@class IBMediaItem, IBSongsAddViewController,MPMediaPlaylist, IBContentViewController, IBVisualizerMusic;
 typedef enum {
     artist_type,
     album_type,
@@ -25,6 +25,8 @@ typedef enum {
 
 @property (strong, nonatomic) IBContentViewController *returnSongsViewController;
 
+
+@property (strong, nonatomic) IBVisualizerMusic *visualizer;
 
 @property (strong, nonatomic) IBMediaItem     *artist;
 @property (strong, nonatomic) IBMediaItem     *album;

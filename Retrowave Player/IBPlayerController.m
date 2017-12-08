@@ -46,9 +46,10 @@
     self.musicPlayerController.shuffleMode = MPMusicShuffleModeOff;
     self.musicPlayerController.repeatMode = MPMusicRepeatModeAll;
     
-    IBMainTabBarController *tabBarController = (IBMainTabBarController*)self.tabBarController;
-    IBVisualizerMusic *visualizer = [tabBarController visualizer];
+//    IBMainTabBarController *tabBarController = (IBMainTabBarController*)self.tabBarController;
+//    IBVisualizerMusic *visualizer = [tabBarController visualizer];
     
+    IBVisualizerMusic *visualizer = [[IBCurrentParametersManager sharedManager]visualizer];
     self.visualizer = visualizer;
     [self.playPauseButton setSelected:YES];
     
@@ -147,10 +148,10 @@
    
     
 }
+
+
+
 #pragma mark - Actions
-
-
-
 
 
 - (IBAction)timeLineSliderValueChanged :(UISlider*) slider{
@@ -191,9 +192,7 @@
          self.visualizer.isStarted = NO;
         [IBCurrentParametersManager sharedManager].isPlayingMusic = NO;
         [button setSelected:NO];
-          }
-
-    else {
+}else {
         self.timerForMusicTimeLineRefresh = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateMusicTimeLine) userInfo:nil repeats:YES];
         [self.musicPlayerController play];
         [self.visualizer startVisualizerAnimation];

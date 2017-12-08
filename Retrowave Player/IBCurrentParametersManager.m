@@ -10,7 +10,7 @@
 #import "IBSongsViewController.h"
 #import "IBSongsAddViewController.h"
 #import "IBContentViewController.h"
-
+#import "IBVisualizerMusic.h"
 @implementation IBCurrentParametersManager
 
 
